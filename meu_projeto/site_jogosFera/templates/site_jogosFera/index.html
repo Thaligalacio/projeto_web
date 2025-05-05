@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogos Fera</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'site_django/css/estilo.css' %}">
+    <link rel="stylesheet" href="{% static 'site_django/css/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}">
+</head>
+<body>
+    
+    <header class="header-container">
+        <div class="logo">
+            <img src="{% static 'site_django/imagens/logo-topo.png' %}" alt="Logo Topo">
+        </div>
+        <div class="carosel-container">
+            <div class="carosel-slide">
+                <div class="carosel-item"><img src="{% static 'site_django/imagens/fundo-site2.png' %}" alt="Fundo Site 2"></div>
+                <div class="carosel-item"><img src="{% static 'site_django/imagens/fundo-site3.png' %}" alt="Fundo Site 3"></div>
+                <div class="carosel-item"><img src="{% static 'site_django/imagens/fundo-site4.png' %}" alt="Fundo Site 4"></div>
+            </div>
+            <div class="carosel-controls">
+                <button class="prev" onclick="moveCarousel(-1)">&#10094;</button>
+                <button class="next" onclick="moveCarousel(1)">&#10095;</button>
+            </div>
+        </div> <!-- fecha carousel-container -->
+
+        <nav>
+            <button class="nav-btn">🏆 Melhores Jogos</button>
+            <button class="nav-btn">💎 Jogos Favoritos</button>
+            
+            <div class="dropdown">
+                <button class="nav-btn">📋 Categorias</button>
+                <div class="dropdown-content">
+                    <a href="#" data-category="acao">Ação</a>
+                    <a href="#" data-category="aventura">Aventura</a>
+                    <a href="#" data-category="estrategia">Estratégia</a>
+                    <a href="#" data-category="corrida">Corrida</a>
+                    <a href="#" data-category="rpg">RPG</a>
+                </div>
+            </div>
+            
+            <button class="nav-btn">🔍 Buscar</button>
+            <button class="nav-btn play-now">🎮 Jogar Agora</button>
+            <button class="nav-btn">🛒 Comprar</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Bem-vindo ao nosso Site!</h2>
+            <h1>ESCOLHA SEU JOGO</h1>
+        </section>
+
+        <section class="game-list">
+            <div class="game-card" data-category="acao">
+                <img src="{% static 'site_django/imagens/super-mario.png' %}" alt="Super Mario">
+                <h3>Super Mario</h3>
+                <button class="play-btn">Play</button>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/counter-strike.png' %}" alt="Counter Strike">
+                <h3>Counter Strike</h3>
+                <button class="play-btn">Play</button>
+            </div>
+            <div class="game-card" data-category="estrategia">
+                <img src="{% static 'site_django/imagens/sonic3.png' %}" alt="Sonic 3">
+                <h3>Sonic 3</h3>
+                <button class="play-btn">Play</button>
+            </div>
+            <div class="game-card" data-category="corrida">
+                <img src="{% static 'site_django/imagens/Snake.png' %}" alt="Snake">
+                <h3>Snake</h3>
+                <button class="play-btn">Play</button>
+            </div>
+            <div class="game-card" data-category="rpg">
+                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="Minecraft">
+                <h3>Minecraft</h3>
+                <button class="play-btn">Play</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Importando o arquivo JavaScript -->
+    <script src="{% static 'site_django/js/script.js' %}"></script>
+</body>
+</html>
+

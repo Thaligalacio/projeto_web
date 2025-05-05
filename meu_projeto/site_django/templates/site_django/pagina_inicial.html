@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FB Games</title>
+    <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}">
+    <script src="{% static 'site_django/js/script.js' %}" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="{% static 'site_django/imagens/Logo-marca.png' %}" alt="Logo da FB Games" title="FB Games">
+        </div>
+        <nav>
+            <button class="nav-btn">Top Games</button>
+            <button class="nav-btn">Favorite Game</button>
+            <button class="nav-btn" id="category-btn">Category</button>
+            <div style="position: relative;">
+                <ul class="category-menu" id="category-menu">
+                    <li data-category="all">Menu Inicial</li>
+                    <li data-category="acao">Ação</li>
+                    <li data-category="corrida">Corrida</li>
+                    <li data-category="aventura">Aventura</li>
+                    <li data-category="quebra-cabeca">Quebra-Cabeça</li>
+                </ul>
+            </div>
+            <button class="nav-btn">Search</button>
+            <button class="nav-btn play-now">Play Now</button>
+            <button class="nav-btn">Shopping</button>
+            <!-- Botões de Cadastro e Login -->
+            <button class="nav-btn" id="signup-btn">Cadastro</button>
+            <button class="nav-btn" id="login-btn">Login</button>
+        </nav>
+    </header>
+
+    <!-- Mensagem de sucesso (oculta inicialmente) -->
+    <p id="success-message" style="display: none; color: green; text-align: center; margin-bottom: 10px;">
+        Cadastro feito com sucesso!
+    </p>
+
+    <!-- Barra de Login -->
+    <section class="login-form" id="login-form" style="display: none;">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="login-email">E-mail:</label>
+            <input type="email" id="login-email" name="login-email" required placeholder="Digite seu e-mail">
+
+            <label for="login-password">Senha:</label>
+            <input type="password" id="login-password" name="login-password" required placeholder="Digite sua senha">
+
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+    </section>
+
+    <!-- Barra de Cadastro -->
+    <section class="signup-form" id="signup-form" style="display: none;">
+        <h2>Cadastro</h2>
+        <form id="signupForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required placeholder="Digite seu nome">
+
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required placeholder="Digite seu e-mail">
+
+            <label for="phone">Telefone:</label>
+            <input type="tel" id="phone" name="phone" required placeholder="Digite seu telefone" pattern="^\(\d{2}\) \d{4,5}-\d{4}$" title="Exemplo: (11) 12345-6789">
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required placeholder="Digite sua senha">
+
+            <button type="submit" class="submit-btn">Cadastrar</button>
+        </form>
+    </section>
+
+    <main>
+        <section class="hero">
+            <!-- Hero content (opcional) -->
+        </section>
+
+        <section class="game-list">
+            <!-- Jogos -->
+            <div class="game-card" data-category="acao">
+                <img src="{% static 'site_django/imagens/call of duty.png' %}" alt="Call of Duty Vanguard" title="Call of Duty Vanguard">
+                <h3>CALL OF DUTY Vanguard</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="Uncharted" title="Uncharted">
+                <h3>UNCHARTED</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+
+            <div class="game-card" data-category="corrida">
+                <img src="{% static 'site_django/imagens/gran turismo 7.png' %}" alt="Gran Turismo 7" title="Gran Turismo 7">
+                <h3>GRAN TURISMO 7</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="Minecraft" title="Minecraft">
+                <h3>Minecraft</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/super mario bros.png' %}" alt="Super Mario Bros" title="Super Mario Bros">
+                <h3>SUPER MARIO BROS</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+
+            <div class="game-card" data-category="quebra-cabeca">
+                <img src="{% static 'site_django/imagens/quebra cabeça.png' %}" alt="Blocos - Jogo de Quebra-Cabeça" title="Blocos - Jogo de Quebra-Cabeça">
+                <h3>BLOCOS Jogo de Quebra-Cabeça</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Barra de pesquisa fixada no canto -->
+    <div class="search-container">
+        <input type="text" id="search-bar" class="search-bar" placeholder="Search games...">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Variáveis de controle
+            let users = []; // Lista de usuários cadastrados (em memória)
+            const signupBtn = document.getElementById("signup-btn");
+            const loginBtn = document.getElementById("login-btn");
+            const signupForm = document.getElementById("signup-form");
+            const loginForm = document.getElementById("login-form");
+            const successMessage = document.getElementById("success-message");
+
+            // Inicialmente, ambos os formulários estão ocultos
+            signupForm.style.display = "none";
+            loginForm.style.display = "none";
+
+            // Função de alternar o formulário de Cadastro
+            signupBtn.addEventListener("click", function () {
+                if (signupForm.style.display === "none") {
+                    signupForm.style.display = "block";
+                } else {
+                    signupForm.style.display = "none";
+                }
+            });
+
+            // Função de alternar o formulário de Login
+            loginBtn.addEventListener("click", function () {
+                if (loginForm.style.display === "none") {
+                    loginForm.style.display = "block";
+                } else {
+                    loginForm.style.display = "none";
+                }
+            });
+
+            // Manipulador do formulário de cadastro
+            const signupFormElement = document.getElementById("signupForm");
+
+            signupFormElement.addEventListener("submit", function (event) {
+                event.preventDefault(); // Evita o envio real do formulário
+
+                // Coleta os dados do formulário de cadastro
+                const name = document.getElementById("name").value;
+                const email = document.getElementById("email").value;
+                const phone = document.getElementById("phone").value;
+                const password = document.getElementById("password").value;
+
+                // Simula salvar o usuário (em memória)
+                users.push({ email, password });
+
+                // Exibe a mensagem de sucesso
+                successMessage.style.display = "block";
+
+                // Limpa o formulário
+                signupFormElement.reset();
+
+                // Oculta o formulário após 2 segundos
+                setTimeout(() => {
+                    signupForm.style.display = "none";
+                    successMessage.style.display = "none";
+                }, 2000);
+            });
+
+            // Manipulador do formulário de login
+            const loginFormElement = document.getElementById("loginForm");
+
+            loginFormElement.addEventListener("submit", function (event) {
+                event.preventDefault(); // Evita o envio real do formulário
+
+                const loginEmail = document.getElementById("login-email").value;
+                const loginPassword = document.getElementById("login-password").value;
+
+                // Verifica se o e-mail e senha estão cadastrados
+                const user = users.find(user => user.email === loginEmail && user.password === loginPassword);
+
+                if (user) {
+                    alert("Login bem-sucedido!");
+                    // Limpa o formulário
+                    loginFormElement.reset();
+                    loginForm.style.display = "none";
+                } else {
+                    alert("E-mail ou senha incorretos.");
+                }
+            });
+
+            // Menu de categorias
+            const categoryBtn = document.getElementById("category-btn");
+            const categoryMenu = document.getElementById("category-menu");
+            const gameCards = document.querySelectorAll(".game-card");
+
+            categoryBtn.addEventListener("click", function (event) {
+                event.stopPropagation();
+                categoryMenu.style.display = categoryMenu.style.display === "block" ? "none" : "block";
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!categoryMenu.contains(event.target) && event.target !== categoryBtn) {
+                    categoryMenu.style.display = "none";
+                }
+            });
+
+            categoryMenu.querySelectorAll("li").forEach(categoryItem => {
+                categoryItem.addEventListener("click", function () {
+                    let selectedCategory = this.getAttribute("data-category");
+
+                    if (selectedCategory === "all") {
+                        gameCards.forEach(card => {
+                            card.style.display = "block";
+                        });
+                    } else {
+                        gameCards.forEach(card => {
+                            card.style.display = "none";
+                        });
+
+                        document.querySelectorAll(`.game-card[data-category="${selectedCategory}"]`).forEach(card => {
+                            card.style.display = "block";
+                        });
+                    }
+
+                    categoryMenu.style.display = "none";
+                });
+            });
+        });
+    </script>
+</body>
+</html>

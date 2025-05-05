@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet"href="{% static 'core/css/style.css' %}">
+    <title>Pagina inicial do Meu Projeto</title>
+</head>
+<body>
+    <h1>{{saudacao}}</h1>
+   <h3>Agora são {{ hora }}hs</h3>
+    <h1>Bem vindo ao meu site {{nome}}</h1>   
+    <p>Esta é a nossa primeira pagina utilizando HTML no Django</p>
+</body>
+</html>

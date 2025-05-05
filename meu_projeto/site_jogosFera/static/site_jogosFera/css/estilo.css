@@ -1,0 +1,302 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fundo da Página */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('../imagens/fundo-site.png');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    min-height: 100vh; /* Garante que a página ocupe toda a altura da tela */
+    display: flex;
+    flex-direction: column; /* Garante que o conteúdo flua corretamente */
+    overflow-x: hidden; /* Impede rolagem horizontal */
+}
+
+/* Cabeçalho */
+header {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Botões do Menu */
+.nav-btn {
+    background-color: #e66224;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Ajuste para a lista de jogos em uma linha */
+.game-list {
+    display: flex;
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    flex-wrap: nowrap; /* Impede que os itens quebrem para a linha seguinte */
+    overflow-x: auto; /* Permite rolar horizontalmente se necessário */
+    margin-top: 0;
+    background-image: url('../imagens/fundo-gamelist.png'); /* Imagem de fundo da lista de jogos */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    height: 100vh; /* Altura total da tela */
+    width: 100%; /* Garante que a área ocupe toda a largura da página */
+    box-sizing: border-box;
+    animation: moveBackground 10s infinite linear; /* Animação aplicada */
+}
+
+/* Ajuste para cada cartão de jogo */
+.game-card {
+    width: 150px; /* Mantém a largura da moldura pequena */
+    height: 200px; /* Ajusta a altura do cartão de jogo */
+    margin: 0 10px; /* Espaçamento entre os itens */
+    padding: 10px;
+    text-align: center;
+    background-color: transparent; /* Deixa o fundo transparente */
+    border: 2px solid #000; /* Moldura do jogo */
+    border-radius: 10px; /* Bordas arredondadas */
+    transition: transform 0.3s ease; /* Efeito suave ao passar o mouse */
+    position: relative; /* Garante que o conteúdo dentro do cartão fique posicionado corretamente */
+}
+
+/* Efeito de hover nos cartões de jogo */
+.game-card:hover {
+    transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+}
+
+/* Ajuste para a imagem dentro do cartão */
+.game-card img {
+    width: 100%; /* Faz a imagem ocupar toda a largura do cartão */
+    height: auto; /* Mantém a proporção da imagem */
+    border-bottom: 2px solid #000; /* Linha abaixo da imagem */
+    padding-bottom: 10px;
+}
+
+/* Mantém o botão de Play e o texto dentro dos cartões no mesmo lugar */
+.game-card .play-btn,
+.game-card .game-title {
+    position: absolute; /* Garante que o botão e o texto fiquem em posições fixas dentro do cartão */
+    bottom: 10px; /* Ajusta para que fiquem no fundo do cartão */
+    width: 100%;
+    text-align: center; /* Centraliza o texto e o botão */
+}
+
+/* Estilo para o botão de Play */
+.play-btn {
+    background-color: #e66224;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Ajuste para a logomarca transparente sobre o carrossel */
+.logo img {
+    position: absolute;
+    top: 10px; /* Ajuste a posição para que a logo não fique colada no topo */
+    left: 10px; /* Ajuste a posição para que a logo fique um pouco afastada da esquerda */
+    width: auto; /* Deixa a largura automática para não ocupar toda a tela */
+    max-width: 200px; /* Define um tamanho máximo para a logo */
+    opacity: 0.8; /* Define a transparência da logomarca (ajuste conforme necessário) */
+    z-index: 10;
+}
+
+/* Ajuste no header-container para que a logomarca e o menu fiquem em uma linha sobre o carrossel */
+.header-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between; /* Alinha logo à esquerda e menu à direita */
+    align-items: center;
+    width: 100%; /* Garante que o header ocupe a largura total */
+    z-index: 5;
+}
+
+/* Carrossel como banners separados */
+.carousel-container {
+    position: relative;
+    width: 100%; /* Garante que o carrossel ocupe toda a largura disponível */
+    overflow: hidden; /* Esconde as imagens fora do alcance */
+}
+
+.carousel-slide {
+    display: flex;
+    width: 300%; /* Faz com que as 3 imagens caibam lado a lado */
+    transition: transform 0.5s ease; /* Transição suave ao mudar de imagem */
+}
+
+.carousel-item {
+    width: 33.33%; /* Cada item ocupa 1/3 da largura */
+    display: flex;
+    justify-content: center;
+}
+
+.carousel-item img {
+    width: 100%; /* Faz com que a imagem ocupe toda a largura do item */
+    height: auto;
+}
+
+/* Botões de controle do carrossel */
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.prev, .next {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2rem;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Ajuste para o menu ficar na horizontal */
+nav {
+    display: flex;
+    justify-content: space-between; /* Espaça os itens igualmente */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+/* Estilo para cada botão de navegação */
+.nav-btn {
+    margin: 0 10px; /* Espaçamento entre os itens do menu */
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #000;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Ajuste para o menu suspenso */
+.dropdown-content {
+    display: none; /* Fica oculto por padrão */
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block; /* Exibe o menu suspenso quando passa o cursor */
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* Ajuste para o carrossel ter 50% de altura */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 50vh; /* 50% da altura da viewport */
+    overflow: hidden; /* Esconde as imagens fora do alcance */
+}
+
+/* Ajuste para a imagem de fundo na área da lista de jogos */
+.game-list {
+    display: flex;
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    flex-wrap: nowrap; /* Impede que os itens quebrem para a linha seguinte */
+    overflow-x: auto; /* Permite rolar horizontalmente se necessário */
+    margin-top: 0; /* Para garantir que a imagem encoste no topo */
+    background-image: url('../imagens/fundo-gamelist.png'); /* Imagem de fundo da lista de jogos */
+    background-size: cover; /* A imagem ocupa toda a área da lista de jogos */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita que a imagem se repita */
+    padding: 20px; /* Adiciona um espaçamento interno para não colar os itens nas bordas */
+    height: 100vh; /* A altura é 100% da altura da viewport */
+    width: 100%; /* Garante que a área ocupe toda a largura da página */
+    box-sizing: border-box; /* Garante que o padding não interfira no tamanho total da área */
+    margin-top: 0; /* Para garantir que a imagem encoste no topo */
+}
+
+/* Ajuste para o estilo dos cartões de jogo */
+.game-card {
+    width: 150px; /* Mantém a largura da moldura pequena */
+    height: 200px; /* Ajusta a altura do cartão de jogo */
+    margin: 0 5px; /* Reduz o espaçamento entre os cartões */
+    padding: 10px;
+    text-align: center;
+    background-color: transparent; /* Deixa o fundo transparente */
+    border: 2px solid #000; /* Moldura do jogo */
+    border-radius: 10px; /* Bordas arredondadas */
+    transition: transform 0.3s ease;
+    box-sizing: border-box; /* Garante que o tamanho total do cartão não seja afetado pelo padding */
+}
+
+/* Efeito de hover nos cartões de jogo */
+.game-card:hover {
+    transform: scale(1.05); /* Aumenta o tamanho ao passar o mouse */
+}
+
+/* Ajuste para a imagem dentro do cartão */
+.game-card img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+}
+
+/* Fundo com gradiente animado*/
+@keyframes moveBackground {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+
+.game-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-top: 0;
+    background-image: url('../imagens/fundo-gamelist.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0;
+    animation: moveBackground 10s infinite linear; /* Animação aplicada */
+}
+
+/* Efeito de raios */
+.rays {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../imagens/raios.png');
+    background-size: cover;
+    z-index: -1;
+}

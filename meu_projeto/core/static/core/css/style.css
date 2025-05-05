@@ -1,0 +1,10 @@
+body{
+    font-family: Arial, sans-serif;
+    background-color: #086be4;
+    text-align: center;
+}
+p{
+    font-style: italic;
+    font-weight: bold;
+    color: yellow;
+}
