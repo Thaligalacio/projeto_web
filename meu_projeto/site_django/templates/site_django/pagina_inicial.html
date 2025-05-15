@@ -40,9 +40,74 @@
             <button class="nav-btn">Procurar</button>
             <button class="nav-btn play-now">Jogar Agora</button>
             <button class="nav-btn">Compras</button>
-            <button class="nav-btn" id="register-btn">Cadastrar Cliente</button>
-            <button class="nav-btn" id="login-btn">Login</button>
-        </nav>
+            <button class="nav-btn" id="login-btn">Login/Cadastro</button>
+        </nav><div id="login-form" class="modal">
+    <div class="modal-content login-content">
+        <span class="close-button" id="close-login-modal">&times;</span>
+        <h2>Faça o seu login</h2>
+        <div id="login-content">
+            <div class="input-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" placeholder="Seu email">
+            </div>
+            <div class="input-group">
+                <label for="login-password">Senha</label>
+                <input type="password" id="login-password" name="password" placeholder="Sua senha">
+            </div>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember"> Lembrar-me
+                </label>
+                <a href="#">Esqueci minha senha</a>
+            </div>
+            <button type="submit">Login</button>
+            <div class="signup-link">
+                Ainda não possui conta? <a href="#" id="show-register-form">Cadastre-se</a>
+            </div>
+        </div>
+        <div id="register-form-inside-login" style="display: none;">
+            <h2>Cadastrar Cliente</h2>
+            <form method="POST" id="registerFormInside">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="register-nome">Nome</label>
+                    <input type="text" name="nome" placeholder="Nome" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" name="password" placeholder="Senha" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-telefone">Telefone</label>
+                    <input type="text" name="telefone" placeholder="Telefone">
+                </div>
+                <button type="submit">Cadastrar</button>
+                <div class="signup-link">
+                    Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
+                </div>
+                {% if sucesso %}
+                    <p style="color: green;">{{ sucesso }}</p>
+                {% endif %}
+                {% if form.errors %}
+                    <ul style="color: red;">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error|escape }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
     </header>
     </nav>
         <div id="register-modal" class="modal">
