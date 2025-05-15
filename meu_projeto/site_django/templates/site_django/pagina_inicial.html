@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FB Games</title>
+    <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}">
+    <script src="{% static 'site_django/js/script.js' %}"></script>
+</head>
+<body>
+
+<div id="category-menu" class="category-dropdown">
+    <ul class="category-list">
+        <li data-category="all" class="active">Menu Inicial</li>
+        <li data-category="acao">Ação</li>
+        <li data-category="corrida">Corrida</li>
+        <li data-category="aventura">Aventura</li>
+        <li data-category="quebra-cabeca">Quebra-Cabeça</li>
+    </ul>
+</div>
+
+    <header>
+        <div class="logo">
+            <img src="{% static 'site_django/imagens/logo-marca.png' %}" alt="FBGAMES">
+        </div>
+        <nav>
+            <button class="nav-btn">Melhores jogos</button>
+            <button class="nav-btn">Jogos Favoritos</button>
+            <button class="nav-btn" id="category-btn">Categorias</button>
+            <div id="category-menu" class="category-dropdown">
+                <ul class="category-list">
+                    <li data-category="all" class="active">Menu Inicial</li>
+                    <li data-category="acao">Ação</li>
+                    <li data-category="corrida">Corrida</li>
+                    <li data-category="aventura">Aventura</li>
+                    <li data-category="quebra-cabeca">Quebra-Cabeça</li>
+                </ul>
+            </div>
+            <button class="nav-btn">Procurar</button>
+            <button class="nav-btn play-now">Jogar Agora</button>
+            <button class="nav-btn">Compras</button>
+            <button class="nav-btn" id="register-btn">Cadastrar Cliente</button>
+            <button class="nav-btn" id="login-btn">Login</button>
+        </nav>
+    </header>
+    </nav>
+        <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-register-modal">&times;</span>
+            <h2>Cadastrar Cliente</h2>
+            <form method="POST" id="registerForm">
+                {% csrf_token %}
+                <input type="text" name="nome" placeholder="Nome" required><br><br>
+                <input type="email" name="email" placeholder="Email" required><br><br>
+                <input type="password" name="password" placeholder="Senha" required><br><br>
+                <input type="text" name="telefone" placeholder="Telefone"><br><br>
+                <button type="submit">Cadastrar</button>
+                <div id="register-success-message" style="display:none; color: green; margin-top: 10px;">Cadastro realizado com sucesso!</div>
+                {% if sucesso %}
+                    <p style="color: green;">{{ sucesso }}</p>
+                {% endif %}
+                {% if form.errors %}
+                    <ul style="color: red;">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error|escape }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error|escape }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'site_django/js/script.js' %}"></script>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+        </section>
+
+        <section class="game-list">
+            <div class="game-card" data-category="acao">
+                <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty">
+                <h3>CALL OF DUTY Vanguard</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted">
+                <h3>UNCHARTED</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+            <div class="game-card" data-category="corrida">
+                <img src="{% static 'site_django/imagens/gran turismo 7.png' %}" alt="gran turismo">
+                <h3>GRAN TURISMO 7</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft">
+                <h3>Minecraft</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/super mario bros.png' %}" alt="super mario">
+                <h3>SUPER MARIO BROS</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+            <div class="game-card" data-category="quebra-cabeca">
+                <img src="{% static 'site_django/imagens/quebra cabeça.png' %}" alt="Quebra-cabeça">
+                <h3>BLOCOS Jogo de Quebra-Cabeça</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            </div>
+        </section>
+    </main>
+
+    <div id="login-form" class="modal">
+        <div class="modal-content login-content">
+            <span class="close-button" id="close-login-modal">&times;</span>
+            <h2>Faça o seu login</h2>
+            <div class="input-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" placeholder="Seu email">
+            </div>
+            <div class="input-group">
+                <label for="login-password">Senha</label>
+                <input type="password" id="login-password" name="password" placeholder="Sua senha">
+            </div>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember"> Lembrar-me
+                </label>
+                <a href="#">Esqueci minha senha</a>
+            </div>
+            <button type="submit">Login</button>
+            <div class="signup-link">
+                Ainda não possui conta? <a href="#">Cadastre-se</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryBtn = document.getElementById("category-btn");
+            const categoryMenu = document.getElementById("category-menu");
+            const gameCards = document.querySelectorAll(".game-card");
+            const registerBtn = document.getElementById("register-btn");
+            const registerModal = document.getElementById("register-modal");
+            const closeRegisterModal = document.getElementById("close-register-modal");
+            const loginBtnElement = document.getElementById("login-btn");
+            const loginFormElement = document.getElementById("login-form");
+            const closeLoginModal = document.getElementById("close-login-modal"); // Pegue o botão de fechar do login
+            const loginFormElementParaFechar = document.getElementById("login-form"); // Pegue o modal de login para fechar
+
+            // Modal de Cadastro
+            if (registerBtn) {
+                registerBtn.addEventListener("click", () => {
+                    if (registerModal) registerModal.style.display = "block";
+                });
+            }
+            if (closeRegisterModal) {
+                closeRegisterModal.addEventListener("click", () => {
+                    if (registerModal) registerModal.style.display = "none";
+                });
+            }
+            window.addEventListener("click", (event) => {
+                if (registerModal && event.target === registerModal) {
+                    registerModal.style.display = "none";
+                }
+            });
+
+            // Dropdown de Categoria
+            if (categoryBtn) {
+                categoryBtn.addEventListener("click", function (event) {
+                    event.stopPropagation();
+                    if (categoryMenu) categoryMenu.style.display = categoryMenu.style.display === "block" ? "none" : "block";
+                });
+            }
+            document.addEventListener("click", function (event) {
+                if (categoryMenu && !categoryMenu.contains(event.target) && event.target !== categoryBtn) {
+                    categoryMenu.style.display = "none";
+                }
+            });
+            if (categoryMenu) {
+                categoryMenu.querySelectorAll("li").forEach(categoryItem => {
+                    categoryItem.addEventListener("click", function () {
+                        let selectedCategory = this.getAttribute("data-category");
+                        if (selectedCategory === "all") {
+                            gameCards.forEach(card => card.style.display = "block");
+                        } else {
+                            gameCards.forEach(card => {
+                                card.style.display = card.dataset.category === selectedCategory ? "block" : "none";
+                            });
+                        }
+                        categoryMenu.style.display = "none";
+                    });
+                });
+            }
+
+            // Login Modal
+            if (loginFormElement) {
+                loginFormElement.style.display = "none"; // Inicialmente escondido
+            }
+            if (loginBtnElement) {
+                loginBtnElement.addEventListener("click", function () {
+                    if (loginFormElement) {
+                        loginFormElement.style.display = loginFormElement.style.display === "none" ? "block" : "none";
+                    }
+                });
+            }
+
+            // Fechar modal de Login
+            if (closeLoginModal) {
+                closeLoginModal.addEventListener("click", () => {
+                    if (loginFormElementParaFechar) {
+                        loginFormElementParaFechar.style.display = "none";
+                    }
+                });
+            }
+
+            window.addEventListener("click", (event) => {
+                if (loginFormElementParaFechar && event.target === loginFormElementParaFechar) {
+                    loginFormElementParaFechar.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

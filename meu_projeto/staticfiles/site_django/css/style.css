@@ -1,0 +1,63 @@
+        body {
+            color: hsl(0, 23%, 95%);
+        }
+
+.hero {
+    background-image: url("{% static 'imagens/fundo.png' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: rgb(223, 24, 24);
+            text-align: center;
+            padding: 50px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Estilização do menu de categorias */
+        .category-menu {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            list-style: none;
+            z-index: 100;
+        }
+
+        .category-menu li {
+            padding: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .category-menu li:hover {
+            background: gray;
+        }
+
+        /* Melhor responsividade para lista de jogos */
+        .game-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .game-card {
+            width: 250px;
+            text-align: center;
+            border: 1px solid gray;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .game-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        
