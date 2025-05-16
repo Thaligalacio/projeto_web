@@ -164,3 +164,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// tempo de apresentação da mensagem de cadastro
+document.addEventListener('DOMContentLoaded', function() {
+    const messagesContainer = document.querySelector('.messages');
+    if (messagesContainer) {
+        const successMessage = messagesContainer.querySelector('.success-message');
+        if (successMessage) {
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 5000); // A mensagem desaparece após 5 segundos (5000 milissegundos)
+        }
+    }
+});

@@ -387,7 +387,6 @@ button[type="submit"]:hover {
 .login-content .signup-link a:hover {
     text-decoration: underline;
 }
-/* ... outros estilos ... */
 
 #register-modal {
     display: none; /* Mantenha como none inicialmente */
@@ -573,4 +572,15 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+}
+
+/*Estilo da mensagem do cadastro*/
+.success-message {
+    color: green; /* Cor da letra */
+    font-size: 1.2em; /* Tamanho da fonte */
+    text-align: center; /* Centralizar o texto */
+    margin-top: 10px; /* Espaçamento acima */
+    padding: 10px; /* Espaçamento interno */
+    background-color: #e6ffe6; /* Cor de fundo suave (opcional) */
+    border: 1px solid #b3e6b3; /* Borda suave (opcional) */
 }

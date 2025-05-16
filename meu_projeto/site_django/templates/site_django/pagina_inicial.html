@@ -67,8 +67,15 @@
         </div>
         <div id="register-form-inside-login" style="display: none;">
             <h2>Cadastrar Cliente</h2>
-            <form method="POST" id="registerFormInside">
+            <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
                 {% csrf_token %}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
                 <div class="input-group">
                     <label for="register-nome">Nome</label>
                     <input type="text" name="nome" placeholder="Nome" required>
@@ -89,18 +96,15 @@
                 <div class="signup-link">
                     Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
                 </div>
-                {% if sucesso %}
-                    <p style="color: green;">{{ sucesso }}</p>
-                {% endif %}
-                {% if form.errors %}
+                {% if form_cadastro.errors %}
                     <ul style="color: red;">
-                        {% for field in form %}
+                        {% for field in form_cadastro %}
                             {% for error in field.errors %}
-                                <li>{{ error|escape }}</li>
+                                <li>{{ field.label }}: {{ error }}</li>
                             {% endfor %}
                         {% endfor %}
-                        {% for error in form.non_field_errors %}
-                            <li>{{ error|escape }}</li>
+                        {% for error in form_cadastro.non_field_errors %}
+                            <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
@@ -140,6 +144,33 @@
             </form>
         </div>
     </div>
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div id="register-form-inside-login" style="display: none;">
+            <h2>Cadastrar Cliente</h2>
+            <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
+                {% csrf_token %}
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="{% if message.tags == 'success' %}success-message{% else %}{{ message.tags }}{% endif %}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="input-group">
+                    <label for="register-nome">Nome</label>
+                    <input type="text" name="nome" placeholder="Nome" required>
+                </div>
+                </div>
+
+<form method="post">
+
+</form>
     <script src="{% static 'site_django/js/script.js' %}"></script>
         </nav>
     </header>
@@ -219,24 +250,30 @@
             const loginFormElement = document.getElementById("login-form");
             const closeLoginModal = document.getElementById("close-login-modal"); // Pegue o botão de fechar do login
             const loginFormElementParaFechar = document.getElementById("login-form"); // Pegue o modal de login para fechar
+            const showRegisterFormLink = document.getElementById("show-register-form");
+            const registerFormInsideLogin = document.getElementById("register-form-inside-login");
+            const showLoginFormLink = document.getElementById("show-login-form");
+            const loginContentDiv = document.getElementById("login-content");
 
-            // Modal de Cadastro
-            if (registerBtn) {
-                registerBtn.addEventListener("click", () => {
-                    if (registerModal) registerModal.style.display = "block";
+            // Mostrar formulário de cadastro dentro do modal de login
+            if (showRegisterFormLink) {
+                showRegisterFormLink.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    if (loginContentDiv) loginContentDiv.style.display = "none";
+                    if (registerFormInsideLogin) registerFormInsideLogin.style.display = "block";
                 });
             }
-            if (closeRegisterModal) {
-                closeRegisterModal.addEventListener("click", () => {
-                    if (registerModal) registerModal.style.display = "none";
+
+            // Mostrar formulário de login dentro do modal de login
+            if (showLoginFormLink) {
+                showLoginFormLink.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    if (registerFormInsideLogin) registerFormInsideLogin.style.display = "none";
+                    if (loginContentDiv) loginContentDiv.style.display = "block";
                 });
             }
-            window.addEventListener("click", (event) => {
-                if (registerModal && event.target === registerModal) {
-                    registerModal.style.display = "none";
-                }
-            });
 
+            // Modal de Cadastro (removido, pois o cadastro será dentro do modal de login)
             // Dropdown de Categoria
             if (categoryBtn) {
                 categoryBtn.addEventListener("click", function (event) {
