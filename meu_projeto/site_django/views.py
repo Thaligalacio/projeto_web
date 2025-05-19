@@ -7,21 +7,38 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from PIL import Image
+from django.http import JsonResponse
 
 def registrar_cliente(request):
     form = ClienteForm(request.POST or None)
+    print("Método da requisição:", request.method)
     if request.method == 'POST':
+        print("Formulário POST recebido.")
         if form.is_valid():
+            print("Formulário é válido.")
             try:
-                form.save()
+                print("Tentando salvar o formulário...")
+                cliente = form.save()
+                print("Cliente salvo com sucesso:", cliente)
                 messages.success(request, 'Cadastro realizado com sucesso!')
-                # Não redireciona, renderiza a página inicial novamente com a mensagem
+                return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': ClienteForm()}) # Limpa o formulário após sucesso
             except IntegrityError as e:
+                print("Ocorreu um IntegrityError:", e)
                 if 'UNIQUE constraint failed: site_django_cliente.email' in str(e):
-                    form.add_error('email', 'Este e-mail já está em uso.')
+                    print("Erro de e-mail duplicado detectado!")
+                    return JsonResponse({'error': 'Este e-mail já está em uso.'}, status=400)
                 else:
                     form.add_error(None, 'Ocorreu um erro ao cadastrar. Tente novamente.')
-        # Se o formulário não for válido, ele será re-renderizado com os erros
+                    print("Erro desconhecido ao cadastrar:", e)
+        else:
+            print("Formulário é inválido:", form.errors)
+            # Se o formulário NÃO for válido, vamos retornar um JSON de erro
+            if 'email' in form.errors:
+                return JsonResponse({'error': form.errors['email'][0]}, status=400)
+            else:
+                return JsonResponse({'error': 'Erro no formulário de cadastro.'}, status=400)
+    else:
+        print("Requisição não é POST.")
 
     return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': form})
 
@@ -49,28 +66,8 @@ def login_user(request):
             return JsonResponse({'success': True})
         except Cliente.DoesNotExist:
             return JsonResponse({'error': 'Credenciais inválidas'}, status=401)
-        
-def registrar_cliente(request):
-    form = ClienteForm(request.POST or None)
-    print("Método:", request.method)
-    if request.method == 'POST':
-        print("POST recebido")
-        if form.is_valid():
-            print("Formulário válido")
-            try:
-                form.save()
-                messages.success(request, 'Cadastro realizado com sucesso!')
-                print("Cadastro realizado com sucesso!")
-                # Não redireciona, renderiza a página inicial novamente com a mensagem
-            except IntegrityError as e:
-                if 'UNIQUE constraint failed: site_django_cliente.email' in str(e):
-                    form.add_error('email', 'Este e-mail já está em uso.')
-                    print("Erro: E-mail já em uso.")
-                else:
-                    form.add_error(None, 'Ocorreu um erro ao cadastrar. Tente novamente.')
-                    print("Erro desconhecido ao cadastrar.")
+
         else:
             print("Formulário inválido:", form.errors)
         # Se o formulário não for válido, ele será re-renderizado com os erros
-
-    return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': form})
+        

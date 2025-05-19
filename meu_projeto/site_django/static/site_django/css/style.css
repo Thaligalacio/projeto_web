@@ -1,9 +1,18 @@
-/* Estilo geral */
-body {
+/* RESET GERAL */
+* {
+    box-sizing: border-box;
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: 'Arial', sans-serif;
     background-color: #0d0d0d;
     color: #fff;
+    background-image: url("/static/site_django/imagens/fundo_inteiro.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 header {
@@ -14,7 +23,8 @@ header {
     justify-content: space-between;
 }
 
-nav .nav-btn {
+nav .nav-btn,
+nav .play-now {
     background-color: #d0a933;
     color: #fff;
     padding: 5px 10px;
@@ -25,13 +35,20 @@ nav .nav-btn {
     font-weight: bold;
 }
 
-nav .play-now {
-    background-color: #d0a933;
-}
-
 .hero {
+    background-image: url("/static/site_django/imagens/fundo.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: rgb(223, 24, 24);
     text-align: center;
-    margin: 20px 0;
+    padding: 50px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    width: 100%;
 }
 
 .hero img {
@@ -43,229 +60,105 @@ nav .play-now {
     margin-top: 10px;
 }
 
+/* MENSAGENS */
+.success-message {
+    color: green;
+    font-size: 1.8em;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e6ffe6;
+    border: 1px solid #138d13;
+}
+
+#error-message-container {
+    background-color: #fdd;
+    color: #800;
+    border: 1px solid #800;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* MENU CATEGORIAS */
+.category-menu,
+.category-dropdown {
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    list-style: none;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    margin-top: 5px;
+    min-width: 160px;
+}
+
+.category-menu li,
+.category-dropdown li {
+    padding: 10px 15px;
+    color: #fff;
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+    white-space: nowrap;
+}
+
+.category-dropdown li:last-child {
+    border-bottom: none;
+}
+
+.category-menu li:hover,
+.category-dropdown li:hover {
+    background: gray;
+}
+
+/* GAME LIST */
 .game-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
     padding: 20px;
+    background: transparent;
 }
 
 .game-card {
-    background-color: #262626;
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
     padding: 15px;
     border-radius: 10px;
-    width: 200px;
+    width: calc(33.33% - 20px);
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
+    box-sizing: border-box;
+    border: 1px solid #555;
+    color: #fff;
 }
 
 .game-card img {
     width: 100%;
+    height: 150px;
+    object-fit: contain;
     border-radius: 5px;
 }
 
-.game-card h3 {
-    margin: 10px 0;
+@media (max-width: 768px) {
+    .game-card {
+        width: calc(50% - 20px);
+    }
 }
 
-.play-btn {
-    background-color: #d0a933;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+@media (max-width: 480px) {
+    .game-card {
+        width: 100%;
+    }
 }
 
-        body {
-            color: hsl(0, 23%, 95%);
-        }
-
-        .hero {
-            background-image: url("/static/site_django/imagens/fundo.png");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: rgb(223, 24, 24);
-            text-align: center;
-            padding: 50px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 300px;
-            width: 100%;
-        }
-
-        /* Estilização do menu de categorias */
-
-        .category-menu {
-    display: none; /* Garante que o menu comece escondido */
-    position: absolute;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 10px;
-    border-radius: 5px;
-    list-style: none;
-    z-index: 100;
-}
-        .category-menu li {
-            padding: 5px;
-            cursor: pointer;
-            color: white;
-        }
-
-        .category-menu li:hover {
-            background: gray;
-        }
-
-        /* Melhor responsividade para lista de jogos */
-        .game-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .game-card {
-            width: 250px;
-            text-align: center;
-            border: 1px solid gray;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-        }
-
-        .game-card img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    border-radius: 5px;
-    color: #333;
-    position: relative;
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-
-/* Estilos para o conteúdo do modal */
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* Centra o modal verticalmente */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Ajuste a largura conforme necessário */
-    max-width: 400px; /* Largura máxima */
-    border-radius: 5px;
-}
-
-/* Estilos para o botão de fechar */
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Estilos para os cabeçalhos */
-h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* Estilos para os campos de entrada */
-.input-group {
-    margin-bottom: 15px;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.input-group input[type="email"],
-.input-group input[type="password"],
-.input-group input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box; /* Garante que o padding não afeta a largura */
-}
-
-/* Estilos para o botão */
-button[type="submit"] {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-}
-
-button[type="submit"]:hover {
-    background-color: #0056b3;
-}
-
-/* Estilos para links */
-.signup-link {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.signup-link a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.signup-link a:hover {
-    text-decoration: underline;
-}
-/* Estilos para o modal de login */
-#login-form {
-    display: none; /* Mantenha como none inicialmente */
+/* MODAIS GERAIS */
+.modal,
+#login-form,
+#register-modal {
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -273,64 +166,73 @@ button[type="submit"]:hover {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.8); /* Fundo mais escuro e um pouco transparente */
+    background-color: rgba(0,0,0,0.8);
 }
 
+.modal-content,
 .login-content {
-    background-color: #1a1a1a; /* Fundo mais escuro */
-    margin: 10% auto; /* Ajusta a margem para centralizar melhor */
-    padding: 30px; /* Aumenta o padding interno */
-    border-radius: 10px; /* Bordas mais arredondadas */
+    background-color: #1a1a1a;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 10px;
     width: 80%;
     max-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Sombra mais pronunciada */
-    color: #e0e0e0; /* Cor do texto clara */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    color: #e0e0e0;
+    position: relative;
 }
 
+.modal-content h2,
 .login-content h2 {
-    color: #fff; /* Título branco */
-    text-align: left; /* Alinhar o título à esquerda */
+    color: #fff;
+    text-align: left;
     margin-bottom: 25px;
     font-size: 2em;
 }
 
-.login-content .close-button {
+.close-button {
     color: #bbb;
     float: right;
     font-size: 30px;
     font-weight: bold;
-}
-
-.login-content .close-button:hover,
-.login-content .close-button:focus {
-    color: #fff;
-    text-decoration: none;
     cursor: pointer;
 }
 
-.login-content .input-group {
+.close-button:hover,
+.close-button:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+.input-group {
     margin-bottom: 20px;
 }
 
-.login-content .input-group label {
+.input-group label,
+#registerForm label {
     display: block;
     color: #ddd;
     margin-bottom: 8px;
 }
 
-.login-content .input-group input[type="email"],
-.login-content .input-group input[type="password"] {
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="password"],
+.modal-content input[type="text"] {
     width: 100%;
     padding: 12px;
-    border: none; /* Remover borda padrão */
+    border: none;
     border-radius: 5px;
-    background-color: #333; /* Fundo escuro para os inputs */
-    color: #fff; /* Cor do texto nos inputs */
-    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
     font-size: 1em;
+    box-sizing: border-box;
+    margin-bottom: 15px;
 }
 
-.login-content .options {
+.options {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -339,26 +241,17 @@ button[type="submit"]:hover {
     font-size: 0.9em;
 }
 
-.login-content .options label {
-    display: inline-flex;
-    align-items: center;
-}
-
-.login-content .options input[type="checkbox"] {
-    margin-right: 5px;
-}
-
-.login-content .options a {
+.options a {
     color: #64b5f6;
     text-decoration: none;
 }
 
-.login-content .options a:hover {
+.options a:hover {
     text-decoration: underline;
 }
 
-.login-content button[type="submit"] {
-    background-image: linear-gradient(to right, #BA68C8, #F06292); /* Gradiente roxo/rosa */
+button[type="submit"] {
+    background-image: linear-gradient(to right, #BA68C8, #F06292);
     color: white;
     padding: 14px 20px;
     border: none;
@@ -366,221 +259,24 @@ button[type="submit"]:hover {
     cursor: pointer;
     width: 100%;
     font-size: 1.1em;
-    transition: background-image 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
-.login-content button[type="submit"]:hover {
+button[type="submit"]:hover {
     opacity: 0.9;
 }
 
-.login-content .signup-link {
+.signup-link {
     text-align: center;
     margin-top: 25px;
     color: #ccc;
 }
 
-.login-content .signup-link a {
+.signup-link a {
     color: #81D4FA;
     text-decoration: none;
 }
 
-.login-content .signup-link a:hover {
+.signup-link a:hover {
     text-decoration: underline;
-}
-
-#register-modal {
-    display: none; /* Mantenha como none inicialmente */
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8); /* Fundo mais escuro e um pouco transparente */
-}
-
-.modal-content {
-    background-color: #1a1a1a; /* Fundo mais escuro */
-    margin: 10% auto; /* Ajusta a margem para centralizar melhor */
-    padding: 30px; /* Aumenta o padding interno */
-    border-radius: 10px; /* Bordas mais arredondadas */
-    width: 80%;
-    max-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Sombra mais pronunciada */
-    color: #e0e0e0; /* Cor do texto clara */
-    position: relative; /* Para posicionar o botão de fechar */
-}
-
-.modal-content h2 {
-    color: #fff; /* Título branco */
-    text-align: left; /* Alinhar o título à esquerda */
-    margin-bottom: 25px;
-    font-size: 2em;
-}
-
-.modal-content .close-button {
-    color: #bbb;
-    float: right;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.modal-content .close-button:hover,
-.modal-content .close-button:focus {
-    color: #fff;
-    text-decoration: none;
-}
-
-.modal-content input[type="text"],
-.modal-content input[type="email"],
-.modal-content input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
-    box-sizing: border-box;
-    font-size: 1em;
-}
-
-.modal-content button[type="submit"] {
-    background-image: linear-gradient(to right, #BA68C8, #F06292); /* Gradiente roxo/rosa */
-    color: white;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1.1em;
-    transition: background-image 0.3s ease;
-}
-
-.modal-content button[type="submit"]:hover {
-    opacity: 0.9;
-}
-
-/* Estilos específicos para o formulário de cadastro, se necessário */
-#registerForm label {
-    display: block;
-    color: #ddd;
-    margin-bottom: 8px;
-}
-/* Botão categorias */
-.category-dropdown {
-    display: none; /* Garante que o menu comece escondido */
-    position: absolute;
-    top: auto; /* Para que apareça abaixo do botão */
-    left: auto; /* Vamos ajustar isso */
-    min-width: 160px; /* Largura mínima */
-    background-color: #1a1a1a; /* Mesmo fundo escuro dos modais */
-    color: #e0e0e0; /* Mesma cor de texto dos modais */
-    padding: 10px 0; /* Ajustando o padding vertical */
-    border-radius: 10px; /* Bordas arredondadas */
-    list-style: none;
-    z-index: 100;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Mesma sombra dos modais */
-    margin-top: 5px; /* Pequena margem do botão */
-}
-
-.category-dropdown ul {
-    padding: 0;
-    margin: 0;
-}
-
-.category-dropdown li {
-    padding: 10px 15px;
-    cursor: pointer;
-    color: #fff;
-    border-bottom: 1px solid #333; /* Separador entre os itens */
-    white-space: nowrap; /* Evitar que o texto quebre */
-}
-
-.category-dropdown li:last-child {
-    border-bottom: none; /* Remove a bord*/
-}
-
-/* Imagens padrão*/
-.game-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* Alinha os cards à esquerda em cada linha */
-    gap: 20px;
-    padding: 20px;
-}
-
-.game-card {
-    background-color: #262626;
-    padding: 15px;
-    border-radius: 10px;
-    width: calc(33.33% - 20px); /* Aproximadamente 1/3 da largura menos a margem */
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
-}
-
-@media (max-width: 768px) {
-    .game-card {
-        width: calc(50% - 20px); /* Em telas menores, mostra dois por linha */
-    }
-}
-
-@media (max-width: 480px) {
-    .game-card {
-        width: 100%; /* Em telas muito pequenas, mostra um por linha */
-    }
-}
-
-.game-card img {
-    width: 100%;
-    height: 150px;
-    object-fit: contain; /* Tenta manter a imagem inteira dentro da altura */
-    border-radius: 5px;
-}
-
-/* Fundo do carde*/
-.game-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start; /* Alinha os cards à esquerda em cada linha */
-    gap: 20px;
-    padding: 20px;
-    background: transparent;
-}
-/*Fundo Card*/
-.game-card {
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%); /* Gradiente dourado escuro */
-    padding: 15px;
-    border-radius: 10px;
-    width: calc(33.33% - 20px);
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2); /* Sombra externa e um brilho interno sutil */
-    box-sizing: border-box;
-    border: 1px solid #555;
-    color: #fff; /* Garante que o texto dentro continue branco/visível */
-}
-/* Fundo da pagina inteira  */
-body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #0d0d0d; /* Cor de fundo de fallback */
-    color: #fff;
-    background-image: url("/static/site_django/imagens/fundo_inteiro.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-/*Estilo da mensagem do cadastro*/
-.success-message {
-    color: green; /* Cor da letra */
-    font-size: 1.2em; /* Tamanho da fonte */
-    text-align: center; /* Centralizar o texto */
-    margin-top: 10px; /* Espaçamento acima */
-    padding: 10px; /* Espaçamento interno */
-    background-color: #e6ffe6; /* Cor de fundo suave (opcional) */
-    border: 1px solid #b3e6b3; /* Borda suave (opcional) */
 }

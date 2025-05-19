@@ -96,18 +96,6 @@
                 <div class="signup-link">
                     Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
                 </div>
-                {% if form_cadastro.errors %}
-                    <ul style="color: red;">
-                        {% for field in form_cadastro %}
-                            {% for error in field.errors %}
-                                <li>{{ field.label }}: {{ error }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                        {% for error in form_cadastro.non_field_errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
             </form>
         </div>
     </div>
@@ -129,18 +117,6 @@
                 {% if sucesso %}
                     <p style="color: green;">{{ sucesso }}</p>
                 {% endif %}
-                {% if form.errors %}
-                    <ul style="color: red;">
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <li>{{ error|escape }}</li>
-                            {% endfor %}
-                        {% endfor %}
-                        {% for error in form.non_field_errors %}
-                            <li>{{ error|escape }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
             </form>
         </div>
     </div>
@@ -152,23 +128,17 @@
 </ul>
 {% endif %}
 <div id="register-form-inside-login" style="display: none;">
-            <h2>Cadastrar Cliente</h2>
-            <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
-                {% csrf_token %}
-                {% if messages %}
-                <div class="messages">
-                    {% for message in messages %}
-                    <div class="{% if message.tags == 'success' %}success-message{% else %}{{ message.tags }}{% endif %}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                <div class="input-group">
-                    <label for="register-nome">Nome</label>
-                    <input type="text" name="nome" placeholder="Nome" required>
-                </div>
-                </div>
+    <div id="register-alert-message" style="display: none;"></div>
+    <h2>Cadastrar Cliente</h2>
+    <form id="registerFormInside" method="post" action="{% url 'registrar_cliente' %}">
+        {% csrf_token %}
+        </div>
 
 <form method="post">
+
+<div id="login-form" class="modal">
+    <div id="error-message-container" style="display: none; /* Initially hidden */"></div>
+    </div>
 
 </form>
     <script src="{% static 'site_django/js/script.js' %}"></script>
@@ -191,7 +161,7 @@
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
             <div class="game-card" data-category="corrida">
-                <img src="{% static 'site_django/imagens/gran turismo 7.png' %}" alt="gran turismo">
+                <img src="{% static 'site_django/imagens/gran_turismo 7.png' %}" alt="gran_turismo">
                 <h3>GRAN TURISMO 7</h3>
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
@@ -201,12 +171,12 @@
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
             <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/super mario bros.png' %}" alt="super mario">
+                <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros">
                 <h3>SUPER MARIO BROS</h3>
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
             <div class="game-card" data-category="quebra-cabeca">
-                <img src="{% static 'site_django/imagens/quebra cabeça.png' %}" alt="Quebra-cabeça">
+                <img src="{% static 'site_django/imagens/quebra_cabeça.png' %}" alt="quebra-cabeca">
                 <h3>BLOCOS Jogo de Quebra-Cabeça</h3>
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
