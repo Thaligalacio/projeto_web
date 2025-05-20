@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    console.log('script.js carregado!'); // Verificar se o script carrega
+
     // Elementos principais
     const showRegisterFormLink = document.getElementById("show-register-form");
     const showLoginFormLink = document.getElementById("show-login-form");
@@ -219,4 +221,79 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // RECUPERAR SENHA
+    const forgotPasswordLink = document.querySelector('#login-content .options a');
+    const loginContentDiv = document.getElementById('login-content');
+    const forgotPasswordContentDiv = document.getElementById('forgot-password-content');
+    const closeForgotPasswordModal = document.getElementById('close-forgot-password-modal');
+    const showLoginFromForgotLink = document.getElementById('show-login-from-forgot');
+
+    console.log('forgotPasswordLink:', forgotPasswordLink); // Verificar se o link foi selecionado
+
+    if (forgotPasswordLink && loginContentDiv && forgotPasswordContentDiv) {
+        forgotPasswordLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginContentDiv.style.display = 'none';
+            forgotPasswordContentDiv.style.display = 'block';
+        });
+    }
+
+    if (closeForgotPasswordModal && forgotPasswordContentDiv) {
+        closeForgotPasswordModal.addEventListener('click', function() {
+            forgotPasswordContentDiv.style.display = 'none';
+            loginContentDiv.style.display = 'block';
+        });
+    }
+
+    if (showLoginFromForgotLink && forgotPasswordContentDiv && loginContentDiv) {
+        showLoginFromForgotLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            forgotPasswordContentDiv.style.display = 'none';
+            loginContentDiv.style.display = 'block';
+        });
+    }
 });
+
+// Para o carrossel
+let slideIndex = 0;
+const carouselSlide = document.querySelector('.carousel-slide');
+const carouselItems = document.querySelectorAll('.carousel-item');
+const prevButton = document.querySelector('.prev');
+const nextButton = document.querySelector('.next');
+let intervalId;
+
+function moveSlide(step) {
+    if (!carouselSlide || carouselItems.length === 0) return;
+    const totalItems = carouselItems.length;
+    slideIndex = (slideIndex + step + totalItems) % totalItems;
+    const itemWidth = carouselItems[0].offsetWidth + 20; // Largura do item + margem
+    carouselSlide.style.transform = `translateX(-${slideIndex * itemWidth}px)`;
+}
+
+function startAutomaticSlide() {
+    intervalId = setInterval(() => {
+        moveSlide(1);
+    }, 3000);
+}
+
+function stopAutomaticSlide() {
+    clearInterval(intervalId);
+}
+
+if (prevButton && nextButton && carouselSlide && carouselItems.length > 0) {
+    prevButton.addEventListener('click', () => {
+        stopAutomaticSlide();
+        moveSlide(-1);
+        startAutomaticSlide();
+    });
+
+    nextButton.addEventListener('click', () => {
+        stopAutomaticSlide();
+        moveSlide(1);
+        startAutomaticSlide();
+    });
+
+    // Iniciar o carrossel automático
+    startAutomaticSlide();
+}

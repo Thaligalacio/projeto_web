@@ -280,3 +280,90 @@ button[type="submit"]:hover {
 .signup-link a:hover {
     text-decoration: underline;
 }
+
+/* Estilos para o Carrossel de Jogos */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Esconder o que estiver fora do contêiner */
+}
+
+.carousel-slide {
+    display: flex; /* Usar flex para alinhar os três itens */
+    overflow-x: auto; /* Permitir rolagem se houver mais grupos */
+    scroll-snap-type: x mandatory; /* Para o scroll parar nos slides */
+    padding-bottom: 20px; /* Espaço para os controles */
+}
+
+.carousel-slide .carousel-item {
+    flex: 0 0 calc(33.33% - 20px); /* Cada item ocupa um terço da largura */
+    margin-right: 20px;
+    scroll-snap-align: start;
+}
+
+.carousel-slide .carousel-item:last-child {
+    margin-right: 0;
+}
+
+.carousel-item.game-card {
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
+    box-sizing: border-box;
+    border: 1px solid #555;
+    color: #fff;
+    display: block; /* Mudado para block para ocupar a largura definida pelo flex */
+}
+
+.carousel-item.game-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.carousel-item.game-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.carousel-item.game-card .play-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #d0a933;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.carousel-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.carousel-controls button {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2rem;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.carousel-controls .prev {
+    left: 10px;
+}
+
+.carousel-controls .next {
+    right: 10px;
+}
