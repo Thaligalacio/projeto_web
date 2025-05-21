@@ -256,44 +256,34 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Para o carrossel
-let slideIndex = 0;
-const carouselSlide = document.querySelector('.carousel-slide');
-const carouselItems = document.querySelectorAll('.carousel-item');
-const prevButton = document.querySelector('.prev');
-const nextButton = document.querySelector('.next');
-let intervalId;
+document.addEventListener("DOMContentLoaded", function () {
+    console.log('script.js carregado!');
+    // Seu outro código JavaScript aqui (modais, categorias, etc.)
+});
 
-function moveSlide(step) {
-    if (!carouselSlide || carouselItems.length === 0) return;
-    const totalItems = carouselItems.length;
-    slideIndex = (slideIndex + step + totalItems) % totalItems;
-    const itemWidth = carouselItems[0].offsetWidth + 20; // Largura do item + margem
-    carouselSlide.style.transform = `translateX(-${slideIndex * itemWidth}px)`;
+function moveSlide(direction, carouselContainer) {
+    const slide = carouselContainer.querySelector('.carousel-slide');
+    if (!slide) return;
+    const containerWidth = carouselContainer.offsetWidth;
+    slide.scrollBy({ left: direction * containerWidth, behavior: 'smooth' });
 }
 
-function startAutomaticSlide() {
-    intervalId = setInterval(() => {
-        moveSlide(1);
-    }, 3000);
-}
+//  Carrossel automático
+setInterval(() => {
+    const carouselContainer = document.querySelector('.carousel-container');
+    if (carouselContainer) {
+        const slide = carouselContainer.querySelector('.carousel-slide');
+        if (slide) {
+            const containerWidth = carouselContainer.offsetWidth;
+            const maxScrollLeft = slide.scrollWidth - slide.clientWidth;
 
-function stopAutomaticSlide() {
-    clearInterval(intervalId);
-}
-
-if (prevButton && nextButton && carouselSlide && carouselItems.length > 0) {
-    prevButton.addEventListener('click', () => {
-        stopAutomaticSlide();
-        moveSlide(-1);
-        startAutomaticSlide();
-    });
-
-    nextButton.addEventListener('click', () => {
-        stopAutomaticSlide();
-        moveSlide(1);
-        startAutomaticSlide();
-    });
-
-    // Iniciar o carrossel automático
-    startAutomaticSlide();
-}
+            if (slide.scrollLeft + containerWidth >= maxScrollLeft - 5) {
+                // Volta ao início suavemente
+                slide.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                // Vai para o próximo conjunto de slides
+                slide.scrollBy({ left: containerWidth, behavior: 'smooth' });
+            }
+        }
+    }
+}, 3000);

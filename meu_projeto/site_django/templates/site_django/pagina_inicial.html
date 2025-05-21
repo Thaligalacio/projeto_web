@@ -149,24 +149,23 @@
         <section class="hero">
         </section>
 
-    <section class="carousel-container">
-    {% for group in game_cards_grouped_by_three %}
+<section class="carousel-container">
     <div class="carousel-slide">
-        {% for card in group %}
-        <div class="carousel-item game-card" data-category="{{ card.category }}">
-            <img src="{% static 'site_django/imagens/' %}{{ card.image }}" alt="{{ card.name }}">
-            <h3>{{ card.name }}</h3>
-            <a href="{{ card.play_url }}" class="play-btn">Play</a>
-        </div>
+        {% for group in game_cards_grouped_by_three %}
+            {% for card in group %}
+                <div class="carousel-item game-card" data-category="{{ card.category }}">
+                    <img src="{% static 'site_django/imagens/' %}{{ card.image }}" alt="{{ card.name }}">
+                    <h3>{{ card.name }}</h3>
+                    <a href="{{ card.play_url }}" class="play-btn">Play</a>
+                </div>
+            {% endfor %}
         {% endfor %}
     </div>
     <div class="carousel-controls">
-        <button class="prev" onclick="moveSlide(-1, this.parentNode.previousElementSibling)">&#10094;</button>
-        <button class="next" onclick="moveSlide(1, this.parentNode.previousElementSibling)">&#10095;</button>
+        <button class="prev" onclick="moveSlide(-1, this.parentNode)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1, this.parentNode)">&#10095;</button>
     </div>
-    {% endfor %}
 </section>
-
             <div class="game-card" data-category="acao">
                 <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty">
                 <h3>CALL OF DUTY Vanguard</h3>
