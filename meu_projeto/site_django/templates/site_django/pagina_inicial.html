@@ -41,7 +41,10 @@
             <button class="nav-btn play-now">Jogar Agora</button>
             <button class="nav-btn">Compras</button>
             <button class="nav-btn" id="login-btn">Login/Cadastro</button>
-        </nav><div id="login-form" class="modal">
+        </nav>
+    </header>
+
+<div id="login-form" class="modal">
     <div class="modal-content login-content">
         <span class="close-button" id="close-login-modal">&times;</span>
         <h2>Faça o seu login</h2>
@@ -77,20 +80,20 @@
                 </ul>
                 {% endif %}
                 <div class="input-group">
-                    <label for="register-nome">Nome</label>
-                    <input type="text" name="nome" placeholder="Nome" required>
+                    <label for="register-nome-inside">Nome</label>
+                    <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required>
                 </div>
                 <div class="input-group">
-                    <label for="register-email">Email</label>
-                    <input type="email" name="email" placeholder="Email" required>
+                    <label for="register-email-inside">Email</label>
+                    <input type="email" name="email" id="register-email-inside" placeholder="Email" required>
                 </div>
                 <div class="input-group">
-                    <label for="register-password">Senha</label>
-                    <input type="password" name="password" placeholder="Senha" required>
+                    <label for="register-password-inside">Senha</label>
+                    <input type="password" name="password" id="register-password-inside" placeholder="Senha" required>
                 </div>
                 <div class="input-group">
-                    <label for="register-telefone">Telefone</label>
-                    <input type="text" name="telefone" placeholder="Telefone">
+                    <label for="register-telefone-inside">Telefone</label>
+                    <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone">
                 </div>
                 <button type="submit">Cadastrar</button>
                 <div class="signup-link">
@@ -100,26 +103,40 @@
         </div>
     </div>
 </div>
-    </header>
-    </nav>
-        <div id="register-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="close-register-modal">&times;</span>
-            <h2>Cadastrar Cliente</h2>
-            <form method="POST" id="registerForm">
-                {% csrf_token %}
-                <input type="text" name="nome" placeholder="Nome" required><br><br>
-                <input type="email" name="email" placeholder="Email" required><br><br>
-                <input type="password" name="password" placeholder="Senha" required><br><br>
-                <input type="text" name="telefone" placeholder="Telefone"><br><br>
-                <button type="submit">Cadastrar</button>
-                <div id="register-success-message" style="display:none; color: green; margin-top: 10px;">Cadastro realizado com sucesso!</div>
-                {% if sucesso %}
-                    <p style="color: green;">{{ sucesso }}</p>
-                {% endif %}
-            </form>
-        </div>
+
+<div id="register-modal" class="modal">
+    <div class="modal-content login-content">
+        <span class="close-button" id="close-register-modal">&times;</span>
+        <h2>Cadastrar Cliente</h2>
+        <form method="POST" id="registerForm">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="register-nome">Nome</label>
+                <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style">
+            </div>
+            <div class="input-group">
+                <label for="register-email">Email</label>
+                <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style">
+            </div>
+            <div class="input-group">
+                <label for="register-password">Senha</label>
+                <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style">
+            </div>
+            <div class="input-group">
+                <label for="register-telefone">Telefone</label>
+                <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style">
+            </div>
+            <button type="submit" class="login-button">Cadastrar</button>
+            <div class="signup-link">
+                Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
+            </div>
+            <div id="register-success-message" style="display:none; color: green; margin-top: 10px;">Cadastro realizado com sucesso!</div>
+            {% if sucesso %}
+                <p style="color: green;">{{ sucesso }}</p>
+            {% endif %}
+        </form>
     </div>
+</div>
     {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -127,20 +144,21 @@
     {% endfor %}
 </ul>
 {% endif %}
-<div id="register-form-inside-login" style="display: none;">
-    <div id="register-alert-message" style="display: none;"></div>
-    <h2>Cadastrar Cliente</h2>
-    <form id="registerFormInside" method="post" action="{% url 'registrar_cliente' %}">
-        {% csrf_token %}
-        </div>
 
-<form method="post">
-
-<div id="login-form" class="modal">
-    <div id="error-message-container" style="display: none; /* Initially hidden */"></div>
+<div id="forgot-password-content" class="modal-content" style="display: none;">
+    <span class="close-button" id="close-forgot-password-modal">&times;</span>
+    <h2>Recuperar Senha</h2>
+    <p>Por favor, insira seu email para recuperar sua senha.</p>
+    <div class="input-group">
+        <label for="forgot-email">Email</label>
+        <input type="email" id="forgot-email" name="email" placeholder="Seu email">
     </div>
+    <button type="button" id="recover-password-button">Enviar Link de Recuperação</button>
+    <div class="signup-link">
+        Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
+    </div>
+</div>
 
-</form>
     <script src="{% static 'site_django/js/script.js' %}"></script>
         </nav>
     </header>
@@ -148,27 +166,9 @@
     <main>
         <section class="hero">
         </section>
-
-<section class="carousel-container">
-    <div class="carousel-slide">
-        {% for group in game_cards_grouped_by_three %}
-            {% for card in group %}
-                <div class="carousel-item game-card" data-category="{{ card.category }}">
-                    <img src="{% static 'site_django/imagens/' %}{{ card.image }}" alt="{{ card.name }}">
-                    <h3>{{ card.name }}</h3>
-                    <a href="{{ card.play_url }}" class="play-btn">Play</a>
-                </div>
-            {% endfor %}
-        {% endfor %}
-    </div>
-    <div class="carousel-controls">
-        <button class="prev" onclick="moveSlide(-1, this.parentNode)">&#10094;</button>
-        <button class="next" onclick="moveSlide(1, this.parentNode)">&#10095;</button>
-    </div>
-</section>
             <div class="game-card" data-category="acao">
                 <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty">
-                <h3>CALL OF DUTY Vanguard</h3>
+                <h3>CALL OF DUTY</h3>
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
             <div class="game-card" data-category="aventura">
@@ -183,7 +183,7 @@
             </div>
             <div class="game-card" data-category="aventura">
                 <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft">
-                <h3>Minecraft</h3>
+                <h3>MINECRAFT</h3>
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
             <div class="game-card" data-category="aventura">
@@ -193,140 +193,9 @@
             </div>
             <div class="game-card" data-category="quebra_cabeca">
                 <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca">
-                <h3>Quebra_Cabeca</h3>
+                <h3>QUEBRA_CABECA</h3>
                 <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             </div>
-        </section>
     </main>
-
-    <div id="login-form" class="modal">
-        <div class="modal-content login-content">
-            <span class="close-button" id="close-login-modal">&times;</span>
-            <h2>Faça o seu login</h2>
-            <div class="input-group">
-                <label for="login-email">Email</label>
-                <input type="email" id="login-email" name="email" placeholder="Seu email">
-            </div>
-            <div class="input-group">
-                <label for="login-password">Senha</label>
-                <input type="password" id="login-password" name="password" placeholder="Sua senha">
-            </div>
-            <div class="options">
-                <label>
-                    <input type="checkbox" name="remember"> Lembrar-me
-                </label>
-                <a href="#">Esqueci minha senha</a>
-            </div>
-            <button type="submit">Login</button>
-            <div class="signup-link">
-                Ainda não possui conta? <a href="#">Cadastre-se</a>
-            </div>
-        </div>
-    </div><div id="forgot-password-content" class="modal-content" style="display: none;">
-        <span class="close-button" id="close-forgot-password-modal">&times;</span>
-        <h2>Recuperar Senha</h2>
-        <p>Por favor, insira seu email para recuperar sua senha.</p>
-        <div class="input-group">
-            <label for="forgot-email">Email</label>
-            <input type="email" id="forgot-email" name="email" placeholder="Seu email">
-        </div>
-        <button type="button" id="recover-password-button">Enviar Link de Recuperação</button>
-        <div class="signup-link">
-            Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
-        </div>
-    </div>
-
-<script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const categoryBtn = document.getElementById("category-btn");
-            const categoryMenu = document.getElementById("category-menu");
-            const gameCards = document.querySelectorAll(".game-card");
-            const registerBtn = document.getElementById("register-btn");
-            const registerModal = document.getElementById("register-modal");
-            const closeRegisterModal = document.getElementById("close-register-modal");
-            const loginBtnElement = document.getElementById("login-btn");
-            const loginFormElement = document.getElementById("login-form");
-            const closeLoginModal = document.getElementById("close-login-modal"); // Pegue o botão de fechar do login
-            const loginFormElementParaFechar = document.getElementById("login-form"); // Pegue o modal de login para fechar
-            const showRegisterFormLink = document.getElementById("show-register-form");
-            const registerFormInsideLogin = document.getElementById("register-form-inside-login");
-            const showLoginFormLink = document.getElementById("show-login-form");
-            const loginContentDiv = document.getElementById("login-content");
-
-            // Mostrar formulário de cadastro dentro do modal de login
-            if (showRegisterFormLink) {
-                showRegisterFormLink.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    if (loginContentDiv) loginContentDiv.style.display = "none";
-                    if (registerFormInsideLogin) registerFormInsideLogin.style.display = "block";
-                });
-            }
-
-            // Mostrar formulário de login dentro do modal de login
-            if (showLoginFormLink) {
-                showLoginFormLink.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    if (registerFormInsideLogin) registerFormInsideLogin.style.display = "none";
-                    if (loginContentDiv) loginContentDiv.style.display = "block";
-                });
-            }
-
-            // Modal de Cadastro (removido, pois o cadastro será dentro do modal de login)
-            // Dropdown de Categoria
-            if (categoryBtn) {
-                categoryBtn.addEventListener("click", function (event) {
-                    event.stopPropagation();
-                    if (categoryMenu) categoryMenu.style.display = categoryMenu.style.display === "block" ? "none" : "block";
-                });
-            }
-            document.addEventListener("click", function (event) {
-                if (categoryMenu && !categoryMenu.contains(event.target) && event.target !== categoryBtn) {
-                    categoryMenu.style.display = "none";
-                }
-            });
-            if (categoryMenu) {
-                categoryMenu.querySelectorAll("li").forEach(categoryItem => {
-                    categoryItem.addEventListener("click", function () {
-                        let selectedCategory = this.getAttribute("data-category");
-                        if (selectedCategory === "all") {
-                            gameCards.forEach(card => card.style.display = "block");
-                        } else {
-                            gameCards.forEach(card => {
-                                card.style.display = card.dataset.category === selectedCategory ? "block" : "none";
-                            });
-                        }
-                        categoryMenu.style.display = "none";
-                    });
-                });
-            }
-
-            // Login Modal
-            if (loginFormElement) {
-                loginFormElement.style.display = "none"; // Inicialmente escondido
-            }
-            if (loginBtnElement) {
-                loginBtnElement.addEventListener("click", function () {
-                    if (loginFormElement) {
-                        loginFormElement.style.display = loginFormElement.style.display === "none" ? "block" : "none";
-                    }
-                });
-            }
-
-            // Fechar modal de Login
-            if (closeLoginModal) {
-                closeLoginModal.addEventListener("click", () => {
-                    if (loginFormElementParaFechar) {
-                        loginFormElementParaFechar.style.display = "none";
-                    }
-                });
-            }
-
-            window.addEventListener("click", (event) => {
-                if (loginFormElementParaFechar && event.target === loginFormElementParaFechar) {
-                    loginFormElementParaFechar.style.display = "none";
-                }
-            });
-        });
-    </script>
 </body>
 </html>

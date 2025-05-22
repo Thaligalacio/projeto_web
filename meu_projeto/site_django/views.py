@@ -7,12 +7,17 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from PIL import Image
-from django.http import JsonResponse
+
+def recuperar_senha_view(request):
+    # Sua lógica para a recuperação de senha aqui
+    return render(request, 'site_django/recuperar_senha.html') # Crie este template se ainda não existir
+
 
 def registrar_cliente(request):
     form = ClienteForm(request.POST or None)
     print("Método da requisição:", request.method)
     if request.method == 'POST':
+
         print("Formulário POST recebido.")
         if form.is_valid():
             print("Formulário é válido.")

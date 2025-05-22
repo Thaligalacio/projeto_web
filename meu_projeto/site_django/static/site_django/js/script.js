@@ -1,289 +1,195 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log('script.js carregado!'); // Verificar se o script carrega
-
-    // Elementos principais
-    const showRegisterFormLink = document.getElementById("show-register-form");
-    const showLoginFormLink = document.getElementById("show-login-form");
-    const loginContent = document.getElementById("login-content");
-    const registerFormInsideLogin = document.getElementById("register-form-inside-login");
-
-    const loginBtn = document.getElementById("login-btn");
-    const loginModal = document.getElementById("login-form");
-    const closeLoginModal = document.getElementById("close-login-modal");
-
-    const registerBtn = document.getElementById("register-btn");
-    const registerModal = document.getElementById("register-modal");
-    const closeRegisterModal = document.getElementById("close-register-modal");
-
     const categoryBtn = document.getElementById("category-btn");
     const categoryMenu = document.getElementById("category-menu");
     const gameCards = document.querySelectorAll(".game-card");
+    const loginBtn = document.getElementById("login-btn");
+    const loginForm = document.getElementById("login-form");
+    const closeLoginModalBtn = document.getElementById("close-login-modal");
+    const registerModal = document.getElementById("register-modal");
+    const closeRegisterModalBtn = document.getElementById("close-register-modal");
+    const loginFormDiv = document.getElementById("login-form");
+    const registerFormDivInsideLogin = document.getElementById("register-form-inside-login");
+    const showRegisterFormLink = document.getElementById("show-register-form");
+    const showLoginFormLinks = document.querySelectorAll("#show-login-form");
+    const showForgotPasswordLink = document.querySelector("#login-content a[href='#']"); // Link "Esqueci minha senha"
+    const showLoginFromForgot = document.getElementById("show-login-from-forgot");
+    const loginContentDiv = document.getElementById("login-content");
+    const forgotPasswordDiv = document.getElementById("forgot-password-content");
+    const forgotPasswordDialog = document.getElementById("forgot-password-dialog"); // Nova dialog
 
-    // Alternar entre login e cadastro DENTRO do modal de login
-    if (showRegisterFormLink && showLoginFormLink && loginContent && registerFormInsideLogin) {
-        showRegisterFormLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            loginContent.style.display = "none";
-            registerFormInsideLogin.style.display = "block";
-        });
 
-        showLoginFormLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            registerFormInsideLogin.style.display = "none";
-            loginContent.style.display = "block";
-        });
-    }
-
-    // Abrir/fechar modal de login
-    if (loginBtn && loginModal) {
-        loginModal.style.display = "none";
-
-        loginBtn.addEventListener("click", function () {
-            loginModal.style.display = loginModal.style.display === "none" ? "block" : "none";
-        });
-
-        if (closeLoginModal) {
-            closeLoginModal.addEventListener("click", () => {
-                loginModal.style.display = "none";
-            });
-        }
-
-        window.addEventListener("click", (event) => {
-            if (event.target === loginModal) {
-                loginModal.style.display = "none";
-            }
-        });
-    }
-
-    // Abrir/fechar modal de cadastro
-    if (registerBtn && registerModal) {
-        registerBtn.addEventListener("click", () => {
-            registerModal.style.display = "block";
-        });
-
-        if (closeRegisterModal) {
-            closeRegisterModal.addEventListener("click", () => {
-                registerModal.style.display = "none";
-            });
-        }
-
-        window.addEventListener("click", (event) => {
-            if (event.target === registerModal) {
-                registerModal.style.display = "none";
-            }
-        });
-    }
-
-    // Dropdown de categorias
-    if (categoryBtn && categoryMenu) {
-        categoryBtn.addEventListener("click", function (event) {
-            event.stopPropagation();
-            const rect = categoryBtn.getBoundingClientRect();
-            categoryMenu.style.left = `${rect.left}px`;
-            categoryMenu.style.top = `${rect.bottom + window.scrollY}px`;
+    // Dropdown categorias
+    if (categoryBtn) {
+        categoryBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
             categoryMenu.style.display = categoryMenu.style.display === "block" ? "none" : "block";
         });
-
-        document.addEventListener("click", function (event) {
-            if (!categoryMenu.contains(event.target) && event.target !== categoryBtn) {
-                categoryMenu.style.display = "none";
-            }
-        });
-
-        categoryMenu.querySelectorAll("li").forEach(categoryItem => {
-            categoryItem.addEventListener("click", function () {
-                const selectedCategory = this.getAttribute("data-category");
-                gameCards.forEach(card => {
-                    card.style.display = (selectedCategory === "all" || card.dataset.category === selectedCategory)
-                        ? "block" : "none";
-                });
-                categoryMenu.style.display = "none";
-            });
-        });
     }
-
-    // Mensagem de sucesso desaparece depois de 3s
-    const messagesContainer = document.querySelector('.messages');
-    if (messagesContainer) {
-        const successMessage = messagesContainer.querySelector('.success-message');
-        if (successMessage) {
-            setTimeout(function () {
-                successMessage.style.display = 'none';
-            }, 3000);
+    document.addEventListener("click", function (e) {
+        if (categoryMenu && !categoryMenu.contains(e.target) && e.target !== categoryBtn) {
+            categoryMenu.style.display = "none";
         }
-    }
-
-    // Envio do formulário de cadastro (AJAX)
-    const registerFormInside = document.getElementById('registerFormInside');
-    if (registerFormInside) {
-        registerFormInside.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            })
-            .then(response => {
-                const alertMessageDiv = document.getElementById('register-alert-message');
-                if (!response.ok) {
-                    response.json().then(data => {
-                        if (data.error && alertMessageDiv) {
-                            alertMessageDiv.textContent = data.error;
-                            alertMessageDiv.style.display = 'block';
-                            setTimeout(() => {
-                                alertMessageDiv.style.display = 'none';
-                            }, 3000);
-                        } else {
-                            alert('Ocorreu um erro no cadastro.');
-                        }
-                    }).catch(() => {
-                        alert('Ocorreu um erro no cadastro.');
-                    });
+    });
+    if (categoryMenu) {
+        categoryMenu.querySelectorAll("li").forEach(li => {
+            li.addEventListener("click", function () {
+                const cat = this.getAttribute("data-category");
+                if (cat === "all") {
+                    gameCards.forEach(card => card.style.display = "block");
                 } else {
-                    response.text().then(data => {
-                        if (alertMessageDiv) {
-                            alertMessageDiv.textContent = 'Cadastro realizado com sucesso!';
-                            alertMessageDiv.style.backgroundColor = '#c8e6c9';
-                            alertMessageDiv.style.borderColor = '#81c784';
-                            alertMessageDiv.style.color = '#1b5e20';
-                            alertMessageDiv.style.display = 'block';
-                            setTimeout(() => {
-                                alertMessageDiv.style.display = 'none';
-                                registerFormInside.reset();
-                            }, 3000);
+                    gameCards.forEach(card => {
+                        if (card.getAttribute("data-category") === cat) {
+                            card.style.display = "block";
                         } else {
-                            alert('Cadastro realizado com sucesso!');
-                            registerFormInside.reset();
+                            card.style.display = "none";
                         }
                     });
                 }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Ocorreu um erro inesperado.');
+                categoryMenu.querySelectorAll("li").forEach(i => i.classList.remove("active"));
+                this.classList.add("active");
+                categoryMenu.style.display = "none";
             });
         });
     }
 
-    // Envio do formulário de login (AJAX)
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (event) {
-            event.preventDefault();
+    // Modal login/cadastro (abrir modal principal)
+    if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+            if (loginForm) loginForm.style.display = "block";
+            if (loginContentDiv) loginContentDiv.style.display = "block";
+            if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none";
+            if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida inicialmente
+            if (registerFormDivInsideLogin) registerFormDivInsideLogin.style.display = "none";
+        });
+    }
+    if (closeLoginModalBtn && loginForm) {
+        closeLoginModalBtn.addEventListener("click", () => {
+            loginForm.style.display = "none";
+        });
+    }
 
-            const emailInput = document.getElementById('login-email');
-            const passwordInput = document.getElementById('login-password');
+    // Mostrar modal de cadastro (separado) ao clicar no link de cadastro NO LOGIN
+    if (showRegisterFormLink) {
+        showRegisterFormLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (loginForm) loginForm.style.display = "none";
+            if (registerModal) registerModal.style.display = "block";
+        });
+    }
 
-            if (emailInput && passwordInput) {
-                const email = emailInput.value;
-                const password = passwordInput.value;
+    // Voltar para login do cadastro (modal separado e interno)
+    function setupLoginFromRegisterLink() {
+        showLoginFormLinks.forEach(link => {
+            console.log("Link 'Fazer Login' encontrado:", link);
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                console.log("CLIQUE NO 'FAZER LOGIN' DETECTADO!");
+                if (registerModal && registerModal.style.display === "block") {
+                    registerModal.style.display = "none";
+                    if (loginForm) loginForm.style.display = "block";
+                    if (loginContentDiv) loginContentDiv.style.display = "block";
+                    if (registerFormInsideLogin) registerFormDivInsideLogin.style.display = "none";
+                    if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none"; // Garante que "Esqueci a senha" esteja escondido
+                    if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
+                    console.log("Trocando do modal de cadastro (separado) para login.");
+                } else if (loginForm && registerFormInsideLogin && loginContentDiv) {
+                    registerFormDivInsideLogin.style.display = "none";
+                    loginContentDiv.style.display = "block";
+                    if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none"; // Garante que "Esqueci a senha" esteja escondido
+                    if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
+                    console.log("Trocando da aba de cadastro (dentro do login) para login.");
+                } else if (loginForm && forgotPasswordDiv && loginContentDiv) {
+                    forgotPasswordDiv.style.display = "none";
+                    if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
+                    loginContentDiv.style.display = "block"; // Volta para a tela de login normal
+                } else if (loginForm && forgotPasswordDialog && loginContentDiv) {
+                    forgotPasswordDialog.style.display = "none";
+                    loginContentDiv.style.display = "block"; // Volta para a tela de login normal
+                }
+            });
+        });
+    }
+    setupLoginFromRegisterLink();
 
-                const formData = new FormData();
-                formData.append('email', email);
-                formData.append('password', password);
+    // Mostrar formulário esqueci a senha (dentro do modal de login principal)
+    const loginTitle = document.querySelector("#login-form .modal-content.login-content h2"); // Seleciona o título de login
 
-                const loginUrl = loginForm.getAttribute('data-login-url'); // <- Use data attribute no HTML
+    if (showForgotPasswordLink) {
+        showForgotPasswordLink.addEventListener("click", (e) => {
+            e.preventDefault();
 
-                fetch(loginUrl, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Login realizado com sucesso!');
-                        window.location.href = data.redirect_url || '/';
-                    } else if (data.error) {
-                        const errorMessageContainer = document.getElementById('error-message-container');
-                        if (errorMessageContainer) {
-                            errorMessageContainer.textContent = data.error;
-                            errorMessageContainer.style.display = 'block';
-                            setTimeout(() => {
-                                errorMessageContainer.style.display = 'none';
-                            }, 3000);
-                        } else {
-                            alert('Erro no login: ' + data.error);
-                        }
-                    } else {
-                        alert('Resposta inesperada do servidor.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao fazer login:', error);
-                    alert('Ocorreu um erro ao tentar fazer login.');
-                });
+            if (loginContentDiv) {
+                loginContentDiv.style.display = "none";
+                console.log("Escondendo a seção de login.");
             }
+            if (forgotPasswordDiv) {
+                forgotPasswordDiv.style.display = "none"; // Esconde a versão antiga
+                console.log("Escondendo a seção antiga de 'Esqueci minha senha'.");
+            }
+            if (forgotPasswordDialog) {
+                forgotPasswordDialog.style.display = "block"; // Mostra a nova dialog
+                console.log("Mostrando a nova caixa de diálogo de 'Esqueci minha senha'.");
+            }
+            if (loginTitle) {
+                loginTitle.style.display = "none"; // Esconde o título de login
+                console.log("Escondendo o título de login.");
+            }
+            // O botão de fechar permanece visível, o que é bom para fechar o modal.
         });
     }
 
-    // RECUPERAR SENHA
-    const forgotPasswordLink = document.querySelector('#login-content .options a');
-    const loginContentDiv = document.getElementById('login-content');
-    const forgotPasswordContentDiv = document.getElementById('forgot-password-content');
-    const closeForgotPasswordModal = document.getElementById('close-forgot-password-modal');
-    const showLoginFromForgotLink = document.getElementById('show-login-from-forgot');
-
-    console.log('forgotPasswordLink:', forgotPasswordLink); // Verificar se o link foi selecionado
-
-    if (forgotPasswordLink && loginContentDiv && forgotPasswordContentDiv) {
-        forgotPasswordLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            loginContentDiv.style.display = 'none';
-            forgotPasswordContentDiv.style.display = 'block';
+    // Voltar para login do esqueci senha (dentro da NOVA dialog)
+    const backToLoginNewDialog = document.querySelector("#forgot-password-dialog .back-to-login a");
+    if (backToLoginNewDialog) {
+        backToLoginNewDialog.addEventListener("click", function(e) {
+            e.preventDefault();
+            if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none";
+            if (loginContentDiv) loginContentDiv.style.display = "block";
+            if (loginTitle) loginTitle.style.display = "block";
         });
     }
 
-    if (closeForgotPasswordModal && forgotPasswordContentDiv) {
-        closeForgotPasswordModal.addEventListener('click', function() {
-            forgotPasswordContentDiv.style.display = 'none';
-            loginContentDiv.style.display = 'block';
+    // Voltar para login do esqueci senha (dentro do MODAL ANTIGO) - mantido por precaução
+    if (showLoginFromForgot) {
+        showLoginFromForgot.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (loginContentDiv) loginContentDiv.style.display = "block";
+            if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none";
+            if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog também esteja escondida
+            if (loginTitle) loginTitle.style.display = "block";
         });
     }
 
-    if (showLoginFromForgotLink && forgotPasswordContentDiv && loginContentDiv) {
-        showLoginFromForgotLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            forgotPasswordContentDiv.style.display = 'none';
-            loginContentDiv.style.display = 'block';
-        });
-    }
-});
-
-// Para o carrossel
-document.addEventListener("DOMContentLoaded", function () {
-    console.log('script.js carregado!');
-    // Seu outro código JavaScript aqui (modais, categorias, etc.)
-});
-
-function moveSlide(direction, carouselContainer) {
-    const slide = carouselContainer.querySelector('.carousel-slide');
-    if (!slide) return;
-    const containerWidth = carouselContainer.offsetWidth;
-    slide.scrollBy({ left: direction * containerWidth, behavior: 'smooth' });
-}
-
-//  Carrossel automático
-setInterval(() => {
-    const carouselContainer = document.querySelector('.carousel-container');
-    if (carouselContainer) {
-        const slide = carouselContainer.querySelector('.carousel-slide');
-        if (slide) {
-            const containerWidth = carouselContainer.offsetWidth;
-            const maxScrollLeft = slide.scrollWidth - slide.clientWidth;
-
-            if (slide.scrollLeft + containerWidth >= maxScrollLeft - 5) {
-                // Volta ao início suavemente
-                slide.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                // Vai para o próximo conjunto de slides
-                slide.scrollBy({ left: containerWidth, behavior: 'smooth' });
+    // Fechar modais ao clicar fora
+    window.addEventListener("click", function (event) {
+        if (loginForm && event.target === loginForm) {
+            loginForm.style.display = "none";
+            // Resetar para a tela de login principal ao fechar o modal
+            if (loginContentDiv) loginContentDiv.style.display = "block";
+            if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none";
+            if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none";
+            const loginTitleReset = document.querySelector("#login-form .modal-content.login-content h2");
+            if (loginTitleReset) loginTitleReset.style.display = "block";
+        }
+        if (registerModal && event.target === registerModal) {
+            registerModal.style.display = "none";
+            // Ao fechar o modal de registro, volta a mostrar o formulário de login se o modal de login estiver aberto
+            if (loginForm && loginForm.style.display === "block") {
+                if (loginContentDiv) loginContentDiv.style.display = "block";
+                if (registerFormDivInsideLogin) registerFormDivInsideLogin.style.display = "none";
             }
         }
+    });
+
+    // Fechar modal de cadastro (separado) no botão de fechar
+    if (closeRegisterModalBtn) {
+        closeRegisterModalBtn.addEventListener("click", () => {
+            registerModal.style.display = "none";
+            // Ao fechar o modal de registro, volta a mostrar o formulário de login se o modal de login estiver aberto
+            if (loginForm && loginForm.style.display === "block") {
+                if (loginContentDiv) loginContentDiv.style.display = "block";
+                if (registerFormDivInsideLogin) registerFormDivInsideLogin.style.display = "none";
+            }
+        });
     }
-}, 3000);
+});

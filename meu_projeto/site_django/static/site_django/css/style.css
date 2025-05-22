@@ -62,19 +62,19 @@ nav .play-now {
 
 /* MENSAGENS */
 .success-message {
-    color: #c8e6c9;
+    color: green;
     font-size: 1.8em;
     text-align: center;
     margin-top: 10px;
     padding: 10px;
-    background-color: #1e4620;
-    border: 1px solid #2e7d32;
+    background-color: #e6ffe6;
+    border: 1px solid #138d13;
 }
 
 #error-message-container {
-    background-color: #4a1c1c;
-    color: #ffcdd2;
-    border: 1px solid #f44336;
+    background-color: #fdd;
+    color: #800;
+    border: 1px solid #800;
     padding: 10px;
     margin-top: 10px;
     border-radius: 5px;
@@ -155,6 +155,18 @@ nav .play-now {
 }
 
 /* MODAIS GERAIS */
+.modal-content.login-content {
+    background-color: #121212; /* Fundo mais escuro */
+    margin: 15% auto; /* Ajusta a margem vertical para centralizar melhor */
+    padding: 30px;
+    border-radius: 8px; /* Bordas um pouco menos arredondadas */
+    width: 90%; /* Aumenta um pouco a largura em telas menores */
+    max-width: 350px; /* Mantém uma largura máxima */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9); /* Sombra mais pronunciada */
+    color: #e0e0e0;
+    position: relative;
+}
+
 .modal,
 #login-form,
 #register-modal {
@@ -167,85 +179,42 @@ nav .play-now {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.8);
-    visibility: hidden;
 }
 
-body.loaded .modal,
-body.loaded #login-form,
-body.loaded #register-modal {
-    visibility: visible;
-}
-
-.modal-content,
-.login-content {
-    background-color: #1a1a1a;
-    margin: 10% auto;
-    padding: 30px;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    color: #e0e0e0;
-    position: relative;
-}
-
-.modal-content h2,
 .login-content h2 {
     color: #fff;
-    text-align: left;
+    text-align: center; /* Centraliza o título */
     margin-bottom: 25px;
-    font-size: 2em;
+    font-size: 2.2em;
 }
 
-.close-button {
-    color: #bbb;
-    float: right;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: #fff;
-    text-decoration: none;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label,
-#registerForm label {
+.input-group label {
     display: block;
-    color: #ddd;
-    margin-bottom: 8px;
+    color: #bbb;
+    margin-bottom: 5px; /* Reduz a margem abaixo da label */
+    font-size: 0.9em;
 }
 
-.input-group input[type="email"],
-.input-group input[type="password"],
 .input-group input[type="text"],
-.modal-content input[type="email"],
-.modal-content input[type="password"],
-.modal-content input[type="text"] {
+.input-group input[type="email"],
+.input-group input[type="password"] {
     width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    background-color: #333;
+    padding: 10px; /* Reduz um pouco o padding */
+    border: 1px solid #333; /* Adiciona uma borda sutil */
+    border-radius: 4px; /* Bordas um pouco menos arredondadas */
+    background-color: #212121; /* Fundo mais escuro para os inputs */
     color: #fff;
     font-size: 1em;
     box-sizing: border-box;
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Aumenta um pouco a margem inferior */
 }
-
 .options {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    color: #ccc;
-    font-size: 0.9em;
+    color: #9e9e9e;
+    font-size: 0.85em;
 }
 
 .options a {
@@ -257,26 +226,28 @@ body.loaded #register-modal {
     text-decoration: underline;
 }
 
-button[type="submit"] {
+.login-content button[type="submit"] {
     background-image: linear-gradient(to right, #BA68C8, #F06292);
     color: white;
-    padding: 14px 20px;
+    padding: 12px 20px; /* Reduz um pouco o padding vertical */
     border: none;
-    border-radius: 5px;
+    border-radius: 4px; /* Bordas um pouco menos arredondadas */
     cursor: pointer;
     width: 100%;
     font-size: 1.1em;
     transition: opacity 0.3s ease;
+    margin-top: 10px; /* Adiciona um pouco de espaço acima do botão */
 }
 
-button[type="submit"]:hover {
+.login-content button[type="submit"]:hover {
     opacity: 0.9;
 }
 
 .signup-link {
     text-align: center;
-    margin-top: 25px;
-    color: #ccc;
+    margin-top: 20px;
+    color: #9e9e9e;
+    font-size: 0.9em;
 }
 
 .signup-link a {
@@ -288,100 +259,179 @@ button[type="submit"]:hover {
     text-decoration: underline;
 }
 
-/* carrossel horizontal*/
-.carousel-container {
-    position: relative;
-    width: 100%;
-    overflow-x: auto; /* permite scroll horizontal */
-    overflow-y: hidden; /* esconde scroll vertical */
-    scroll-behavior: smooth;
-    scrollbar-width: none; /* Firefox */
+.close-button {
+    color: #757575;
+    float: right;
+    font-size: 28px; /* Reduz um pouco o tamanho do botão de fechar */
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
 }
 
-.carousel-slide {
-    display: flex; /* Coloca os itens lado a lado */
-    overflow-x: auto; /* Permite a rolagem horizontal */
-    scroll-snap-type: x mandatory; /* Faz o scroll parar em cada item */
-    scroll-behavior: smooth;
-    scrollbar-width: none; /* Firefox */
-    padding-bottom: 20px; /* Espaço para os controles se necessário */
+.close-button:hover,
+.close-button:focus {
+    color: #fff;
+    text-decoration: none;
 }
 
-.carousel-slide .carousel-item {
-    flex: 0 0 auto; /* Não "encolhe" nem "esticam", largura automática */
-    width: calc(33.33% - 20px); /* Exibe aproximadamente 3 cards por vez (ajuste conforme necessário) */
-    margin-right: 20px;
-    scroll-snap-align: start; /* Alinha o início de cada item com o container */
-}
-
-.carousel-slide .carousel-item:last-child {
-    margin-right: 0;
-    
-}
-
-.carousel-slide::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
-}
-
-.carousel-item.game-card {
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
+/*Para as imagens lado a lado*/
+main {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
+    gap: 15px; /* Espaçamento entre os cards */
     padding: 15px;
+}
+
+.game-card {
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
-    box-sizing: border-box;
     border: 1px solid #555;
     color: #fff;
-    display: block; /* Garante que ocupe a largura definida */
+    /* Defina uma largura base para cada card */
+    width: calc(33.33% - 15px); /* Aproximadamente um terço da largura com espaçamento */
+    box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
+    margin-bottom: 15px; /* Espaçamento inferior entre as linhas */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    min-height: 250px; /* Altura mínima para os cards */
 }
 
-.carousel-item.game-card img {
+.game-card img {
     width: 100%;
-    height: 150px;
+    max-height: 120px;
     object-fit: contain;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
-.carousel-item.game-card h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.2em;
+.game-card {
+    /* ... outras propriedades ... */
+    align-items: center; /* Centraliza os itens horizontalmente */
+    /* justify-content: space-between; <- já temos isso para o alinhamento vertical */
 }
 
-.carousel-item.game-card .play-btn {
-    display: inline-block;
-    padding: 8px 15px;
-    background-color: #d0a933;
-    color: white;
+.game-card .play-btn {
+    display: inline-block; /* Garante que a largura se ajuste ao conteúdo */
+    padding: 6px 12px;
+    background-color: #cc9900;
+    color: #fff;
     text-decoration: none;
     border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* Empurra o botão para a parte inferior (devido ao space-between) */
 }
 
-.carousel-controls {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    right: 10px;
-    display: flex;
-    justify-content: space-between;
-    transform: translateY(-50%);
-    z-index: 10;
+.game-card .play-btn:hover {
+    background-color: #b38600;
 }
 
-.carousel-controls button {
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 2rem;
+.hero {
+    width: 100%; /* Garante que a imagem do topo ocupe a largura total */
+    margin-bottom: 15px; /* Adiciona um pouco de espaço abaixo dela */
+}
+
+/* Para telas menores, ajuste a largura dos cards */
+@media (max-width: 768px) {
+    .game-card {
+        width: calc(50% - 15px); /* Metade da largura em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .game-card {
+        width: 100%; /* Largura total em telas bem pequenas */
+    }
+}
+
+/* Estilos para a nova caixa de diálogo de esqueci senha */
+#forgot-password-dialog {
+    display: none;
+    background-color: #8A2BE2; /* Roxo */
+    color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    margin: 10% auto; /* Ajusta a margem para centralizar */
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+#forgot-password-dialog h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+#forgot-password-dialog p {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 0.9em;
+    color: #eee;
+}
+
+#forgot-password-dialog .input-group {
+    margin-bottom: 20px;
+}
+
+#forgot-password-dialog label {
+    display: block;
+    color: #fff;
+    margin-bottom: 8px;
+    font-size: 1em;
+}
+
+#forgot-password-dialog input[type="text"],
+#forgot-password-dialog input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+    margin-top: 5px;
+    color: #333;
+}
+
+#forgot-password-dialog button {
+    width: 100%;
+    padding: 14px;
     border: none;
-    padding: 10px;
+    border-radius: 6px;
+    background-color: #64b5f6; /* Azul claro */
+    color: #fff;
+    font-size: 1.1em;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.carousel-controls .prev {
-    left: 0;
+#forgot-password-dialog button:hover {
+    background-color: #42a5f5;
 }
 
-.carousel-controls .next {
-    right: 0;
+#forgot-password-dialog .back-to-login {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+#forgot-password-dialog .back-to-login a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#forgot-password-dialog .back-to-login a:hover {
+    text-decoration: underline;
+}
+
+/* Esconde a versão antiga de "Recuperar Senha" */
+#forgot-password-content {
+    display: none !important;
 }
