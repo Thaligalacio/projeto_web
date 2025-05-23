@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,24 +24,26 @@
         <div class="logo">
             <img src="{% static 'site_django/imagens/logo-marca.png' %}" alt="FBGAMES">
         </div>
-        <nav>
-            <button class="nav-btn">Melhores jogos</button>
-            <button class="nav-btn">Jogos Favoritos</button>
-            <button class="nav-btn" id="category-btn">Categorias</button>
-            <div id="category-menu" class="category-dropdown">
-                <ul class="category-list">
-                    <li data-category="all" class="active">Menu Inicial</li>
-                    <li data-category="acao">Ação</li>
-                    <li data-category="corrida">Corrida</li>
-                    <li data-category="aventura">Aventura</li>
-                    <li data-category="quebra_cabeca">quebra_cabeca</li>
-                </ul>
-            </div>
-            <button class="nav-btn">Procurar</button>
-            <button class="nav-btn play-now">Jogar Agora</button>
-            <button class="nav-btn">Compras</button>
-            <button class="nav-btn" id="login-btn">Login/Cadastro</button>
-        </nav>
+       <nav>
+    <button class="nav-btn">Melhores jogos</button>
+    <button class="nav-btn">Jogos Favoritos</button>
+    <button class="nav-btn" id="category-btn">Categorias</button>
+    <div id="category-menu" class="category-dropdown">
+        <ul class="category-list">
+            <li data-category="all" class="active">Menu Inicial</li>
+            <li data-category="acao">Ação</li>
+            <li data-category="corrida">Corrida</li>
+            <li data-category="aventura">Aventura</li>
+            <li data-category="quebra_cabeca">quebra_cabeca</li>
+        </ul>
+    </div>
+    <button class="nav-btn" id="search-trigger">Procurar</button>
+    <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;">
+    <button class="nav-btn" id="close-search" style="display: none;">X</button>
+    <button class="nav-btn play-now">Jogar Agora</button>
+    <button class="nav-btn">Compras</button>
+    <button class="nav-btn" id="login-btn">Login/Cadastro</button>
+</nav>
     </header>
 
 <div id="login-form" class="modal">

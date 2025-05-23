@@ -193,3 +193,48 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (seu código JavaScript existente) ...
+
+    const searchTrigger = document.getElementById('search-trigger');
+    const searchInput = document.getElementById('search-input');
+    const closeSearchBtn = document.getElementById('close-search');
+    const gameCards = document.querySelectorAll('.game-card');
+
+    if (searchTrigger) {
+        searchTrigger.addEventListener('click', function() {
+            searchTrigger.style.display = 'none';
+            searchInput.style.display = 'inline-block';
+            closeSearchBtn.style.display = 'inline-block';
+            searchInput.focus();
+        });
+    }
+
+    if (closeSearchBtn) {
+        closeSearchBtn.addEventListener('click', function() {
+            searchInput.style.display = 'none';
+            closeSearchBtn.style.display = 'none';
+            searchTrigger.style.display = 'inline-block';
+            // Opcional: Limpar o campo de pesquisa ao fechar
+            searchInput.value = '';
+            // Opcional: Mostrar todos os jogos novamente
+            gameCards.forEach(card => card.style.display = 'block');
+        });
+    }
+
+    // Funcionalidade de pesquisa enquanto digita
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        gameCards.forEach(card => {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            if (title.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // ... (o restante do seu código JavaScript) ...
+});
