@@ -284,22 +284,31 @@ main {
     padding: 15px;
 }
 
+/* GAME LIST */
+.game-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 20px;
+    background: transparent;
+}
+
 .game-card {
     background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
+    padding: 15px;
     border-radius: 10px;
+    width: calc(33.33% - 20px);
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
+    box-sizing: border-box;
     border: 1px solid #555;
     color: #fff;
-    /* Defina uma largura base para cada card */
-    width: calc(33.33% - 15px); /* Aproximadamente um terço da largura com espaçamento */
-    box-sizing: border-box; /* Garante que padding e border não aumentem a largura */
-    margin-bottom: 15px; /* Espaçamento inferior entre as linhas */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 15px;
+    display: flex; /* Adicionado para o alinhamento interno */
+    flex-direction: column; /* Adicionado para o alinhamento interno */
+    justify-content: space-between; /* Adicionado para o alinhamento interno */
     min-height: 250px; /* Altura mínima para os cards */
+    align-items: center; /* Centraliza os itens horizontalmente */
 }
 
 .game-card img {
@@ -310,14 +319,20 @@ main {
     margin-bottom: 10px;
 }
 
-.game-card {
-    /* ... outras propriedades ... */
-    align-items: center; /* Centraliza os itens horizontalmente */
-    /* justify-content: space-between; <- já temos isso para o alinhamento vertical */
+@media (max-width: 768px) {
+    .game-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .game-card {
+        width: 100%;
+    }
 }
 
 .game-card .play-btn {
-    display: inline-block; /* Garante que a largura se ajuste ao conteúdo */
+    display: inline-block;
     padding: 6px 12px;
     background-color: #cc9900;
     color: #fff;
@@ -326,113 +341,48 @@ main {
     font-weight: bold;
     font-size: 0.9em;
     transition: background-color 0.3s ease;
-    margin-top: auto; /* Empurra o botão para a parte inferior (devido ao space-between) */
+    margin-top: auto;
 }
 
 .game-card .play-btn:hover {
     background-color: #b38600;
 }
 
-.hero {
-    width: 100%; /* Garante que a imagem do topo ocupe a largura total */
-    margin-bottom: 15px; /* Adiciona um pouco de espaço abaixo dela */
-}
-
-/* Para telas menores, ajuste a largura dos cards */
-@media (max-width: 768px) {
-    .game-card {
-        width: calc(50% - 15px); /* Metade da largura em telas menores */
-    }
-}
-
-@media (max-width: 480px) {
-    .game-card {
-        width: 100%; /* Largura total em telas bem pequenas */
-    }
-}
-
-/* Estilos para a nova caixa de diálogo de esqueci senha */
-#forgot-password-dialog {
+.game-features-popup {
     display: none;
-    background-color: #8A2BE2; /* Roxo */
+    position: absolute;
+    background-color: #333;
     color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    margin: 10% auto; /* Ajusta a margem para centralizar */
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-}
-
-#forgot-password-dialog h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
-#forgot-password-dialog p {
-    text-align: center;
-    margin-bottom: 25px;
+    border: 1px solid #555;
+    padding: 10px;
+    border-radius: 5px;
     font-size: 0.9em;
-    color: #eee;
+    z-index: 10;
+    max-width: 200px;
 }
 
-#forgot-password-dialog .input-group {
-    margin-bottom: 20px;
+.game-card.searched-with-description {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
 }
 
-#forgot-password-dialog label {
-    display: block;
-    color: #fff;
-    margin-bottom: 8px;
-    font-size: 1em;
+.game-card.searched-with-description img {
+    max-width: 150px;
+    height: auto;
+    margin-right: 15px;
+    margin-bottom: 0;
 }
 
-#forgot-password-dialog input[type="text"],
-#forgot-password-dialog input[type="email"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 1em;
-    margin-top: 5px;
-    color: #333;
-}
-
-#forgot-password-dialog button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 6px;
-    background-color: #64b5f6; /* Azul claro */
-    color: #fff;
-    font-size: 1.1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#forgot-password-dialog button:hover {
-    background-color: #42a5f5;
-}
-
-#forgot-password-dialog .back-to-login {
-    text-align: center;
-    margin-top: 20px;
+.game-card.searched-with-description .description-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
     font-size: 0.9em;
+    text-align: left;
+    margin-left: 15px;
 }
 
-#forgot-password-dialog .back-to-login a {
-    color: #fff;
-    text-decoration: none;
+.game-card .game-features {
+    display: none; /* Garante que a descrição original embaixo fique escondida */
 }
-
-#forgot-password-dialog .back-to-login a:hover {
-    text-decoration: underline;
-}
-
-/* Esconde a versão antiga de "Recuperar Senha" */
-#forgot-password-content {
-    display: none !important;
-}
-
