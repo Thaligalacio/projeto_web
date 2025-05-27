@@ -64,7 +64,6 @@ nav .play-now {
 /* MENU CATEGORIAS */
 .category-menu,
 .category-dropdown {
-    display: none;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
     padding: 10px;
@@ -92,47 +91,10 @@ nav .play-now {
 .category-menu li:hover,
 .category-dropdown li:hover {
     background: gray;
-}
+}*/
 
-/* GAME LIST */
-.game-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
-    padding: 20px;
-    background: transparent;
-}
-
-.game-card {
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
-    padding: 15px;
-    border-radius: 10px;
-    width: calc(33.33% - 20px);
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
-    box-sizing: border-box;
-    border: 1px solid #555;
-    color: #fff;
-}
-
-.game-card img {
-    width: 100%;
-    height: 150px;
-    object-fit: contain;
-    border-radius: 5px;
-}
-
-@media (max-width: 768px) {
-    .game-card {
-        width: calc(50% - 20px);
-    }
-}
-
-@media (max-width: 480px) {
-    .game-card {
-        width: 100%;
-    }
+.menu-aberto {
+    display: block !important; /* Usamos !important para garantir que sobreponha outros estilos de display */
 }
 
 /* MODAIS GERAIS DO CARD */
@@ -265,7 +227,7 @@ main {
     padding: 15px;
 }
 
-/* GAME LIST */
+/* GAME LIST DO CARD DE IMAGENS DOS JOGOS*/
 .game-list {
     display: flex;
     flex-wrap: wrap;
@@ -364,46 +326,4 @@ main {
     margin-left: 15px;
 }
 
-/* Estilização do menu de categorias */
-        .category-menu {
-            display: none;
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            list-style: none;
-            z-index: 100;
-        }
-
-        .category-menu li {
-            padding: 5px;
-            cursor: pointer;
-            color: white;
-        }
-
-        .category-menu li:hover {
-            background: gray;
-        }
-
-        /* Melhor responsividade para lista de jogos */
-        .game-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .game-card {
-            width: 250px;
-            text-align: center;
-            border: 1px solid gray;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-        }
-
-        .game-card img {
-            max-width: 100%;
-            height: auto;
-        }
 
