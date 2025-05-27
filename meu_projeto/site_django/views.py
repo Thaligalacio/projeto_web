@@ -12,7 +12,7 @@ def recuperar_senha_view(request):
     # Sua lógica para a recuperação de senha aqui
     return render(request, 'site_django/recuperar_senha.html') # Crie este template se ainda não existir
 
-
+#função para registro de clientes
 def registrar_cliente(request):
     form = ClienteForm(request.POST or None)
     print("Método da requisição:", request.method)

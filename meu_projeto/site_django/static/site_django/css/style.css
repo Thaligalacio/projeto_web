@@ -4,6 +4,7 @@
     margin: 0;
     padding: 0;
 }
+/*Estetica do fundo do site */
 
 body {
     font-family: 'Arial', sans-serif;
@@ -22,7 +23,7 @@ header {
     align-items: center;
     justify-content: space-between;
 }
-
+/*estetica do card*/
 nav .nav-btn,
 nav .play-now {
     background-color: #d0a933;
@@ -34,7 +35,7 @@ nav .play-now {
     cursor: pointer;
     font-weight: bold;
 }
-
+/*estetica do fundo sobre o controle*/
 .hero {
     background-image: url("/static/site_django/imagens/fundo.png");
     background-size: cover;
@@ -58,26 +59,6 @@ nav .play-now {
 .hero h1 {
     font-size: 2.5em;
     margin-top: 10px;
-}
-
-/* MENSAGENS */
-.success-message {
-    color: green;
-    font-size: 1.8em;
-    text-align: center;
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #e6ffe6;
-    border: 1px solid #138d13;
-}
-
-#error-message-container {
-    background-color: #fdd;
-    color: #800;
-    border: 1px solid #800;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
 }
 
 /* MENU CATEGORIAS */
@@ -154,7 +135,7 @@ nav .play-now {
     }
 }
 
-/* MODAIS GERAIS */
+/* MODAIS GERAIS DO CARD */
 .modal-content.login-content {
     background-color: #121212; /* Fundo mais escuro */
     margin: 15% auto; /* Ajusta a margem vertical para centralizar melhor */
@@ -383,6 +364,46 @@ main {
     margin-left: 15px;
 }
 
-.game-card .game-features {
-    display: none; /* Garante que a descrição original embaixo fique escondida */
-}
+/* Estilização do menu de categorias */
+        .category-menu {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            list-style: none;
+            z-index: 100;
+        }
+
+        .category-menu li {
+            padding: 5px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .category-menu li:hover {
+            background: gray;
+        }
+
+        /* Melhor responsividade para lista de jogos */
+        .game-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .game-card {
+            width: 250px;
+            text-align: center;
+            border: 1px solid gray;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+
+        .game-card img {
+            max-width: 100%;
+            height: auto;
+        }
+

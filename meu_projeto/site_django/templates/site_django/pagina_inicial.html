@@ -9,153 +9,144 @@
     <script src="{% static 'site_django/js/script.js' %}"></script>
 </head>
 <body>
-
-<div id="category-menu" class="category-dropdown">
-    <ul class="category-list">
-        <li data-category="all" class="active">Menu Inicial</li>
-        <li data-category="acao">Ação</li>
-        <li data-category="corrida">Corrida</li>
-        <li data-category="aventura">Aventura</li>
-        <li data-category="quebra-cabeca">Quebra-Cabeça</li>
-    </ul>
-</div>
-
     <header>
         <div class="logo">
             <img src="{% static 'site_django/imagens/logo-marca.png' %}" alt="FBGAMES">
         </div>
-    <nav>
-    <button class="nav-btn">Melhores jogos</button>
-    <button class="nav-btn">Jogos Favoritos</button>
-    <button class="nav-btn" id="category-btn">Categorias</button>
-    <button class="nav-btn" id="search-trigger">Procurar</button>
-    <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;">
-    <button class="nav-btn" id="close-search" style="display: none;">X</button>
-    <button class="nav-btn play-now">Jogar Agora</button>
-    <button class="nav-btn" id="login-btn">Login/Cadastro</button>
-</nav>
+        <nav>
+            <button class="nav-btn">Melhores jogos</button>
+            <button class="nav-btn">Jogos Favoritos</button>
+            <button class="nav-btn" id="category-btn">Categoria</button>
+            <ul class="category-menu" id="category-menu" style="display: none;">
+                <li data-category="all">Menu Inicial</li>
+                <li data-category="acao">Ação</li>
+                <li data-category="corrida">Corrida</li>
+                <li data-category="aventura">Aventura</li>
+                <li data-category="quebra-cabeca">Quebra-Cabeça</li>
+            </ul>
+            <button class="nav-btn" id="search-trigger">Procurar</button>
+            <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;">
+            <button class="nav-btn" id="close-search" style="display: none;">X</button>
+            <button class="nav-btn play-now">Jogar Agora</button>
+            <button class="nav-btn" id="login-btn">Login/Cadastro</button>
+        </nav>
     </header>
-
-<div id="login-form" class="modal">
-    <div class="modal-content login-content">
-        <span class="close-button" id="close-login-modal">&times;</span>
-        <h2>Faça o seu login</h2>
-        <div id="login-content">
-            <div class="input-group">
-                <label for="login-email">Email</label>
-                <input type="email" id="login-email" name="email" placeholder="Seu email">
+    <div id="login-form" class="modal">
+        <div class="modal-content login-content">
+            <span class="close-button" id="close-login-modal">&times;</span>
+            <h2>Faça o seu login</h2>
+            <div id="login-content">
+                <div class="input-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" placeholder="Seu email">
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" name="password" placeholder="Sua senha">
+                </div>
+                <div class="options">
+                    <label>
+                        <input type="checkbox" name="remember"> Lembrar-me
+                    </label>
+                    <a href="#">Esqueci minha senha</a>
+                </div>
+                <button type="submit">Login</button>
+                <div class="signup-link">
+                    Ainda não possui conta? <a href="#" id="show-register-form">Cadastre-se</a>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="login-password">Senha</label>
-                <input type="password" id="login-password" name="password" placeholder="Sua senha">
-            </div>
-            <div class="options">
-                <label>
-                    <input type="checkbox" name="remember"> Lembrar-me
-                </label>
-                <a href="#">Esqueci minha senha</a>
-            </div>
-            <button type="submit">Login</button>
-            <div class="signup-link">
-                Ainda não possui conta? <a href="#" id="show-register-form">Cadastre-se</a>
+            <div id="register-form-inside-login" style="display: none;">
+                <h2>Cadastrar Cliente</h2>
+                <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
+                    {% csrf_token %}
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <div class="input-group">
+                        <label for="register-nome-inside">Nome</label>
+                        <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-email-inside">Email</label>
+                        <input type="email" name="email" id="register-email-inside" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password-inside">Senha</label>
+                        <input type="password" name="password" id="register-password-inside" placeholder="Senha" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-telefone-inside">Telefone</label>
+                        <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone">
+                    </div>
+                    <button type="submit">Cadastrar</button>
+                    <div class="signup-link">
+                        Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
+                    </div>
+                </form>
             </div>
         </div>
-        <div id="register-form-inside-login" style="display: none;">
+    </div>
+    <div id="register-modal" class="modal">
+        <div class="modal-content login-content">
+            <span class="close-button" id="close-register-modal">&times;</span>
             <h2>Cadastrar Cliente</h2>
-            <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
+            <form method="POST" id="registerForm">
                 {% csrf_token %}
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
                 <div class="input-group">
-                    <label for="register-nome-inside">Nome</label>
-                    <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required>
+                    <label for="register-nome">Nome</label>
+                    <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style">
                 </div>
                 <div class="input-group">
-                    <label for="register-email-inside">Email</label>
-                    <input type="email" name="email" id="register-email-inside" placeholder="Email" required>
+                    <label for="register-email">Email</label>
+                    <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style">
                 </div>
                 <div class="input-group">
-                    <label for="register-password-inside">Senha</label>
-                    <input type="password" name="password" id="register-password-inside" placeholder="Senha" required>
+                    <label for="register-password">Senha</label>
+                    <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style">
                 </div>
                 <div class="input-group">
-                    <label for="register-telefone-inside">Telefone</label>
-                    <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone">
+                    <label for="register-telefone">Telefone</label>
+                    <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style">
                 </div>
-                <button type="submit">Cadastrar</button>
+                <button type="submit" class="login-button">Cadastrar</button>
                 <div class="signup-link">
                     Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
                 </div>
+                <div id="register-success-message" style="display:none; color: green; margin-top: 10px;">Cadastro realizado com sucesso!</div>
+                {% if sucesso %}
+                    <p style="color: green;">{{ sucesso }}</p>
+                {% endif %}
             </form>
         </div>
     </div>
-</div>
-
-<div id="register-modal" class="modal">
-    <div class="modal-content login-content">
-        <span class="close-button" id="close-register-modal">&times;</span>
-        <h2>Cadastrar Cliente</h2>
-        <form method="POST" id="registerForm">
-            {% csrf_token %}
-            <div class="input-group">
-                <label for="register-nome">Nome</label>
-                <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style">
-            </div>
-            <div class="input-group">
-                <label for="register-email">Email</label>
-                <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style">
-            </div>
-            <div class="input-group">
-                <label for="register-password">Senha</label>
-                <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style">
-            </div>
-            <div class="input-group">
-                <label for="register-telefone">Telefone</label>
-                <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style">
-            </div>
-            <button type="submit" class="login-button">Cadastrar</button>
-            <div class="signup-link">
-                Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
-            </div>
-            <div id="register-success-message" style="display:none; color: green; margin-top: 10px;">Cadastro realizado com sucesso!</div>
-            {% if sucesso %}
-                <p style="color: green;">{{ sucesso }}</p>
-            {% endif %}
-        </form>
-    </div>
-</div>
     {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<div id="forgot-password-content" class="modal-content" style="display: none;">
-    <span class="close-button" id="close-forgot-password-modal">&times;</span>
-    <h2>Recuperar Senha</h2>
-    <p>Por favor, insira seu email para recuperar sua senha.</p>
-    <div class="input-group">
-        <label for="forgot-email">Email</label>
-        <input type="email" id="forgot-email" name="email" placeholder="Seu email">
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div id="forgot-password-content" class="modal-content" style="display: none;">
+        <span class="close-button" id="close-forgot-password-modal">&times;</span>
+        <h2>Recuperar Senha</h2>
+        <p>Por favor, insira seu email para recuperar sua senha.</p>
+        <div class="input-group">
+            <label for="forgot-email">Email</label>
+            <input type="email" id="forgot-email" name="email" placeholder="Seu email">
+        </div>
+        <button type="button" id="recover-password-button">Enviar Link de Recuperação</button>
+        <div class="signup-link">
+            Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
+        </div>
     </div>
-    <button type="button" id="recover-password-button">Enviar Link de Recuperação</button>
-    <div class="signup-link">
-        Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
-    </div>
-</div>
-
     <script src="{% static 'site_django/js/script.js' %}"></script>
         </nav>
     </header>
-
-    <main>
+<main>
         <section class="hero">
         </section>
             <div class="game-card" data-category="acao">

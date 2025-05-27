@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const gameFeaturesContainers = document.querySelectorAll('.game-features');
     const registerFormInsideLogin = document.getElementById("register-form-inside-login");
 
-     //Descrições para os jogos aqui
+    //Descrições para os jogos aqui
     const gameDescriptions = {
-        'call of duty': 'Jogo de tiro em primeira pessoa com combates intensos e modos multiplayer.',
+        'call of duty':'Jogo de tiro em primeira pessoa com combates intensos e modos multiplayer.',
         'uncharted': 'Aventura cinematográfica com exploração, quebra-cabeças e ação.',
         'gran turismo 7': 'Simulador de corrida realista com vasta seleção de carros e pistas.',
         'minecraft': 'Jogo de mundo aberto com construção, exploração e sobrevivência.',
@@ -33,18 +33,21 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // Dropdown categorias
-    if (categoryBtn) {
-        categoryBtn.addEventListener("click", function (e) {
-            e.stopPropagation();
+    if (categoryBtn && categoryMenu) {
+        categoryBtn.addEventListener("click", function (event) {
+            event.stopPropagation();
             categoryMenu.style.display = categoryMenu.style.display === "block" ? "none" : "block";
         });
+
+        document.addEventListener("click", function (event) {
+            if (!categoryMenu.contains(event.target) && event.target !== categoryBtn) {
+                categoryMenu.style.display = "none";
+            }
+        });
+    } else {
+        console.error("Botão de categoria ou menu não encontrados.");
     }
-    document.addEventListener("click", function (e) {
-        if (categoryMenu && !categoryMenu.contains(e.target) && e.target !== categoryBtn) {
-            categoryMenu.style.display = "none";
-        }
-    });
-    if (categoryMenu) {
+
         categoryMenu.querySelectorAll("li").forEach(li => {
             li.addEventListener("click", function () {
                 const cat = this.getAttribute("data-category");
@@ -67,15 +70,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Modal login/cadastro (abrir modal principal)
-    if (loginBtn) {
+    if (loginBtn && loginForm && loginContentDiv && forgotPasswordDiv && registerFormDivInsideLogin) {
         loginBtn.addEventListener("click", () => {
-            if (loginForm) loginForm.style.display = "block";
-            if (loginContentDiv) loginContentDiv.style.display = "block";
-            if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none";
+            loginForm.style.display = "block";
+            loginContentDiv.style.display = "block";
+            forgotPasswordDiv.style.display = "none";
             if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida inicialmente
-            if (registerFormDivInsideLogin) registerFormDivInsideLogin.style.display = "none";
+            registerFormDivInsideLogin.style.display = "none";
         });
     }
+
+    // Fechar modal de login
     if (closeLoginModalBtn && loginForm) {
         closeLoginModalBtn.addEventListener("click", () => {
             loginForm.style.display = "none";
@@ -83,31 +88,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Mostrar modal de cadastro (separado) ao clicar no link de cadastro NO LOGIN
-    if (showRegisterFormLink) {
+    if (showRegisterFormLink && loginForm && registerModal) {
         showRegisterFormLink.addEventListener("click", (e) => {
             e.preventDefault();
-            if (loginForm) loginForm.style.display = "none";
-            if (registerModal) registerModal.style.display = "block";
+            loginForm.style.display = "none";
+            registerModal.style.display = "block";
         });
     }
 
     // Voltar para login do cadastro (modal separado e interno)
     function setupLoginFromRegisterLink() {
-    showLoginFormLinks.forEach(link => {
+        showLoginFormLinks.forEach(link => {
             link.addEventListener("click", function(e) {
-            e.preventDefault();
+                e.preventDefault();
                 if (registerModal && registerModal.style.display === "block") {
                     registerModal.style.display = "none";
                     if (loginForm) loginForm.style.display = "block";
                     if (loginContentDiv) loginContentDiv.style.display = "block";
                     if (registerFormInsideLogin) registerFormDivInsideLogin.style.display = "none";
                     if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none"; // Garante que "Esqueci a senha" esteja escondido
-                 if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
+                    if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
                 } else if (loginForm && registerFormInsideLogin && loginContentDiv) {
-                    registerFormDivInsideLogin.style.display = "none";
+                    registerFormInsideLogin.style.display = "none";
                     loginContentDiv.style.display = "block";
                     if (forgotPasswordDiv) forgotPasswordDiv.style.display = "none"; // Garante que "Esqueci a senha" esteja escondido
-                   if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
+                    if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
                 } else if (loginForm && forgotPasswordDiv && loginContentDiv) {
                     forgotPasswordDiv.style.display = "none";
                     if (forgotPasswordDialog) forgotPasswordDialog.style.display = "none"; // Garante que a nova dialog esteja escondida
@@ -121,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     setupLoginFromRegisterLink();
 
-// Fechar modais ao clicar fora
+    // Fechar modais ao clicar fora
     window.addEventListener("click", function (event) {
         if (loginForm && event.target === loginForm) {
             loginForm.style.display = "none";
@@ -143,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Fechar modal de cadastro (separado) no botão de fechar
-    if (closeRegisterModalBtn) {
+    if (closeRegisterModalBtn && registerModal) {
         closeRegisterModalBtn.addEventListener("click", () => {
             registerModal.style.display = "none";
             // Ao fechar o modal de registro, volta a mostrar o formulário de login se o modal de login estiver aberto
@@ -152,10 +157,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (registerFormDivInsideLogin) registerFormDivInsideLogin.style.display = "none";
             }
         });
-}
+    }
 
     // Funcionalidade da barra de pesquisa e exibição das características
-    if (searchTrigger) {
+    if (searchTrigger && searchInput && closeSearchBtn) {
         searchTrigger.addEventListener('click', function() {
             searchTrigger.style.display = 'none';
             searchInput.style.display = 'inline-block';
@@ -165,50 +170,47 @@ document.addEventListener("DOMContentLoaded", function () {
             gameCards.forEach(card => card.style.display = 'flex');
             searchInput.value = '';
         });
-    }
 
-    if (closeSearchBtn) {
         closeSearchBtn.addEventListener('click', function() {
             searchInput.style.display = 'none';
             closeSearchBtn.style.display = 'none';
-        searchTrigger.style.display = 'inline-block';
+            searchTrigger.style.display = 'inline-block';
             searchInput.value = '';
             gameCards.forEach(card => card.style.display = 'flex');
             gameFeaturesContainers.forEach(div => div.style.display = 'none');
         });
-    }
 
-searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        gameCards.forEach(card => {
-            const titleElement = card.querySelector('h3');
-            const featuresDiv = card.querySelector('.game-features');
-            const title = titleElement ? titleElement.textContent.toLowerCase() : '';
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            gameCards.forEach(card => {
+                const titleElement = card.querySelector('h3');
+                const featuresDiv = card.querySelector('.game-features');
+                const title = titleElement ? titleElement.textContent.toLowerCase() : '';
 
-            if (title.includes(searchTerm)) {
-                card.style.display = 'block'; // Mantém a forma de exibição original
-                if (featuresDiv && gameDescriptions[title]) {
-                    featuresDiv.textContent = gameDescriptions[title];
-                    featuresDiv.style.display = 'inline-block';
-                    featuresDiv.style.verticalAlign = 'top';
-                    featuresDiv.style.marginLeft = '15px';
-                } else if (featuresDiv) {
-                    featuresDiv.style.display = 'none';
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'block'; // Mantém a forma de exibição original
+                    if (featuresDiv && gameDescriptions[title]) {
+                        featuresDiv.textContent = gameDescriptions[title];
+                        featuresDiv.style.display = 'inline-block';
+                        featuresDiv.style.verticalAlign = 'top';
+                        featuresDiv.style.marginLeft = '15px';
+                    } else if (featuresDiv) {
+                        featuresDiv.style.display = 'none';
+                    }
+                } else {
+                    card.style.display = 'none';
+                    if (featuresDiv) {
+                        featuresDiv.style.display = 'none';
+                    }
                 }
-            } else {
-                card.style.display = 'none';
-                if (featuresDiv) {
-                    featuresDiv.style.display = 'none';
-                }
-            }
 
-            if (searchTerm === '') {
-                card.style.display = 'block';
-                if (featuresDiv) {
-                    featuresDiv.style.display = 'none';
+                if (searchTerm === '') {
+                    card.style.display = 'block';
+                    if (featuresDiv) {
+                        featuresDiv.style.display = 'none';
+                    }
                 }
-            }
+            });
         });
-    })
-})
-
+    }
+});
