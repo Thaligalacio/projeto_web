@@ -2,35 +2,94 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FB Games</title>
-    <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}">
-    <script src="{% static 'site_django/js/script.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}" />
+    <script src="{% static 'site_django/js/script.js' %}" defer></script>
+    <style>
+        /* Estilo para alinhar botões do nav horizontalmente */
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Espaço entre os botões */
+            flex-wrap: wrap; /* Para não quebrar em telas pequenas */
+        }
+        .nav-btn {
+            padding: 8px 12px;
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-btn:hover {
+            background-color: #666;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            display: none;
+            flex-direction: column;
+        }
+        .dropdown-content a {
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Exibe o dropdown quando ativo */
+        .dropdown.show .dropdown-content {
+            display: flex;
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="{% static 'site_django/imagens/logo-marca.png' %}" alt="FBGAMES">
+            <img src="{% static 'site_django/imagens/logo-marca.png' %}" alt="FBGAMES" />
         </div>
         <nav>
             <button class="nav-btn">Melhores jogos</button>
             <button class="nav-btn">Jogos Favoritos</button>
-            <button class="nav-btn" id="category-btn">Categoria</button>
-            <ul class="category-menu" id="category-menu">
-                <li data-category="all">Menu Inicial</li>
-                <li data-category="acao">Ação</li>
-                <li data-category="corrida">Corrida</li>
-                <li data-category="aventura">Aventura</li>
-                <li data-category="quebra-cabeca">Quebra-cabeca</li>
-            </ul>
+
+            <div class="dropdown" id="dropdown-category">
+                <button class="nav-btn" id="category-btn">Categoria</button>
+                <div class="dropdown-content" id="category-menu">
+                    <a href="#">Menu Principal</a>
+                    <a href="#">Ação</a>
+                    <a href="#">Corrida</a>
+                    <a href="#">Aventura</a>
+                    <a href="#">Quebra-Cabeça</a>
+                </div>
+            </div>
+
             <button class="nav-btn" id="search-trigger">Procurar</button>
-            <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;">
+            <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;" />
             <button class="nav-btn" id="close-search" style="display: none;">X</button>
+
             <button class="nav-btn play-now">Jogar Agora</button>
             <button class="nav-btn" id="login-btn">Login/Cadastro</button>
         </nav>
     </header>
+
+    <!-- Modal Login -->
     <div id="login-form" class="modal">
         <div class="modal-content login-content">
             <span class="close-button" id="close-login-modal">&times;</span>
@@ -38,16 +97,14 @@
             <div id="login-content">
                 <div class="input-group">
                     <label for="login-email">Email</label>
-                    <input type="email" id="login-email" name="email" placeholder="Seu email">
+                    <input type="email" id="login-email" name="email" placeholder="Seu email" />
                 </div>
                 <div class="input-group">
                     <label for="login-password">Senha</label>
-                    <input type="password" id="login-password" name="password" placeholder="Sua senha">
+                    <input type="password" id="login-password" name="password" placeholder="Sua senha" />
                 </div>
                 <div class="options">
-                    <label>
-                        <input type="checkbox" name="remember"> Lembrar-me
-                    </label>
+                    <label><input type="checkbox" name="remember" /> Lembrar-me</label>
                     <a href="#">Esqueci minha senha</a>
                 </div>
                 <button type="submit">Login</button>
@@ -68,19 +125,19 @@
                     {% endif %}
                     <div class="input-group">
                         <label for="register-nome-inside">Nome</label>
-                        <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required>
+                        <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required />
                     </div>
                     <div class="input-group">
                         <label for="register-email-inside">Email</label>
-                        <input type="email" name="email" id="register-email-inside" placeholder="Email" required>
+                        <input type="email" name="email" id="register-email-inside" placeholder="Email" required />
                     </div>
                     <div class="input-group">
                         <label for="register-password-inside">Senha</label>
-                        <input type="password" name="password" id="register-password-inside" placeholder="Senha" required>
+                        <input type="password" name="password" id="register-password-inside" placeholder="Senha" required />
                     </div>
                     <div class="input-group">
                         <label for="register-telefone-inside">Telefone</label>
-                        <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone">
+                        <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone" />
                     </div>
                     <button type="submit">Cadastrar</button>
                     <div class="signup-link">
@@ -90,6 +147,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Register -->
     <div id="register-modal" class="modal">
         <div class="modal-content login-content">
             <span class="close-button" id="close-register-modal">&times;</span>
@@ -98,31 +157,35 @@
                 {% csrf_token %}
                 <div class="input-group">
                     <label for="register-nome">Nome</label>
-                    <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style">
+                    <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style" />
                 </div>
                 <div class="input-group">
                     <label for="register-email">Email</label>
-                    <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style">
+                    <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style" />
                 </div>
                 <div class="input-group">
                     <label for="register-password">Senha</label>
-                    <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style">
+                    <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style" />
                 </div>
                 <div class="input-group">
                     <label for="register-telefone">Telefone</label>
-                    <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style">
+                    <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style" />
                 </div>
                 <button type="submit" class="login-button">Cadastrar</button>
                 <div class="signup-link">
                     Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
                 </div>
-                <div id="register-success-message" style="display:none; color: green; margin-top: 10px;">Cadastro realizado com sucesso!</div>
+                <div id="register-success-message" style="display: none; color: green; margin-top: 10px;">
+                    Cadastro realizado com sucesso!
+                </div>
                 {% if sucesso %}
-                    <p style="color: green;">{{ sucesso }}</p>
+                <p style="color: green;">{{ sucesso }}</p>
                 {% endif %}
             </form>
         </div>
     </div>
+
+    <!-- Mensagens -->
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -130,61 +193,60 @@
         {% endfor %}
     </ul>
     {% endif %}
+
+    <!-- Modal Recuperar Senha -->
     <div id="forgot-password-content" class="modal-content" style="display: none;">
         <span class="close-button" id="close-forgot-password-modal">&times;</span>
         <h2>Recuperar Senha</h2>
         <p>Por favor, insira seu email para recuperar sua senha.</p>
         <div class="input-group">
             <label for="forgot-email">Email</label>
-            <input type="email" id="forgot-email" name="email" placeholder="Seu email">
+            <input type="email" id="forgot-email" name="email" placeholder="Seu email" />
         </div>
         <button type="button" id="recover-password-button">Enviar Link de Recuperação</button>
         <div class="signup-link">
             Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
         </div>
     </div>
-    <script src="{% static 'site_django/js/script.js' %}"></script>
-        </nav>
-    </header>
-<main>
-        <section class="hero">
-        </section>
-            <div class="game-card" data-category="acao">
-                <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty">
-                <h3>CALL OF DUTY</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted">
-                <h3>UNCHARTED</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="corrida">
-                <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7">
-                <h3>GRAN TURISMO 7</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft">
-                <h3>MINECRAFT</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros">
-                <h3>SUPER MARIO BROS</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="quebra_cabeca">
-                <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca">
-                <h3>QUEBRA_CABECA</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-    </main>
+
+    <main>
+        <section class="hero"></section>
+        <!-- Cards de jogos -->
+        <div class="game-card" data-category="acao">
+            <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
+            <h3>CALL OF DUTY</h3>
+            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            <div class="game-features" style="display: none;"></div>
+        </div>
+        <div class="game-card" data-category="aventura">
+            <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
+            <h3>UNCHARTED</h3>
+            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            <div class="game-features" style="display: none;"></div>
+        </div>
+        <div class="game-card" data-category="corrida">
+            <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
+            <h3>GRAN TURISMO 7</h3>
+            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            <div class="game-features" style="display: none;"></div>
+        </div>
+        <div class="game-card" data-category="aventura">
+            <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
+            <h3>MINECRAFT</h3>
+            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            <div class="game-features" style="display: none;"></div>
+        </div>
+        <div class="game-card" data-category="aventura">
+            <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
+            <h3>SUPER MARIO BROS</h3>
+            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            <div class="game-features" style="display: none;"></div>
+        </div>   
+        <div class="game-card" data-category="quebra_cabeca">
+            <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
+            <h3>QUEBRA_CABECA</h3>
+            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+            <div class="game-features" style="display: none;"></div>
+        </div>
 </body>
 </html>

@@ -1,11 +1,11 @@
-/* RESET GERAL */
+/* ===== RESET GERAL ===== */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-/*Estetica do fundo do site */
 
+/* ===== BODY E FUNDO ===== */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #0d0d0d;
@@ -16,26 +16,35 @@ body {
     background-attachment: fixed;
 }
 
+/* ===== HEADER ===== */
 header {
     background: transparent;
     padding: 10px 20px;
     display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita */
     align-items: center;
-    justify-content: space-between;
+    gap: 10px; /* Espaço entre os botões */
 }
-/*estetica do card*/
+
+/* ===== BOTÕES GERAIS ===== */
+nav {
+    display: flex;
+    flex-direction: row; /* Botões na horizontal */
+    gap: 10px;
+}
+
 nav .nav-btn,
 nav .play-now {
     background-color: #d0a933;
     color: #fff;
     padding: 5px 10px;
-    margin: 0 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
 }
-/*estetica do fundo sobre o controle*/
+
+/* ===== HERO SECTION ===== */
 .hero {
     background-image: url("/static/site_django/imagens/fundo.png");
     background-size: cover;
@@ -61,55 +70,41 @@ nav .play-now {
     margin-top: 10px;
 }
 
-/* MENU CATEGORIAS */
-.category-menu,
-.category-dropdown {
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 10px;
-    border-radius: 10px;
-    list-style: none;
-    z-index: 100;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    margin-top: 5px;
-    min-width: 160px;
-}
-
-.category-menu li,
-.category-dropdown li {
-    padding: 10px 15px;
-    color: #fff;
-    cursor: pointer;
-    border-bottom: 1px solid #333;
-    white-space: nowrap;
-}
-
-.category-dropdown li:last-child {
-    border-bottom: none;
-}
-
-.category-menu li:hover,
-.category-dropdown li:hover {
-    background: gray;
-}*/
-
-.menu-aberto {
-    display: block !important; /* Usamos !important para garantir que sobreponha outros estilos de display */
-}
-
-/* MODAIS GERAIS DO CARD */
-.modal-content.login-content {
-    background-color: #121212; /* Fundo mais escuro */
-    margin: 15% auto; /* Ajusta a margem vertical para centralizar melhor */
-    padding: 30px;
-    border-radius: 8px; /* Bordas um pouco menos arredondadas */
-    width: 90%; /* Aumenta um pouco a largura em telas menores */
-    max-width: 350px; /* Mantém uma largura máxima */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9); /* Sombra mais pronunciada */
-    color: #e0e0e0;
+/* ===== MENU SUSPENSO ===== */
+.dropdown {
     position: relative;
+    display: inline-block;
 }
 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1e1e1e;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #333;
+}
+
+.dropdown-content a:hover {
+    background-color: #333;
+}
+
+.dropdown.show .dropdown-content {
+    display: block;
+}
+
+/* ===== MODAIS ===== */
 .modal,
 #login-form,
 #register-modal {
@@ -124,17 +119,30 @@ nav .play-now {
     background-color: rgba(0,0,0,0.8);
 }
 
+.modal-content.login-content {
+    background-color: #121212;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 350px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+    color: #e0e0e0;
+    position: relative;
+}
+
 .login-content h2 {
     color: #fff;
-    text-align: center; /* Centraliza o título */
+    text-align: center;
     margin-bottom: 25px;
     font-size: 2.2em;
 }
 
+/* INPUTS DO FORMULÁRIO */
 .input-group label {
     display: block;
     color: #bbb;
-    margin-bottom: 5px; /* Reduz a margem abaixo da label */
+    margin-bottom: 5px;
     font-size: 0.9em;
 }
 
@@ -142,15 +150,17 @@ nav .play-now {
 .input-group input[type="email"],
 .input-group input[type="password"] {
     width: 100%;
-    padding: 10px; /* Reduz um pouco o padding */
-    border: 1px solid #333; /* Adiciona uma borda sutil */
-    border-radius: 4px; /* Bordas um pouco menos arredondadas */
-    background-color: #212121; /* Fundo mais escuro para os inputs */
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #212121;
     color: #fff;
     font-size: 1em;
     box-sizing: border-box;
-    margin-bottom: 20px; /* Aumenta um pouco a margem inferior */
+    margin-bottom: 20px;
 }
+
+/* OPÇÕES DE LINKS DENTRO DO LOGIN */
 .options {
     display: flex;
     justify-content: space-between;
@@ -169,23 +179,25 @@ nav .play-now {
     text-decoration: underline;
 }
 
+/* BOTÃO DE SUBMIT */
 .login-content button[type="submit"] {
     background-image: linear-gradient(to right, #BA68C8, #F06292);
     color: white;
-    padding: 12px 20px; /* Reduz um pouco o padding vertical */
+    padding: 12px 20px;
     border: none;
-    border-radius: 4px; /* Bordas um pouco menos arredondadas */
+    border-radius: 4px;
     cursor: pointer;
     width: 100%;
     font-size: 1.1em;
     transition: opacity 0.3s ease;
-    margin-top: 10px; /* Adiciona um pouco de espaço acima do botão */
+    margin-top: 10px;
 }
 
 .login-content button[type="submit"]:hover {
     opacity: 0.9;
 }
 
+/* LINK PARA CADASTRO */
 .signup-link {
     text-align: center;
     margin-top: 20px;
@@ -202,10 +214,11 @@ nav .play-now {
     text-decoration: underline;
 }
 
+/* BOTÃO DE FECHAR MODAL */
 .close-button {
     color: #757575;
     float: right;
-    font-size: 28px; /* Reduz um pouco o tamanho do botão de fechar */
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
     position: absolute;
@@ -219,15 +232,15 @@ nav .play-now {
     text-decoration: none;
 }
 
-/*Para as imagens lado a lado*/
+/* ===== LAYOUT PRINCIPAL ===== */
 main {
     display: flex;
-    flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
-    gap: 15px; /* Espaçamento entre os cards */
+    flex-wrap: wrap;
+    gap: 15px;
     padding: 15px;
 }
 
-/* GAME LIST DO CARD DE IMAGENS DOS JOGOS*/
+/* ===== LISTA DE JOGOS ===== */
 .game-list {
     display: flex;
     flex-wrap: wrap;
@@ -237,6 +250,7 @@ main {
     background: transparent;
 }
 
+/* CARD DO JOGO */
 .game-card {
     background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
     padding: 15px;
@@ -244,14 +258,15 @@ main {
     width: calc(33.33% - 20px);
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
-    box-sizing: border-box;
     border: 1px solid #555;
     color: #fff;
-    display: flex; /* Adicionado para o alinhamento interno */
-    flex-direction: column; /* Adicionado para o alinhamento interno */
-    justify-content: space-between; /* Adicionado para o alinhamento interno */
-    min-height: 250px; /* Altura mínima para os cards */
-    align-items: center; /* Centraliza os itens horizontalmente */
+
+    /* Alinhamento interno flexível */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    align-items: center;
 }
 
 .game-card img {
@@ -262,18 +277,7 @@ main {
     margin-bottom: 10px;
 }
 
-@media (max-width: 768px) {
-    .game-card {
-        width: calc(50% - 20px);
-    }
-}
-
-@media (max-width: 480px) {
-    .game-card {
-        width: 100%;
-    }
-}
-
+/* BOTÃO PLAY NOS CARDS */
 .game-card .play-btn {
     display: inline-block;
     padding: 6px 12px;
@@ -284,13 +288,14 @@ main {
     font-weight: bold;
     font-size: 0.9em;
     transition: background-color 0.3s ease;
-    margin-top: auto;
+    margin-top: auto; /* Faz o botão ir para o fim do card */
 }
 
 .game-card .play-btn:hover {
     background-color: #b38600;
 }
 
+/* POPUP DE FUNCIONALIDADES */
 .game-features-popup {
     display: none;
     position: absolute;
@@ -304,6 +309,7 @@ main {
     max-width: 200px;
 }
 
+/* CARD COM DESCRIÇÃO */
 .game-card.searched-with-description {
     display: flex;
     flex-direction: row;
@@ -326,4 +332,16 @@ main {
     margin-left: 15px;
 }
 
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .game-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .game-card {
+        width: 100%;
+    }
+}
 
