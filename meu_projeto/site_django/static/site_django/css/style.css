@@ -21,27 +21,27 @@ header {
     background: transparent;
     padding: 10px 20px;
     display: flex;
-    justify-content: flex-end; /* Alinha os botões à direita */
     align-items: center;
-    gap: 10px; /* Espaço entre os botões */
+    justify-content: space-between;
 }
 
 /* ===== BOTÕES GERAIS ===== */
-nav {
-    display: flex;
-    flex-direction: row; /* Botões na horizontal */
-    gap: 10px;
-}
-
 nav .nav-btn,
 nav .play-now {
     background-color: #d0a933;
     color: #fff;
     padding: 5px 10px;
+    margin: 0 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+}
+
+/* Alinha os botões juntos dentro do nav */
+nav {
+    display: flex;
+    align-items: center;
 }
 
 /* ===== HERO SECTION ===== */
@@ -79,25 +79,33 @@ nav .play-now {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #1e1e1e;
+    top: 100%;
+    left: 0;
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
     min-width: 160px;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     z-index: 1;
     border-radius: 4px;
     overflow: hidden;
+    padding: 5px 0; /* Pequeno padding vertical */
 }
 
 .dropdown-content a {
-    color: white;
-    padding: 12px 16px;
+    color: #fff !important; /* Cor do texto branco (forçado) */
+    padding: 10px 15px;
     text-decoration: none;
     display: block;
-    font-size: 14px;
-    border-bottom: 1px solid #333;
+    font-size: 16px; /* Tamanho da fonte aumentado */
+    border-bottom: 1px solid #932a2a;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none; /* Remove a borda do último item */
 }
 
 .dropdown-content a:hover {
-    background-color: #333;
+    background-color: #333; /* Cor atual ao passar o mouse */
+    color: #d0a933; /* Cor do texto ao passar o mouse */
 }
 
 .dropdown.show .dropdown-content {
@@ -105,9 +113,7 @@ nav .play-now {
 }
 
 /* ===== MODAIS ===== */
-.modal,
-#login-form,
-#register-modal {
+.modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -344,4 +350,3 @@ main {
         width: 100%;
     }
 }
-
