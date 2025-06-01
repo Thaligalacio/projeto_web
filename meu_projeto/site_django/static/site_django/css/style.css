@@ -20,9 +20,66 @@ body {
 header {
     background: transparent;
     padding: 10px 20px;
-    display: flex;
+    display: flex; /* Usando flexbox para o layout interno */
     align-items: center;
     justify-content: space-between;
+    position: relative; /* Necessário para posicionar elementos filhos (logo, nav) sobre o carrossel */
+}
+
+/* ===== LOGO ===== */
+.logo {
+    position: absolute; /* Para posicionar a logo sobre o carrossel */
+    top: 10px; /* Ajuste vertical da logo */
+    left: 20px; /* Ajuste horizontal da logo */
+    z-index: 20; /* Garante que a logo fique na frente do carrossel */
+}
+
+/* ===== CARROSSEL COMO BANNER HERO (agora dentro do header) ===== */
+
+.carousel-container {
+    width: 100%;
+    max-height: 280px; /* Diminuindo um pouco a altura máxima */
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+}
+
+.carousel-item img {
+    display: block;
+    width: 40%;
+    height: 60%;
+    object-fit: cover;
+    margin: 0;
+}
+
+.carousel-slide {
+    display: flex; /* Para dispor os itens do carrossel lado a lado */
+    width: 250%; /* Largura total para 3 imagens */
+    height: 50%; /* Ocupa a altura do container do carrossel */
+    transition: transform 0.5s ease; /* Transição suave para o movimento dos slides */
+}
+
+.carousel-item {
+    width: 100%; /* Cada item ocupa a largura total do container do carrossel */
+    flex-shrink: 0; /* Impede que os itens encolham */
+    height: auto; /* A altura se ajustará à imagem */
+}
+
+/* Oculta controles */
+.carousel-controls {
+    display: none;
+}
+
+/* ===== NAVEGAÇÃO ===== */
+nav {
+    position: absolute; /* Para posicionar a navegação sobre o carrossel */
+    top: 10px; /* Ajuste vertical do menu */
+    right: 20px; /* Ajuste horizontal do menu */
+    z-index: 20; /* Garante que a navegação fique na frente do carrossel */
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre os botões do menu */
+    flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha em telas menores */
 }
 
 /* ===== BOTÕES GERAIS ===== */
@@ -39,78 +96,10 @@ nav .play-now {
 }
 
 /* Alinha os botões juntos dentro do nav */
-nav {
+/* nav {
     display: flex;
     align-items: center;
-}
-
-/* ===== HERO SECTION ===== */
-.hero {
-    background-image: url("/static/site_django/imagens/fundo.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: rgb(223, 24, 24);
-    text-align: center;
-    padding: 50px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 300px;
-    width: 100%;
-}
-
-.hero img {
-    width: 200px;
-}
-
-.hero h1 {
-    font-size: 2.5em;
-    margin-top: 10px;
-}
-
-/* ===== MENU SUSPENSO ===== */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
-    border-radius: 4px;
-    overflow: hidden;
-    padding: 5px 0; /* Pequeno padding vertical */
-}
-
-.dropdown-content a {
-    color: #fff !important; /* Cor do texto branco (forçado) */
-    padding: 10px 15px;
-    text-decoration: none;
-    display: block;
-    font-size: 16px; /* Tamanho da fonte aumentado */
-    border-bottom: 1px solid #932a2a;
-}
-
-.dropdown-content a:last-child {
-    border-bottom: none; /* Remove a borda do último item */
-}
-
-.dropdown-content a:hover {
-    background-color: #333; /* Cor atual ao passar o mouse */
-    color: #d0a933; /* Cor do texto ao passar o mouse */
-}
-
-.dropdown.show .dropdown-content {
-    display: block;
-}
+} */
 
 /* ===== MODAIS ===== */
 .modal {

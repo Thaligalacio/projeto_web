@@ -66,6 +66,13 @@
         <div class="logo">
             <img src="{% static 'site_django/imagens/logo-marca.png' %}" alt="FBGAMES" />
         </div>
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <div class="carousel-item"><img src="{% static 'site_django/imagens/fundo_carrossel1.png' %}" alt="Imagem 1"></div>
+                <div class="carousel-item"><img src="{% static 'site_django/imagens/fundo_carrossel2.png' %}" alt="Imagem 2"></div>
+                <div class="carousel-item"><img src="{% static 'site_django/imagens/fundo_carrossel3.png' %}" alt="Imagem 3"></div>
+            </div>
+        </div>
         <nav>
             <button class="nav-btn">Melhores jogos</button>
             <button class="nav-btn">Jogos Favoritos</button>
@@ -90,7 +97,6 @@
         </nav>
     </header>
 
-    <!-- Modal Login -->
     <div id="login-form" class="modal">
         <div class="modal-content login-content">
             <span class="close-button" id="close-login-modal">&times;</span>
@@ -149,7 +155,6 @@
         </div>
     </div>
 
-    <!-- Modal Register -->
     <div id="register-modal" class="modal">
         <div class="modal-content login-content">
             <span class="close-button" id="close-register-modal">&times;</span>
@@ -186,7 +191,6 @@
         </div>
     </div>
 
-    <!-- Mensagens -->
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -195,7 +199,6 @@
     </ul>
     {% endif %}
 
-    <!-- Modal Recuperar Senha -->
     <div id="forgot-password-content" class="modal-content" style="display: none;">
         <span class="close-button" id="close-forgot-password-modal">&times;</span>
         <h2>Recuperar Senha</h2>
@@ -211,8 +214,6 @@
     </div>
 
     <main>
-        <section class="hero"></section>
-        <!-- Cards de jogos -->
         <div class="game-card" data-category="acao">
             <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
             <h3>CALL OF DUTY</h3>
@@ -242,12 +243,13 @@
             <h3>SUPER MARIO BROS</h3>
             <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             <div class="game-features" style="display: none;"></div>
-        </div>   
+        </div>
         <div class="game-card" data-category="quebra_cabeca">
             <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
             <h3>QUEBRA_CABECA</h3>
             <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
             <div class="game-features" style="display: none;"></div>
         </div>
+    </main>
 </body>
 </html>
