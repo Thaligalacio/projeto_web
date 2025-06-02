@@ -56,7 +56,7 @@ header {
     display: flex; /* Para dispor os itens do carrossel lado a lado */
     width: 250%; /* Largura total para 3 imagens */
     height: 50%; /* Ocupa a altura do container do carrossel */
-    transition: transform 0.5s ease; /* Transição suave para o movimento dos slides */
+    transition: transform 0.8s ease; /* Transição suave para o movimento dos slides */
 }
 
 .carousel-item {
