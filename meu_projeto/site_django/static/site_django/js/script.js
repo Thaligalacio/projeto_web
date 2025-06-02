@@ -283,5 +283,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicia o carrossel para que o slide mude automaticamente, se desejar
     setInterval(() => {
         nextSlide();   // Avança o slide a cada 3 segundos
-    }, 3000); // Intervalo de 3 segundos entre cada transição
+    }, 8000); // Intervalo de 8 segundos entre cada transição
 });
