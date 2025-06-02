@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initRegisterModal();
     initForgotPassword();
     initSearchBar();
-    initBestGamesButton(); // Adicionado a inicialização do botão "Melhores Jogos"
 });
 
 // ------------------------ CATEGORIAS ------------------------
@@ -242,27 +241,6 @@ function initSearchBar() {
     }
 }
 
-// ------------------------ BOTÃO MELHORES JOGOS ------------------------
-
-function initBestGamesButton() {
-    const bestGamesBtn = document.querySelector('nav button:contains("Melhores jogos")');
-    const gameCards = document.querySelectorAll(".game-card");
-    const bestGameTitles = ["CALL OF DUTY", "SUPER MARIO BROS", "GRAN TURISMO 7"];
-
-    bestGamesBtn?.addEventListener("click", () => {
-        console.log("Botão Melhores Jogos clicado!");
-        gameCards.forEach(card => {
-            const title = card.querySelector('h3')?.textContent;
-            console.log("Título do card:", title); // ADICIONE ESTA LINHA
-            if (bestGameTitles.includes(title)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-}
-
 
 // ------------------------ CARROSSEL AUTOMÁTICO ------------------------
 
@@ -301,8 +279,9 @@ document.addEventListener('DOMContentLoaded', () => {
         carouselContainer.addEventListener('mouseenter', stopCarousel);
         carouselContainer.addEventListener('mouseleave', startCarousel);
     }
+
+    // Inicia o carrossel para que o slide mude automaticamente, se desejar
+    setInterval(() => {
+        nextSlide();   // Avança o slide a cada 3 segundos
+    }, 3000); // Intervalo de 3 segundos entre cada transição
 });
-// Inicia o carrossel para que o slide mude automaticamente, se desejar
-setInterval(() => {
-    moveSlide(1);  // Avança o slide a cada 3 segundos
-}, 3000); // Intervalo de 3 segundos entre cada transição

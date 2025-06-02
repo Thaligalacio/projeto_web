@@ -7,59 +7,6 @@
     <title>FB Games</title>
     <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}" />
     <script src="{% static 'site_django/js/script.js' %}" defer></script>
-    <style>
-        /* Estilo para alinhar botões do nav horizontalmente */
-        nav {
-            display: flex;
-            align-items: center;
-            gap: 10px; /* Espaço entre os botões */
-            flex-wrap: wrap; /* Para não quebrar em telas pequenas */
-        }
-
-        .nav-btn {
-            padding: 8px 12px;
-            cursor: pointer;
-            background-color: #444;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-        }
-        .nav-btn:hover {
-            background-color: #666;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #fff;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            z-index: 1;
-            display: none;
-            flex-direction: column;
-        }
-        .dropdown-content a {
-            padding: 8px 12px;
-            text-decoration: none;
-            color: #333;
-            display: block;
-        }
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        /* Exibe o dropdown quando ativo */
-        .dropdown.show .dropdown-content {
-            display: flex;
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -74,7 +21,6 @@
             </div>
         </div>
         <nav>
-            <button class="nav-btn">Melhores jogos</button>
             <button class="nav-btn">Jogos Favoritos</button>
 
             <div class="dropdown" id="dropdown-category">
@@ -91,8 +37,6 @@
             <button class="nav-btn" id="search-trigger">Procurar</button>
             <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;" />
             <button class="nav-btn" id="close-search" style="display: none;">X</button>
-
-            <button class="nav-btn play-now">Jogar Agora</button>
             <button class="nav-btn" id="login-btn">Login/Cadastro</button>
         </nav>
     </header>

@@ -95,12 +95,6 @@ nav .play-now {
     font-weight: bold;
 }
 
-/* Alinha os botões juntos dentro do nav */
-/* nav {
-    display: flex;
-    align-items: center;
-} */
-
 /* ===== MODAIS ===== */
 .modal {
     display: none;
@@ -112,6 +106,7 @@ nav .play-now {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.8);
+    z-index: 30; /* Um valor maior que o z-index do carrossel */
 }
 
 .modal-content.login-content {
@@ -338,4 +333,38 @@ main {
     .game-card {
         width: 100%;
     }
+}
+
+/* ===== ESTILOS DO DROPDOWN DE CATEGORIA ===== */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333300; /* Cor de fundo similar aos cards */
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    display: none; /* Inicialmente escondido */
+    flex-direction: column;
+    border-radius: 5px; /* Adicionando bordas arredondadas */
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex; /* Mostrar ao passar o mouse no dropdown */
+}
+
+.dropdown-content a {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #fff; /* Cor do texto branca, como nos cards */
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #664d00; /* Cor de fundo no hover, similar ao destaque dos cards */
 }
