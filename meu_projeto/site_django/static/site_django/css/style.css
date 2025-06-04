@@ -23,7 +23,7 @@ header {
     display: flex; /* Usando flexbox para o layout interno */
     align-items: center;
     justify-content: space-between;
-    position: relative; /* Necessário para posicionar elementos filhos (logo, nav) sobre o carrossel */
+    position: relative; /* Necessário para posicionar elementos filhos (logo, nav) */
 }
 
 /* ===== LOGO ===== */
@@ -35,7 +35,6 @@ header {
 }
 
 /* ===== CARROSSEL COMO BANNER HERO (agora dentro do header) ===== */
-
 .carousel-container {
     width: 100%;
     height: 300px; /* Altura do carrossel igual à altura da imagem */
@@ -56,7 +55,7 @@ header {
     display: flex; /* Para dispor os itens do carrossel lado a lado */
     width: 250%; /* Largura total para 3 imagens */
     height: 50%; /* Ocupa a altura do container do carrossel */
-    transition: transform 0.8s ease; /* Transição suave para o movimento dos slides */
+    transition: transform 0.5s ease; /* Transição suave para o movimento dos slides */
 }
 
 .carousel-item {
@@ -97,28 +96,38 @@ nav .play-now {
 
 /* ===== MODAIS ===== */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
+    display: none; /* Escondido por padrão */
+    position: fixed; /* Fixado na tela */
+    z-index: 1000; /* Acima de outros elementos */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8);
-    z-index: 30; /* Um valor maior que o z-index do carrossel */
+    overflow: auto; /* Adiciona scroll se o conteúdo for maior que a tela (para o fundo) */
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
+    padding: 0; /* Removido o padding geral para deixar o margin do modal-content controlar */
+    box-sizing: border-box;
 }
 
-.modal-content.login-content {
-    background-color: #121212;
-    margin: 15% auto;
+.modal-content {
+    background-color: #2c2c2c; /* Cor de fundo do modal */
+    margin: 5% auto; /* Ajuste: Diminuído para 5% do topo para subir mais */
     padding: 30px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 350px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
-    color: #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
     position: relative;
+    max-width: 500px; /* Largura máxima do modal */
+    width: 90%; /* Largura responsiva */
+    box-sizing: border-box;
+
+    /* MODIFICAÇÃO PRINCIPAL: Ajustado para acomodar o conteúdo sem barra de rolagem */
+    max-height: fit-content; /* Permite que a altura se ajuste ao conteúdo */
+    overflow-y: hidden; /* Remove a barra de rolagem vertical */
+}
+
+/* Para o conteúdo de login especificamente, que você chamou de login-content */
+.login-content {
+    text-align: center;
 }
 
 .login-content h2 {
@@ -134,6 +143,7 @@ nav .play-now {
     color: #bbb;
     margin-bottom: 5px;
     font-size: 0.9em;
+    text-align: left; /* Adicionado para alinhar labels à esquerda */
 }
 
 .input-group input[type="text"],
@@ -207,7 +217,6 @@ nav .play-now {
 /* BOTÃO DE FECHAR MODAL */
 .close-button {
     color: #757575;
-    float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -250,8 +259,6 @@ main {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
     border: 1px solid #555;
     color: #fff;
-
-    /* Alinhamento interno flexível */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -278,7 +285,7 @@ main {
     font-weight: bold;
     font-size: 0.9em;
     transition: background-color 0.3s ease;
-    margin-top: auto; /* Faz o botão ir para o fim do card */
+    margin-top: auto;
 }
 
 .game-card .play-btn:hover {
@@ -367,4 +374,73 @@ main {
 
 .dropdown-content a:hover {
     background-color: #664d00; /* Cor de fundo no hover, similar ao destaque dos cards */
+}
+
+/* ===== MENSAGENS DO DJANGO (Popup de Notificação) ===== */
+.django-message-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+    border: 1px solid #555;
+    color: #fff;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.django-message-popup.show {
+    opacity: 1;
+    visibility: visible;
+    top: 50px;
+}
+
+.django-message-popup .message-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.django-message-popup .message-icon {
+    font-size: 2em; /* Aumentado para 2em */
+}
+
+.django-message-popup .message-title {
+    font-weight: bold;
+    font-size: 1.3em; /* Aumentado para 1.3em */
+    margin-bottom: 5px;
+}
+
+.django-message-popup .message-body {
+    font-size: 1.1em; /* Aumentado para 1.1em */
+}
+
+/* Estilos específicos para tipos de mensagem (opcional, para cores diferentes) */
+.django-message-popup.error {
+    background: linear-gradient(135deg, #8B0000 0%, #CC0000 50%, #8B0000 100%);
+    border-color: #FF0000;
+}
+
+.django-message-popup.success {
+    background: linear-gradient(135deg, #006400 0%, #008000 50%, #006400 100%);
+    border-color: #00FF00;
+}
+
+.django-message-popup.info {
+    background: linear-gradient(135deg, #00008B 0%, #0000CD 50%, #00008B 100%);
+    border-color: #0000FF;
+}
+
+.django-message-popup.warning {
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
+    border-color: #FFA500;
 }

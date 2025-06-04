@@ -7,19 +7,31 @@
     <title>FB Games</title>
     <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}" />
     <script src="{% static 'site_django/js/script.js' %}" defer></script>
+    <link rel="icon" href="{% static 'site_django/imagens/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="{% static 'site_django/imagens/Logo-marca.png' %}" alt="FBGAMES" />
-        </div>
         <div class="carousel-container">
             <div class="carousel-slide">
-                <div class="carousel-item"><img src="{% static 'site_django/imagens/fundo_carrossel1.png' %}" alt="Imagem1"></div>
-                <div class="carousel-item"><img src="{% static 'site_django/imagens/fundo_carrossel2.png' %}" alt="Imagem2"></div>
-                <div class="carousel-item"><img src="{% static 'site_django/imagens/fundo_carrossel3.png' %}" alt="Imagem3"></div>
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel3.png' %}" alt="Imagem3">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel1.png' %}" alt="Imagem1">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel2.png' %}" alt="Imagem2">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel3.png' %}" alt="Imagem3">
+                </div>
             </div>
         </div>
+
+        <div class="logo">
+            <img src="{% static 'site_django/imagens/Logo-marca.png' %}" alt="FBGAMES" />
+            </div>
+
         <nav>
             <button class="nav-btn">Jogos Favoritos</button>
 
@@ -40,6 +52,41 @@
             <button class="nav-btn" id="login-btn">Login/Cadastro</button>
         </nav>
     </header>
+
+    {% if messages %}
+        {% load i18n %}
+        {% load static %}
+        {% load tz %}
+        {% load l10n %}
+        {% load humanize %}
+        
+        {% for message in messages %}
+            <div id="django-message-{{ forloop.counter }}" class="django-message-popup {{ message.tags }}">
+                <div class="message-content">
+                    <span class="message-icon">
+                        {% if "error" in message.tags %}⚠️{% endif %}
+                        {% if "success" in message.tags %}✅{% endif %}
+                        {% if "info" in message.tags %}ℹ️{% endif %}
+                        {% if "warning" in message.tags %}⚠️{% endif %}
+                    </span>
+                    <div class="message-body">
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="message-title">Erro!</div>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <div class="message-title">Sucesso!</div>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                            <div class="message-title">Informação</div>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                            <div class="message-title">Aviso!</div>
+                        {% else %}
+                            <div class="message-title">Mensagem</div> {# Título genérico para outros tipos #}
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 
     <div id="login-form" class="modal">
         <div class="modal-content login-content">
@@ -94,6 +141,7 @@
                     <div class="signup-link">
                         Já possui conta? <a href="#" id="show-login-form">Fazer Login</a>
                     </div>
+                </div>
                 </form>
             </div>
         </div>
@@ -103,7 +151,7 @@
         <div class="modal-content login-content">
             <span class="close-button" id="close-register-modal">&times;</span>
             <h2>Cadastrar Cliente</h2>
-            <form method="POST" id="registerForm">
+            <form method="POST" id="registerForm" action="{% url 'registrar_cliente' %}">
                 {% csrf_token %}
                 <div class="input-group">
                     <label for="register-nome">Nome</label>
@@ -129,20 +177,12 @@
                     Cadastro realizado com sucesso!
                 </div>
                 {% if sucesso %}
-                <p style="color: green;">{{ sucesso }}</p>
+                <p style="color: green; display: none;">{{ sucesso }}</p>
                 {% endif %}
             </form>
         </div>
     </div>
-
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
+    
     <div id="forgot-password-content" class="modal-content" style="display: none;">
         <span class="close-button" id="close-forgot-password-modal">&times;</span>
         <h2>Recuperar Senha</h2>
@@ -158,41 +198,43 @@
     </div>
 
     <main>
-        <div class="game-card" data-category="acao">
-            <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
-            <h3>CALL OF DUTY</h3>
-            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-            <div class="game-features" style="display: none;"></div>
-        </div>
-        <div class="game-card" data-category="aventura">
-            <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
-            <h3>UNCHARTED</h3>
-            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-            <div class="game-features" style="display: none;"></div>
-        </div>
-        <div class="game-card" data-category="corrida">
-            <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
-            <h3>GRAN TURISMO 7</h3>
-            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-            <div class="game-features" style="display: none;"></div>
-        </div>
-        <div class="game-card" data-category="aventura">
-            <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
-            <h3>MINECRAFT</h3>
-            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-            <div class="game-features" style="display: none;"></div>
-        </div>
-        <div class="game-card" data-category="aventura">
-            <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
-            <h3>SUPER MARIO BROS</h3>
-            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-            <div class="game-features" style="display: none;"></div>
-        </div>
-        <div class="game-card" data-category="quebra_cabeca">
-            <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
-            <h3>QUEBRA_CABECA</h3>
-            <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
-            <div class="game-features" style="display: none;"></div>
+        <div class="game-list">
+            <div class="game-card" data-category="acao">
+                <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
+                <h3>CALL OF DUTY</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
+                <h3>UNCHARTED</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="corrida">
+                <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
+                <h3>GRAN TURISMO 7</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
+                <h3>MINECRAFT</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
+                <h3>SUPER MARIO BROS</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="quebra_cabeca">
+                <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
+                <h3>QUEBRA_CABECA</h3>
+                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
         </div>
     </main>
 </body>

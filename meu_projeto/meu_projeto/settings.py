@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'site_institucional', #Adicionando a aplicação site_institucional
     'app_cadastro', #Criando um   formulario de cadastro de clientes
     'site_django', #Criando nosso site
+    'django.contrib.humanize',
     'site_jogosFera',
 ]
 
