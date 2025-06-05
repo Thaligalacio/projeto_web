@@ -763,6 +763,7 @@ main {
     -webkit-backdrop-filter: blur(8px); /* Para compatibilidade com navegadores Webkit */
 }
 
+
 .lgpd-content {
     max-width: 900px;
     width: 90%;
@@ -875,4 +876,9 @@ main {
 .lgpd-content .close-button:focus {
     color: #fff;
     text-decoration: none;
+}
+
+#register-form-inside-login { /* Ou o ID correto do seu container de cadastro */
+    display: none; /* Isso é CRUCIAL! Garante que não apareça ao carregar a página */
+    /* ... outros estilos do seu modal de cadastro, como posição, z-index, etc. ... */
 }

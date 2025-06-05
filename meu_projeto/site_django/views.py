@@ -23,7 +23,7 @@ def registrar_cliente(request):
     - Se a requisição for POST, tenta validar e salvar o formulário.
     - Em caso de sucesso, adiciona uma mensagem de sucesso e redireciona.
     - Em caso de email duplicado ou outros erros de formulário, adiciona uma mensagem de erro
-    e redireciona, permitindo que a mensagem seja exibida no frontend.
+    e RENDERIZA o template, permitindo que a mensagem seja exibida no frontend.
     - Se a requisição não for POST, simplesmente renderiza a página inicial com um formulário vazio.
     """
     # Instancia o formulário com os dados POST, se houver, ou um formulário vazio.
@@ -41,8 +41,7 @@ def registrar_cliente(request):
                 print("Cliente salvo com sucesso:", cliente) # Para depuração
                 # Adiciona uma mensagem de sucesso que será exibida no template
                 messages.success(request, 'Cadastro realizado com sucesso! 🎉 Agora você pode fazer login.')
-                # Redireciona para a página inicial. O 'sucesso' não precisa mais ser passado via contexto,
-                # pois o sistema de mensagens do Django se encarrega disso.
+                # Em caso de sucesso, redireciona. Isso limpa as mensagens após exibição.
                 return redirect('pagina_inicial')
 
             except IntegrityError as e:
@@ -55,30 +54,30 @@ def registrar_cliente(request):
                 else:
                     # Adiciona uma mensagem de erro genérica para outros erros de integridade
                     messages.error(request, 'Ocorreu um erro ao cadastrar. Tente novamente. 😔')
-                # Em ambos os casos de erro, redireciona para a página inicial.
-                return redirect('pagina_inicial')
+                # Em caso de erro, RENDERIZA o template novamente, mantendo o contexto do erro.
+                return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': form})
 
             except Exception as e:
                 # Captura qualquer outra exceção inesperada durante o salvamento
                 print("Erro inesperado ao cadastrar:", e) # Para depuração
                 messages.error(request, f'Ocorreu um erro inesperado: {e} 😔')
-                return redirect('pagina_inicial')
+                # Em caso de erro inesperado, RENDERIZA o template novamente.
+                return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': form})
         else:
             # Se o formulário NÃO for válido (ex: campos faltando, formato inválido)
             print("Formulário é inválido:", form.errors) # Para depuração
             # Adiciona uma mensagem de erro com os detalhes dos erros do formulário
-            # Você pode iterar sobre form.errors se quiser mais detalhes específicos no frontend.
             for field, errors in form.errors.items():
                 for error in errors:
-                    # Adiciona cada erro do formulário como uma mensagem separada
                     messages.error(request, f'Erro no campo {field}: {error} 😞')
-            # Redireciona de volta para a página inicial para exibir os erros
-            return redirect('pagina_inicial')
+            # Se o formulário é inválido, RENDERIZA o template novamente com os erros.
+            return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': form})
     else:
         # Se a requisição for GET, apenas renderiza a página inicial com o formulário vazio
         print("Requisição não é POST (GET ou outra).") # Para depuração
 
     # Renderiza a página inicial com o formulário de cadastro (vazio para GET requests)
+    # Este return final é para o caso de GET requests que não entraram no 'if request.method == 'POST':'
     return render(request, 'site_django/pagina_inicial.html', {'form_cadastro': form})
 
 # Página inicial do site
@@ -88,6 +87,7 @@ def site_django(request):
     Instancia um formulário de cliente vazio para ser usado em modais de cadastro.
     """
     form_cadastro = ClienteForm() # Instancia o formulário para exibir no modal de cadastro
+    messages.get_messages(request) # <<< ADICIONADO PARA LIMPAR MENSAGENS AO CARREGAR A PÁGINA INICIAL
     # Você pode adicionar lógica para 'usuario_logado_nome' aqui, se estiver usando sessões ou autenticação do Django.
     # Exemplo: usuario_logado_nome = request.session.get('usuario_nome')
     # Ou se você usar o sistema de autenticação nativo do Django:
@@ -109,15 +109,15 @@ def redimensionar_imagem(caminho_entrada, caminho_saida):
 
 # Exemplo de função de login usando AJAX/JSON
 @csrf_exempt # Use @csrf_exempt com cautela, apenas para APIs onde o CSRF token não pode ser enviado.
-            # Para forms HTML normais, é melhor usar o {% csrf_token %} e não desabilitar.
+             # Para forms HTML normais, é melhor usar o {% csrf_token %} e não desabilitar.
 def login_user(request):
     """
     Processa a requisição de login de usuário via AJAX.
     Espera um JSON com 'email' e 'password'.
     Retorna JsonResponse com sucesso ou erro.
     NOTA: Para uma aplicação real, é altamente recomendado usar o sistema de autenticação
-        nativo do Django (django.contrib.auth) para segurança, que lida com hash de senhas,
-        sessões, etc. Este é um exemplo simplificado.
+          nativo do Django (django.contrib.auth) para segurança, que lida com hash de senhas,
+          sessões, etc. Este é um exemplo simplificado.
     """
     if request.method == 'POST':
         try:
@@ -144,5 +144,4 @@ def login_user(request):
     else:
         # Se a requisição não for POST
         return JsonResponse({'error': 'Método não permitido.'}, status=405)
-    
     
