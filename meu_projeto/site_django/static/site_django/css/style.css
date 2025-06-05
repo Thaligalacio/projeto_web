@@ -1,51 +1,61 @@
-/* ===== RESET GERAL ===== */
+/* ======================================= RESET GERAL ================================= */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+    margin: 0; /* Remove margens padrão do navegador */
+    padding: 0; /* Remove preenchimentos padrão do navegador */
 }
 
-/* ===== BODY E FUNDO ===== */
+/* ======================================== BODY E FUNDO =============================== */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #0d0d0d;
-    color: #fff;
-    background-image: url("/static/site_django/imagens/fundo_inteiro.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    font-family: 'Arial', sans-serif; /* Define a fonte principal para o corpo */
+    background-color: #0d0d0d; /* Cor de fundo escura para o corpo */
+    color: #fff; /* Cor do texto padrão branca */
+    background-image: url("/static/site_django/imagens/fundo_inteiro.png"); /* Imagem de fundo */
+    background-size: cover; /* Faz a imagem de fundo cobrir toda a área */
+    background-repeat: no-repeat; /* Evita que a imagem de fundo se repita */
+    background-attachment: fixed; /* Fixa a imagem de fundo durante a rolagem */
 }
 
-/* ===== HEADER ===== */
+/* ===================================== HEADER =================================== */
 header {
-    background: transparent;
-    padding: 10px 20px;
-    display: flex; /* Usando flexbox para o layout interno */
-    align-items: center;
-    justify-content: space-between;
-    position: relative; /* Necessário para posicionar elementos filhos (logo, nav) */
+    background: transparent; /* Fundo transparente para o cabeçalho */
+    padding: 10px 20px; /* Preenchimento interno do cabeçalho */
+    display: flex; /* Usa flexbox para organizar itens */
+    align-items: center; /* Alinha itens verticalmente ao centro */
+    justify-content: space-between; /* Distribui itens com espaço entre eles */
+    position: relative; /* Define posição relativa para posicionar elementos filhos */
+    height: 350px; /* Aumenta a altura do header para acomodar melhor o carrossel */
+    overflow: hidden; /* Garante que o conteúdo que extrapolar o header não seja visível */
 }
 
-/* ===== LOGO ===== */
+/* ===================================== LOGO ======================================= */
 .logo {
-    position: absolute; /* Para posicionar a logo sobre o carrossel */
-    top: 10px; /* Ajuste vertical da logo */
-    left: 20px; /* Ajuste horizontal da logo */
-    z-index: 20; /* Garante que a logo fique na frente do carrossel */
+    position: absolute; /* Posiciona a logo de forma absoluta */
+    top: 20px; /* Distância do topo */
+    left: 30px; /* Distância da esquerda */
+    z-index: 30; /* Garante que a logo fique na frente do carrossel e navegação */
 }
 
-/* ===== CARROSSEL COMO BANNER HERO (agora dentro do header) ===== */
+.logo img {
+    height: 70px; /* Ajusta o tamanho da logo */
+}
+
+/* ================ CARROSSEL COMO BANNER HERO (agora dentro do header) ============== */
+
 .carousel-container {
+    height: 100px; /* Altura do carrossel igual à altura da imagem */  
     width: 100%;
-    height: 300px; /* Altura do carrossel igual à altura da imagem */
+    height: 100px; /* Altura do carrossel igual à altura da imagem */
+    display: flex; /* Para dispor os itens do carrossel lado a lado */    
     overflow: hidden;
     position: relative;
+    height: 150%; /* Ocupa a altura do container do carrossel */    
     z-index: 10;
 }
 
 .carousel-item img {
     display: block;
-    width: 40%; /* Ocupa toda a largura */
+    width: 100%; /* Ocupa toda a largura */
     height: 200%; /* Ocupa toda a altura do contêiner */
     object-fit: cover; /* Preenche o contêiner, pode cortar um pouco */
     margin: 0;
@@ -53,14 +63,16 @@ header {
 
 .carousel-slide {
     display: flex; /* Para dispor os itens do carrossel lado a lado */
-    width: 250%; /* Largura total para 3 imagens */
+    width: 300%; /* Largura total para 3 imagens */
     height: 50%; /* Ocupa a altura do container do carrossel */
+    transition: transform 0.8s ease; /* Transição suave para o movimento dos slides */
     transition: transform 0.5s ease; /* Transição suave para o movimento dos slides */
 }
 
 .carousel-item {
     width: 100%; /* Cada item ocupa a largura total do container do carrossel */
     flex-shrink: 0; /* Impede que os itens encolham */
+    z-index: 30; /* Um valor maior que o z-index do carrossel */    
     height: auto; /* A altura se ajustará à imagem */
 }
 
@@ -71,294 +83,576 @@ header {
 
 /* ===== NAVEGAÇÃO ===== */
 nav {
-    position: absolute; /* Para posicionar a navegação sobre o carrossel */
-    top: 10px; /* Ajuste vertical do menu */
-    right: 20px; /* Ajuste horizontal do menu */
-    z-index: 20; /* Garante que a navegação fique na frente do carrossel */
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espaço entre os botões do menu */
+    position: absolute; /* Posiciona a navegação de forma absoluta */
+    top: 25px; /* Distância do topo */
+    right: 30px; /* Distância da direita */
+    z-index: 30; /* Garante que a navegação fique na frente do carrossel */
+    display: flex; /* Usa flexbox para organizar os botões */
+    align-items: center; /* Alinha os botões verticalmente */
+    gap: 15px; /* Espaço entre os botões do menu */
     flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha em telas menores */
 }
 
-/* ===== BOTÕES GERAIS ===== */
+/* ================================ BOTÕES GERAIS ================================= */
 nav .nav-btn,
 nav .play-now {
-    background-color: #d0a933;
-    color: #fff;
-    padding: 5px 10px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
+    background-color: #d0a933; /* Cor de fundo dos botões */
+    color: #fff; /* Cor do texto dos botões */
+    padding: 8px 18px; /* Preenchimento interno dos botões */
+    border: none; /* Remove bordas dos botões */
+    border-radius: 25px; /* Bordas arredondadas para os botões, estilo pílula */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    font-weight: bold; /* Texto em negrito */
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave */
+}
+
+nav .nav-btn:hover,
+nav .play-now:hover {
+    background-color: #e0b84c; /* Cor ligeiramente mais clara no hover */
+    transform: translateY(-2px); /* Pequeno efeito de elevação */
 }
 
 /* ===== MODAIS ===== */
 .modal {
-    display: none; /* Escondido por padrão */
-    position: fixed; /* Fixado na tela */
-    z-index: 1000; /* Acima de outros elementos */
+    display: none; /* Inicialmente oculto */
+    position: fixed; /* Fixa o modal na tela */
+    z-index: 1000; /* Z-index para sobrepor outros elementos, maior que o header */
+    left: 0; /* Alinha à esquerda */
+    top: 0; /* Alinha ao topo */
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Adiciona scroll se o conteúdo for muito grande */
+    background-color: rgba(0,0,0,0.85); /* Fundo semi-transparente mais escuro */
+    backdrop-filter: blur(5px); /* Efeito de blur no fundo */
+    -webkit-backdrop-filter: blur(5px); /* Compatibilidade Safari */
+}
+
+/* NOVO: Esta regra faz o modal aparecer e centralizar QUANDO a classe 'show' é adicionada via JavaScript */
+.modal.show {
+    display: flex; /* Torna o modal visível como flex container */
+    justify-content: center; /* Centraliza horizontalmente o conteúdo do modal */
+    align-items: center; /* Centraliza verticalmente o conteúdo do modal */
+}
+
+.modal-content.login-content {
+    background-color: #1a1a1a; /* Cor de fundo do conteúdo do modal */
+    padding: 35px; /* Preenchimento interno */
+    border-radius: 12px; /* Bordas arredondadas */
+    width: 95%; /* Largura do conteúdo do modal */
+    max-width: 400px; /* Largura máxima do conteúdo do modal */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9); /* Sombra mais pronunciada para o modal */
+    color: #e0e0e0; /* Cor do texto */
+    position: relative; /* Define posição relativa para elementos filhos */
+    animation: fadeInScale 0.3s ease-out forwards; /* Animação de entrada */
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+.login-content h2 {
+    color: #fff; /* Cor do título */
+    text-align: center; /* Alinha texto ao centro */
+    margin-bottom: 30px; /* Margem inferior */
+    font-size: 2.5em; /* Tamanho da fonte do título */
+    letter-spacing: 1px; /* Espaçamento entre letras */
+}
+
+/* O modal deve estar oculto por padrão */
+.modal {
+    display: none; /* Importante para que ele não apareça sem a classe 'show' */
+    position: fixed;
+    z-index: 1000; /* Garante que fique acima de outros elementos */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Adiciona scroll se o conteúdo for maior que a tela (para o fundo) */
+    overflow: auto; /* Para rolagem se o conteúdo for muito grande */
     background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
-    padding: 0; /* Removido o padding geral para deixar o margin do modal-content controlar */
-    box-sizing: border-box;
+    /* Outros estilos de overlay, se houver */
 }
 
+/* Quando a classe 'show' é adicionada pelo JS, o modal aparece e é centralizado */
+.modal.show {
+    display: flex; /* Ou 'block' se preferir, mas 'flex' é melhor para centralização */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+/* Estilo do conteúdo do modal (o box branco/escuro central) */
 .modal-content {
-    background-color: #2c2c2c; /* Cor de fundo do modal */
-    margin: 5% auto; /* Ajuste: Diminuído para 5% do topo para subir mais */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-    position: relative;
-    max-width: 500px; /* Largura máxima do modal */
-    width: 90%; /* Largura responsiva */
-    box-sizing: border-box;
-
-    /* MODIFICAÇÃO PRINCIPAL: Ajustado para acomodar o conteúdo sem barra de rolagem */
-    max-height: fit-content; /* Permite que a altura se ajuste ao conteúdo */
-    overflow-y: hidden; /* Remove a barra de rolagem vertical */
+    background-color: #fefefe; /* Ou a cor do seu modal */
+    margin: auto; /* Ajuda a centralizar em navegadores mais antigos ou se não usar flex */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ou outra largura desejada */
+    max-width: 500px; /* Um max-width é bom para responsividade */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop; /* Exemplo de animação */
+    animation-duration: 0.4s;
 }
 
-/* Para o conteúdo de login especificamente, que você chamou de login-content */
-.login-content {
-    text-align: center;
-}
-
-.login-content h2 {
-    color: #fff;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 2.2em;
+/* Opcional: Animação para o modal aparecer */
+@keyframes animatetop {
+    from { top: -300px; opacity: 0; }
+    to { top: 0; opacity: 1; }
 }
 
 /* INPUTS DO FORMULÁRIO */
+.input-group {
+    margin-bottom: 20px;
+}
+
 .input-group label {
-    display: block;
-    color: #bbb;
-    margin-bottom: 5px;
-    font-size: 0.9em;
-    text-align: left; /* Adicionado para alinhar labels à esquerda */
+    display: block; /* Exibe o label como um bloco */
+    color: #bbb; /* Cor do texto do label */
+    margin-bottom: 8px; /* Margem inferior do label */
+    font-size: 1em; /* Tamanho da fonte do label */
+    font-weight: bold;
 }
 
 .input-group input[type="text"],
 .input-group input[type="email"],
 .input-group input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #333;
-    border-radius: 4px;
-    background-color: #212121;
-    color: #fff;
-    font-size: 1em;
-    box-sizing: border-box;
-    margin-bottom: 20px;
+    width: 100%; /* Largura total do input */
+    padding: 12px; /* Preenchimento interno do input */
+    border: 1px solid #444; /* Borda do input */
+    border-radius: 6px; /* Bordas arredondadas do input */
+    background-color: #2a2a2a; /* Cor de fundo do input */
+    color: #fff; /* Cor do texto do input */
+    font-size: 1.1em; /* Tamanho da fonte do input */
+    box-sizing: border-box; /* Inclui padding e border na largura */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transição para foco */
 }
+
+.input-group input[type="text"]:focus,
+.input-group input[type="email"]:focus,
+.input-group input[type="password"]:focus {
+    border-color: #d0a933; /* Borda dourada no foco */
+    box-shadow: 0 0 0 3px rgba(208, 169, 51, 0.4); /* Sombra suave no foco */
+    outline: none; /* Remove o outline padrão do navegador */
+}
+
 
 /* OPÇÕES DE LINKS DENTRO DO LOGIN */
 .options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    color: #9e9e9e;
-    font-size: 0.85em;
+    display: flex; /* Usa flexbox para organizar links */
+    justify-content: space-between; /* Distribui links com espaço entre eles */
+    align-items: center; /* Alinha links verticalmente */
+    margin-bottom: 25px; /* Margem inferior */
+    color: #9e9e9e; /* Cor do texto */
+    font-size: 0.9em; /* Tamanho da fonte */
 }
 
 .options a {
-    color: #64b5f6;
-    text-decoration: none;
+    color: #64b5f6; /* Cor dos links */
+    text-decoration: none; /* Remove sublinhado dos links */
+    transition: color 0.2s ease;
 }
 
 .options a:hover {
-    text-decoration: underline;
+    color: #81D4FA; /* Cor mais clara no hover */
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
 }
 
 /* BOTÃO DE SUBMIT */
 .login-content button[type="submit"] {
-    background-image: linear-gradient(to right, #BA68C8, #F06292);
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1.1em;
-    transition: opacity 0.3s ease;
-    margin-top: 10px;
+    background-image: linear-gradient(to right, #d0a933, #e0b84c); /* Gradiente de cor dos botões principais */
+    color: #1a1a1a; /* Cor do texto do botão, escuro para contraste */
+    padding: 14px 25px; /* Preenchimento interno */
+    border: none; /* Remove borda */
+    border-radius: 8px; /* Bordas arredondadas */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    width: 100%; /* Largura total */
+    font-size: 1.2em; /* Tamanho da fonte */
+    font-weight: bold;
+    transition: background-size 0.3s ease, transform 0.2s ease; /* Transição suave */
+    margin-top: 15px; /* Margem superior */
+    background-size: 200% auto; /* Para o efeito de hover do gradiente */
 }
 
 .login-content button[type="submit"]:hover {
-    opacity: 0.9;
+    background-position: right center; /* Move o gradiente no hover */
+    transform: translateY(-2px); /* Pequeno efeito de elevação */
 }
 
 /* LINK PARA CADASTRO */
 .signup-link {
-    text-align: center;
-    margin-top: 20px;
-    color: #9e9e9e;
-    font-size: 0.9em;
+    text-align: center; /* Alinha texto ao centro */
+    margin-top: 25px; /* Margem superior */
+    color: #9e9e9e; /* Cor do texto */
+    font-size: 1em; /* Tamanho da fonte */
 }
 
 .signup-link a {
-    color: #81D4FA;
-    text-decoration: none;
+    color: #81D4FA; /* Cor do link */
+    text-decoration: none; /* Remove sublinhado */
+    font-weight: bold;
+    transition: color 0.2s ease;
 }
 
 .signup-link a:hover {
-    text-decoration: underline;
+    color: #A7EDFF; /* Cor mais clara no hover */
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
 }
 
 /* BOTÃO DE FECHAR MODAL */
 .close-button {
-    color: #757575;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 15px;
+    color: #757575; /* Cor do botão de fechar */
+    font-size: 32px; /* Tamanho da fonte maior */
+    font-weight: bold; /* Texto em negrito */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    position: absolute; /* Posicionamento absoluto */
+    top: 15px; /* Distância do topo */
+    right: 20px; /* Distância da direita */
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: #fff;
-    text-decoration: none;
+    color: #fff; /* Muda a cor ao passar o mouse ou focar */
+    transform: rotate(90deg); /* Pequena rotação no hover */
+    text-decoration: none; /* Remove sublinhado */
 }
 
-/* ===== LAYOUT PRINCIPAL ===== */
+/* ========================== LAYOUT PRINCIPAL ========================= */
 main {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    padding: 15px;
+    display: flex; /* Usa flexbox para organizar o conteúdo principal */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    gap: 20px; /* Espaço entre os itens */
+    padding: 20px; /* Preenchimento interno */
+    justify-content: center; /* Centraliza os cards dentro do main */
 }
 
-/* ===== LISTA DE JOGOS ===== */
+/* =========================== LISTA DE JOGOS ====================== */
 .game-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 20px;
-    padding: 20px;
-    background: transparent;
+    display: flex; /* Usa flexbox para organizar os cards de jogos */
+    flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os cards horizontalmente */
+    gap: 25px; /* Espaço maior entre os cards */
+    padding: 30px; /* Preenchimento interno da lista */
+    background: transparent; /* Fundo transparente */
+    max-width: 1400px; /* Largura máxima do contêiner da lista */
+    margin: 0 auto; /* Centraliza o contêiner na página */
 }
 
-/* CARD DO JOGO */
+/* ================================== CARD DO JOGO ============================= */
 .game-card {
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
-    padding: 15px;
-    border-radius: 10px;
-    width: calc(33.33% - 20px);
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.2);
-    border: 1px solid #555;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 250px;
-    align-items: center;
+    /* Dimensões e Layout */
+    width: 300px; /* Largura preferencial maior para cada card */
+    min-width: 250px; /* Garante que o card não encolha demais */
+    /* max-width: calc(33.33% - 25px); Removido para usar a largura fixa e deixar flexbox se encarregar */
+    padding: 20px; /* Preenchimento interno do card */
+    border-radius: 12px; /* Bordas arredondadas do card */
+    text-align: center; /* Alinha o texto ao centro */
+    color: #fff; /* Cor do texto do card */
+    display: flex; /* Usa flexbox para organizar conteúdo interno do card */
+    flex-direction: column; /* Organiza itens em coluna (imagem, título, botão) */
+    justify-content: space-between; /* Distribui espaço entre imagem, título e botão */
+    min-height: 250px; /* Aumenta a altura mínima do card para acomodar imagem e conteúdo */
+    align-items: center; /* Alinha itens horizontalmente no centro do card */
+
+    /* Estilos Visuais */
+    background: linear-gradient(145deg, #222200 0%, #444400 50%, #222200 100%); /* Gradiente de cor mais sutil */
+    border: 1px solid #776000; /* Borda sutil e clara para o card */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Sombra suave para o card */
+    
+    /* Transições para Efeitos de Hover */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.4s ease; /* Suaviza transições no hover */
+
+    /* Posicionamento para a caixa de descrição lateral */
+    position: relative; /* Essencial para posicionar o .description-box dentro dele */
+    overflow: visible; /* Permite que o .description-box "saia" dos limites do card */
 }
 
+/* EFEITO DE HOVER NO CARD */
+.game-card:hover {
+    transform: translateY(-8px); /* Move o card ligeiramente para cima ao passar o mouse */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7); /* Aumenta a sombra do card no hover */
+    background: linear-gradient(145deg, #443300 0%, #775d00 50%, #443300 100%); /* Gradiente mais intenso no hover */
+}
+
+/* IMAGEM DENTRO DO CARD */
 .game-card img {
-    width: 100%;
-    max-height: 120px;
-    object-fit: contain;
-    border-radius: 5px;
+    width: 100%; /* Imagem ocupa 100% da largura do card */
+    max-height: 180px; /* Altura máxima da imagem */
+    object-fit: cover; /* Corta a imagem para preencher a área sem distorcer */
+    border-radius: 8px; /* Bordas arredondadas para a imagem */
+    margin-bottom: 15px; /* Espaçamento abaixo da imagem */
+}
+
+/* TÍTULO DO JOGO DENTRO DO CARD */
+.game-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #ffda6a; /* Cor dourada para o título */
+}
+
+/* BOTÃO PLAY DENTRO DOS CARDS */
+.game-card .play-btn {
+    display: inline-block; /* Exibe como bloco inline */
+    padding: 10px 20px; /* Preenchimento interno do botão */
+    background-color: #ffbb33; /* Cor de fundo amarela vibrante */
+    color: #222; /* Cor do texto escura para contraste */
+    text-decoration: none; /* Remove sublinhado do link */
+    border: 1px solid #cc9900; /* Borda sutil para o botão */
+    border-radius: 25px; /* Bordas arredondadas para o botão, estilo pílula */
+    font-weight: bold; /* Texto em negrito */
+    font-size: 1.1em; /* Tamanho da fonte do botão */
+    margin-top: auto; /* Empurra o botão para a parte inferior do card */
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Suaviza transições no hover */
+}
+
+/* EFEITO DE HOVER NO BOTÃO PLAY */
+.game-card .play-btn:hover {
+    background-color: #e6a82e; /* Cor ligeiramente mais escura no hover */
+    transform: scale(1.08); /* Pequeno efeito de "zoom" ao passar o mouse */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Adiciona uma sombra sutil ao botão no hover */
+}
+
+/* POPUP DE FUNCIONALIDADES (Se for o antigo popup de funcionalidades) */
+.game-features-popup {
+    display: none; /* Esconde o popup */
+    position: absolute; /* Posicionamento absoluto */
+    background-color: #333; /* Cor de fundo */
+    color: #fff; /* Cor do texto */
+    border: 1px solid #555; /* Borda */
+    padding: 10px; /* Preenchimento */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 0.9em; /* Tamanho da fonte */
+    z-index: 10; /* Z-index */
+    max-width: 200px; /* Largura máxima */
+}
+
+/* =========================== ESTILOS PARA A CAIXA DE DESCRIÇÃO LATERAL ====================== */
+.description-box {
+    display: none; /* Inicialmente oculto */
+    position: absolute; /* Posiciona a caixa de forma absoluta em relação ao .game-card */
+    top: 0; /* Alinha o topo da descrição com o topo do card */
+    left: calc(100% + 20px); /* Posiciona à direita do card, com um espaçamento maior de 20px */
+    width: 350px; /* Largura da caixa de descrição, ajuste conforme necessário */
+    min-height: 100%; /* Garante que a caixa de descrição tenha pelo menos a altura do card */
+    background-color: #1f1f1f; /* Cor de fundo escura para a caixa de descrição */
+    border: 1px solid #997a00; /* Borda com a cor dourada/laranja do tema, mais visível */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 20px; /* Preenchimento interno */
+    color: #f0f0f0; /* Cor do texto */
+    font-size: 1em; /* Tamanho da fonte ligeiramente maior */
+    text-align: left; /* Alinha o texto à esquerda */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8); /* Sombra mais pronunciada para a caixa de descrição */
+    z-index: 25; /* Garante que apareça acima de outros elementos, mas abaixo de modais principais */
+    overflow-y: auto; /* Adiciona scroll vertical se o texto for muito longo */
+    max-height: 450px; /* Limita a altura da caixa de descrição para evitar que ela fique muito longa */
+    transition: opacity 0.4s ease, transform 0.4s ease; /* Transição suave para o aparecimento */
+    opacity: 0; /* Começa transparente para a animação */
+    transform: translateX(20px); /* Começa ligeiramente à direita para o efeito de deslize */
+}
+
+.description-box h4 {
+    font-size: 1.3em;
+    color: #ffbb33;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+.description-box p {
+    line-height: 1.6;
     margin-bottom: 10px;
 }
 
-/* BOTÃO PLAY NOS CARDS */
-.game-card .play-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background-color: #cc9900;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-    margin-top: auto;
+/* ESTILO PARA QUANDO A CAIXA DE DESCRIÇÃO ESTÁ VISÍVEL (ativado via hover no .game-card) */
+.game-card:hover .description-box {
+    display: block; /* Torna a caixa visível */
+    opacity: 1; /* Torna a caixa totalmente opaca */
+    transform: translateX(0); /* Move para a posição final */
 }
 
-.game-card .play-btn:hover {
-    background-color: #b38600;
-}
-
-/* POPUP DE FUNCIONALIDADES */
-.game-features-popup {
-    display: none;
-    position: absolute;
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #555;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    z-index: 10;
-    max-width: 200px;
-}
-
-/* CARD COM DESCRIÇÃO */
-.game-card.searched-with-description {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-}
-
-.game-card.searched-with-description img {
-    max-width: 150px;
-    height: auto;
-    margin-right: 15px;
-    margin-bottom: 0;
-}
-
-.game-card.searched-with-description .description-box {
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    font-size: 0.9em;
-    text-align: left;
-    margin-left: 15px;
-}
-
-/* ===== RESPONSIVIDADE ===== */
-@media (max-width: 768px) {
-    .game-card {
-        width: calc(50% - 20px);
+/* =========================== RESPONSIVIDADE ===================== */
+@media (max-width: 1400px) { /* Esconde a descrição lateral em telas um pouco maiores também */
+    .description-box {
+        display: none !important; /* Força a ocultação da descrição lateral em telas menores */
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1000px) { /* Media query para telas de notebooks menores/tablets maiores */
     .game-card {
+        width: calc(50% - 30px); /* Cards ocupam 50% da largura (2 colunas) */
+    }
+
+    header {
+        height: 250px; /* Reduz a altura do header em telas menores */
+    }
+
+    .logo {
+        top: 15px;
+        left: 20px;
+    }
+
+    .logo img {
+        height: 60px;
+    }
+
+    nav {
+        top: 20px;
+        right: 20px;
+        gap: 10px;
+    }
+
+    nav .nav-btn,
+    nav .play-now {
+        padding: 6px 14px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 500px) { /* Media query para tablets */
+    .game-list {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .game-card {
+        width: calc(50% - 15px); /* Cards ocupam 50% da largura (2 colunas) */
+        min-height: 220px; /* Ajusta altura mínima */
+        padding: 15px;
+    }
+
+    .game-card h3 {
+        font-size: 1.3em;
+    }
+
+    .game-card .play-btn {
+        padding: 8px 16px;
+        font-size: 1em;
+    }
+
+    header {
+        height: 200px; /* Reduz ainda mais a altura do header */
+        flex-direction: column; /* Coloca logo e nav em colunas */
+        justify-content: flex-start; /* Alinha ao topo */
+        padding-top: 15px;
+    }
+
+    .logo {
+        position: static; /* Volta para posicionamento estático */
+        margin-bottom: 10px; /* Espaço abaixo da logo */
+        text-align: center;
+    }
+
+    nav {
+        position: static; /* Volta para posicionamento estático */
         width: 100%;
+        justify-content: center; /* Centraliza os botões */
+        gap: 8px;
+    }
+
+    .modal-content.login-content {
+        margin: 5% auto; /* Ajusta a margem para telas menores */
+        padding: 25px;
+    }
+
+    .login-content h2 {
+        font-size: 2em;
     }
 }
 
-/* ===== ESTILOS DO DROPDOWN DE CATEGORIA ===== */
+@media (max-width: 480px) { /* Media query para celulares */
+    .game-list {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .game-card {
+        width: 95%; /* Cards ocupam quase toda a largura (1 coluna) */
+        min-width: unset; /* Remove o min-width para maior flexibilidade */
+    }
+
+    header {
+        height: 180px; /* Altura menor para o header */
+    }
+
+    .logo img {
+        height: 45px;
+    }
+
+    nav {
+        flex-direction: column; /* Botões em coluna */
+        align-items: stretch; /* Estica os botões */
+    }
+
+    nav .nav-btn,
+    nav .play-now {
+        width: 100%; /* Botões ocupam 100% da largura */
+        margin: 5px 0; /* Margem vertical entre eles */
+        padding: 10px;
+        font-size: 1.1em;
+    }
+
+    .modal-content.login-content {
+        padding: 20px;
+    }
+
+    .login-content h2 {
+        font-size: 1.8em;
+    }
+
+    .input-group input {
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .login-content button[type="submit"] {
+        padding: 10px 15px;
+        font-size: 1.1em;
+    }
+
+    .django-message-popup {
+        max-width: 95%;
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}
+
+
+/* ===================== ESTILOS DO DROPDOWN DE CATEGORIA ================== */
 .dropdown {
-    position: relative;
-    display: inline-block;
+    position: relative; /* Define posição relativa para elementos filhos */
+    display: inline-block; /* Exibe como bloco inline */
 }
 
 .dropdown-content {
-    position: absolute;
-    top: 100%;
-    left: 0;
+    position: absolute; /* Posiciona o conteúdo do dropdown de forma absoluta */
+    top: 100%; /* Posiciona abaixo do elemento pai */
+    left: 0; /* Alinha à esquerda */
     background-color: #333300; /* Cor de fundo similar aos cards */
-    min-width: 160px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    z-index: 1;
+    min-width: 180px; /* Largura mínima do dropdown */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4); /* Sombra para o dropdown */
+    z-index: 50; /* Z-index para controle de camadas, acima de outros elementos */
     display: none; /* Inicialmente escondido */
-    flex-direction: column;
-    border-radius: 5px; /* Adicionando bordas arredondadas */
+    flex-direction: column; /* Organiza itens em coluna */
+    border-radius: 8px; /* Adicionando bordas arredondadas */
+    animation: fadeInDown 0.3s ease-out forwards; /* Animação de entrada */
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .dropdown:hover .dropdown-content {
@@ -366,81 +660,219 @@ main {
 }
 
 .dropdown-content a {
-    padding: 8px 12px;
-    text-decoration: none;
+    padding: 10px 15px; /* Preenchimento interno dos links */
+    text-decoration: none; /* Remove sublinhado dos links */
     color: #fff; /* Cor do texto branca, como nos cards */
-    display: block;
+    display: block; /* Exibe o link como um bloco */
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 1em;
 }
 
 .dropdown-content a:hover {
     background-color: #664d00; /* Cor de fundo no hover, similar ao destaque dos cards */
+    color: #ffbb33; /* Cor do texto dourada no hover */
 }
 
-/* ===== MENSAGENS DO DJANGO (Popup de Notificação) ===== */
+.dropdown-content a:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.dropdown-content a:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+/* ======================== MENSAGENS DO DJANGO (Popup de Notificação) ============== */
 .django-message-popup {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1001;
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%);
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
-    border: 1px solid #555;
-    color: #fff;
-    text-align: center;
-    max-width: 400px;
-    width: 90%;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    position: fixed; /* Fixa o popup na tela */
+    top: 20px; /* Distância do topo */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta para centralização exata */
+    z-index: 1001; /* Z-index alto para ficar acima de tudo */
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%); /* Gradiente de fundo */
+    padding: 15px 20px; /* Preenchimento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Sombra */
+    border: 1px solid #555; /* Borda */
+    color: #fff; /* Cor do texto */
+    text-align: center; /* Alinha texto ao centro */
+    max-width: 450px; /* Largura máxima */
+    width: 90%; /* Largura em porcentagem */
+    opacity: 0; /* Começa transparente */
+    visibility: hidden; /* Escondido */
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Transições suaves */
 }
 
 .django-message-popup.show {
-    opacity: 1;
-    visibility: visible;
-    top: 50px;
+    opacity: 1; /* Torna visível */
+    visibility: visible; /* Torna visível */
+    top: 50px; /* Desliza para baixo ao aparecer */
 }
 
 .django-message-popup .message-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    display: flex; /* Usa flexbox para organizar conteúdo */
+    align-items: center; /* Alinha itens verticalmente */
+    justify-content: center; /* Centraliza itens horizontalmente */
+    gap: 10px; /* Espaço entre os itens */
 }
 
 .django-message-popup .message-icon {
-    font-size: 2em; /* Aumentado para 2em */
+    font-size: 2.2em; /* Aumenta o tamanho do ícone */
 }
 
 .django-message-popup .message-title {
-    font-weight: bold;
-    font-size: 1.3em; /* Aumentado para 1.3em */
-    margin-bottom: 5px;
+    font-weight: bold; /* Texto em negrito */
+    font-size: 1.4em; /* Aumenta o tamanho da fonte */
+    margin-bottom: 5px; /* Margem inferior */
 }
 
 .django-message-popup .message-body {
-    font-size: 1.1em; /* Aumentado para 1.1em */
+    font-size: 1.1em; /* Aumenta o tamanho da fonte */
 }
 
 /* Estilos específicos para tipos de mensagem (opcional, para cores diferentes) */
 .django-message-popup.error {
-    background: linear-gradient(135deg, #8B0000 0%, #CC0000 50%, #8B0000 100%);
-    border-color: #FF0000;
+    background: linear-gradient(135deg, #8B0000 0%, #CC0000 50%, #8B0000 100%); /* Gradiente para erro */
+    border-color: #FF0000; /* Cor da borda para erro */
 }
 
 .django-message-popup.success {
-    background: linear-gradient(135deg, #006400 0%, #008000 50%, #006400 100%);
-    border-color: #00FF00;
+    background: linear-gradient(135deg, #006400 0%, #008000 50%, #006400 100%); /* Gradiente para sucesso */
+    border-color: #00FF00; /* Cor da borda para sucesso */
 }
 
 .django-message-popup.info {
-    background: linear-gradient(135deg, #00008B 0%, #0000CD 50%, #00008B 100%);
-    border-color: #0000FF;
+    background: linear-gradient(135deg, #00008B 0%, #0000CD 50%, #00008B 100%); /* Gradiente para informação */
+    border-color: #0000FF; /* Cor da borda para informação */
 }
 
 .django-message-popup.warning {
-    background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
-    border-color: #FFA500;
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #8B4513 100%); /* Gradiente para aviso */
+    border-color: #FFA500; /* Cor da borda para aviso */
+}
+
+/* ============================================ MODAL LGPD ===================================== */
+/* Estilos para o modal LGPD (Visual Melhorado) */
+
+/* Garante que o fundo semitransparente do modal principal esteja visível */
+.modal.show {
+    background-color: rgba(0,0,0,0.65); /* Fundo semitransparente mais suave */
+    backdrop-filter: blur(8px); /* Efeito de blur um pouco mais intenso no fundo */
+    -webkit-backdrop-filter: blur(8px); /* Para compatibilidade com navegadores Webkit */
+}
+
+.lgpd-content {
+    max-width: 900px;
+    width: 90%;
+    padding: 35px; /* Aumentei um pouco o padding para mais espaço interno */
+    text-align: center;
+    background-color: #222; /* Tom de preto ligeiramente mais claro */
+    border-radius: 10px; /* Raio da borda ligeiramente menor */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra mais suave e espalhada */
+    position: relative;
+    /* REMOVIDAS as propriedades max-height e overflow-y: auto */
+    /* Isso significa que se o conteúdo for muito grande, ele pode ser cortado na parte inferior em telas menores */
+}
+
+.lgpd-top-image {
+    width: 250px;
+    height: auto;
+    margin: 0 auto 30px auto; /* Aumentei a margem inferior para mais espaço abaixo da imagem */
+    display: block;
+    opacity: 0.9; /* Ligeira redução na opacidade para um visual um pouco menos "pesado" */
+}
+
+.lgpd-content h2 {
+    color: #eee; /* Tom de branco ligeiramente mais suave */
+    margin-bottom: 25px; /* Aumentei a margem inferior do título */
+    font-size: 1.9em; /* Aumentei ligeiramente o tamanho da fonte do título */
+    font-weight: bold; /* Garante que o título se destaque */
+    letter-spacing: 0.5px; /* Pequeno ajuste no espaçamento entre letras */
+}
+
+.lgpd-content p {
+    color: #ccc; /* Tom de cinza mais claro para o texto */
+    font-size: 1.0em; /* Aumentei ligeiramente o tamanho da fonte do parágrafo */
+    line-height: 1.5; /* Aumentei a altura da linha para melhor legibilidade */
+    margin-bottom: 20px; /* Aumentei a margem inferior dos parágrafos */
+}
+
+.lgpd-actions {
+    margin-top: 35px; /* Aumentei a margem superior dos botões */
+    display: flex;
+    flex-direction: row; /* Voltei para a disposição horizontal dos botões */
+    justify-content: center;
+    gap: 20px;
+}
+
+.lgpd-actions .secondary-button {
+    background-color: #444; /* Tom de cinza mais escuro para o botão "Mais Opções" */
+    color: #eee;
+    padding: 12px 28px; /* Ajustei o preenchimento dos botões */
+    border: 1px solid #555; /* Adicionei uma borda sutil */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.lgpd-actions .secondary-button:hover {
+    background-color: #555;
+    color: #fff;
+    border-color: #777;
+}
+
+.lgpd-actions .primary-button {
+    background-color: #ffc107; /* Cor amarela principal */
+    color: #222; /* Texto escuro para contraste */
+    padding: 12px 28px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.lgpd-actions .primary-button:hover {
+    background-color: #e0a800;
+    color: #333;
+}
+
+.lgpd-contact-info {
+    margin-top: 30px; /* Aumentei a margem superior */
+    font-size: 0.9em;
+    color: #bbb; /* Tom de cinza mais claro */
+}
+
+.lgpd-contact-info a {
+    color: #ffc107;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.lgpd-contact-info a:hover {
+    color: #e0a800;
+    text-decoration: underline;
+}
+
+/* Estilo para o botão de fechar (consistente com o modal de login) */
+.lgpd-content .close-button {
+    color: #757575;
+    font-size: 28px; /* Ligeiramente menor que o do modal de login */
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    transition: color 0.2s ease;
+}
+
+.lgpd-content .close-button:hover,
+.lgpd-content .close-button:focus {
+    color: #fff;
+    text-decoration: none;
 }

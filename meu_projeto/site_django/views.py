@@ -144,3 +144,5 @@ def login_user(request):
     else:
         # Se a requisição não for POST
         return JsonResponse({'error': 'Método não permitido.'}, status=405)
+    
+    

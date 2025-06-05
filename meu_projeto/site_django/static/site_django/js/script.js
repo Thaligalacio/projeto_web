@@ -1,15 +1,116 @@
 console.log("Arquivo script.js carregado!");
 
+// Função para centralizar o controle de todos os modais
+const modalController = (() => {
+    const modals = {
+        'login-form': {
+            element: document.getElementById('login-form'),
+            content: document.getElementById('login-content'), // Conteúdo principal do login
+            registerContent: document.getElementById('register-form-inside-login'), // Form de registro dentro do login
+            forgotContent: document.getElementById('forgot-password-content'), // Form de esqueci senha
+            loginTitle: document.getElementById('login-title') // ADICIONE ESTA LINHA AQUI
+        },
+        'register-modal': { // Assumindo que este é o modal de registro separado
+            element: document.getElementById('register-modal'),
+            content: null // Não há sub-seções aqui, o próprio modal é o conteúdo
+        },
+        'lgpd-modal': { // ADICIONE ESTE MODAL AO CONTROLADOR
+            element: document.getElementById('lgpd-modal'),
+            content: null // Não há sub-conteúdo complexo para o LGPD
+        }
+    };
+
+    function openModal(modalId, initialSection = 'main') {
+        const modal = modals[modalId];
+        if (!modal || !modal.element) {
+            console.warn(`Modal com ID '${modalId}' não encontrado.`);
+            return;
+        }
+
+        // Fecha todos os outros modais abertos antes de abrir o novo
+        for (const key in modals) {
+            if (modals[key].element && modals[key].element.classList.contains('show')) {
+                closeModal(key);
+            }
+        }
+
+        // Adiciona a classe 'show' para ativar o display: flex e centralização via CSS
+        modal.element.classList.add('show');
+        document.body.classList.add('modal-open'); // Desabilita o scroll do body
+
+        // Controla as sub-seções do modal de login
+        if (modalId === 'login-form') {
+            if (initialSection === 'register' && modal.registerContent) {
+                modal.content.style.display = 'none';
+                modal.registerContent.style.display = 'block';
+                if (modal.forgotContent) modal.forgotContent.style.display = 'none';
+                if (modal.loginTitle) modal.loginTitle.style.display = 'none'; // OCULTA O TÍTULO "FAÇA O SEU LOGIN"
+            } else if (initialSection === 'forgot' && modal.forgotContent) {
+                modal.content.style.display = 'none';
+                modal.forgotContent.style.display = 'block';
+                if (modal.registerContent) modal.registerContent.style.display = 'none';
+                if (modal.loginTitle) modal.loginTitle.style.display = 'none'; // OCULTA O TÍTULO "FAÇA O SEU LOGIN"
+            } else { // Padrão: main login
+                modal.content.style.display = 'block';
+                if (modal.registerContent) modal.registerContent.style.display = 'none';
+                if (modal.forgotContent) modal.forgotContent.style.display = 'none';
+                if (modal.loginTitle) modal.loginTitle.style.display = 'block'; // MOSTRA O TÍTULO "FAÇA O SEU LOGIN"
+            }
+        }
+    }
+
+    function closeModal(modalId) {
+        const modal = modals[modalId];
+        if (modal && modal.element) {
+            // Remove a classe 'show' para esconder o modal
+            modal.element.classList.remove('show');
+            document.body.classList.remove('modal-open'); // Habilita o scroll do body
+
+            // Reseta a exibição das sub-seções do login ao fechar
+            if (modalId === 'login-form' && modal.content) {
+                modal.content.style.display = 'block';
+                if (modal.registerContent) modal.registerContent.style.display = 'none';
+                if (modal.forgotContent) modal.forgotContent.style.display = 'none';
+                if (modal.loginTitle) modal.loginTitle.style.display = 'block'; // Garante que o título volte ao fechar
+            }
+        }
+    }
+
+    // Fecha qualquer modal clicando fora dele
+    window.addEventListener('click', (event) => {
+        for (const key in modals) {
+            const modalElement = modals[key].element;
+            // Verifica se o modal está aberto (tem a classe 'show') e se o clique foi fora do conteúdo do modal
+            // E garante que não é o modal da LGPD que está sendo fechado por clique fora (normalmente LGPD exige ação explícita)
+            if (modalElement && modalElement.classList.contains('show') && event.target === modalElement && key !== 'lgpd-modal') {
+                closeModal(key);
+            }
+        }
+    });
+
+    return {
+        open: openModal,
+        close: closeModal
+    };
+})();
+
 // Aguarda o carregamento completo da página
 document.addEventListener("DOMContentLoaded", () => {
     initCategoryDropdown();
     initCategoryFilter();
-    initLoginModal();
-    initRegisterModal(); // Chamada para o modal de registro separado
-    initForgotPassword();
+    initModals(); // Agora uma única função para todos os modais
     initSearchBar();
-    initCarousel(); // Adiciona a inicialização do carrossel
-    initDjangoMessages(); // Função para lidar com as mensagens do Django
+    initCarousel();
+    initDjangoMessages();
+    initGameCardHoverDescriptions(); // Nova função para a descrição lateral no hover
+
+    // Garante que todos os jogos sejam exibidos na carga inicial da página
+    filterGamesByCategory("menu_principal");
+
+    // Lógica para exibir o modal LGPD toda vez que o site é aberto
+    setTimeout(() => {
+        modalController.open('lgpd-modal'); // Abre o modal LGPD usando o modalController
+    }, 1000); // Exibe após 1 segundo (para a página carregar)
 });
 
 // ------------------------ MENSAGENS POPUP (Django Messages) ------------------------
@@ -17,11 +118,6 @@ function initDjangoMessages() {
     const messageDivs = document.querySelectorAll('.django-message-popup');
 
     messageDivs.forEach((messageDiv) => {
-        // Garante que a div esteja visível antes de adicionar a classe 'show'
-        // Definir display: 'block' e forçar reflow é essencial para a transição
-        messageDiv.style.display = 'block';
-        void messageDiv.offsetWidth; // Força o reflow
-
         messageDiv.classList.add('show'); // Adiciona a classe para animação de entrada
 
         // Define um timeout para esconder a mensagem
@@ -29,27 +125,21 @@ function initDjangoMessages() {
             messageDiv.classList.remove('show'); // Remove a classe para animação de saída
             // Espera a transição terminar antes de ocultar totalmente
             messageDiv.addEventListener('transitionend', function handler() {
-                messageDiv.style.display = 'none';
+                messageDiv.style.display = 'none'; // Finalmente, esconde o elemento
                 messageDiv.removeEventListener('transitionend', handler); // Remove o listener após uso
-            });
+            }, { once: true }); // Usar { once: true } para remover o listener automaticamente
 
             // Lógica para fechar modais se a mensagem for de sucesso de cadastro
             if (messageDiv.classList.contains('success')) {
-                const registerModal = document.getElementById('register-modal');
-                if (registerModal && registerModal.style.display === 'block') {
-                    registerModal.style.display = 'none';
-                }
-                const loginModal = document.getElementById('login-form');
-                if (loginModal && loginModal.style.display === 'block') {
-                    loginModal.style.display = 'none';
-                }
+                // Fechar qualquer modal que esteja aberto
+                modalController.close('register-modal');
+                modalController.close('login-form');
             }
         }, 5000); // Exibe por 5 segundos
     });
 }
 
 
-// ------------------------ CARROSSEL ------------------------
 // ------------------------ CARROSSEL ------------------------
 function initCarousel() {
     const carouselSlide = document.querySelector('.carousel-slide');
@@ -58,7 +148,7 @@ function initCarousel() {
         return;
     }
     const carouselItems = document.querySelectorAll('.carousel-item');
-    const totalItems = carouselItems.length; // Deve ser 5 no seu caso
+    const totalItems = carouselItems.length;
     let currentIndex = 0;
 
     function moveSlide(index) {
@@ -72,7 +162,6 @@ function initCarousel() {
         }
 
         // Calcula o deslocamento. Cada slide ocupa 100% da largura visível do carousel-container.
-        // Então, você multiplica o índice pelo 100% do tamanho do item.
         carouselSlide.style.transform = `translateX(${-currentIndex * 100}%)`;
     }
 
@@ -83,7 +172,6 @@ function initCarousel() {
 
     // Inicia o carrossel automático
     setInterval(nextSlide, 8000); // Muda de slide a cada 8 segundos
-
 }
 
 // ------------------------ CATEGORIAS ------------------------
@@ -91,21 +179,22 @@ function initCarousel() {
 // Controla o botão de dropdown de categorias
 function initCategoryDropdown() {
     const categoryBtn = document.getElementById("category-btn");
-    const dropdown = categoryBtn?.parentElement;
+    const dropdownContent = document.querySelector(".dropdown-content"); // Seleciona o conteúdo do dropdown
 
-    if (!categoryBtn || !dropdown) {
+    if (!categoryBtn || !dropdownContent) {
         console.warn("Elementos do dropdown de categoria não encontrados.");
         return;
     }
 
-    categoryBtn.addEventListener("click", () => {
-        dropdown.classList.toggle("show");
+    categoryBtn.addEventListener("click", (event) => {
+        event.stopPropagation(); // Evita que o clique se propague para o document e feche imediatamente
+        dropdownContent.style.display = dropdownContent.style.display === 'flex' ? 'none' : 'flex'; // Alterna flex/none
     });
 
     // Fecha o menu se clicar fora dele
     document.addEventListener("click", event => {
-        if (!dropdown.contains(event.target) && event.target !== categoryBtn) {
-            dropdown.classList.remove("show");
+        if (!categoryBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.style.display = "none";
         }
     });
 }
@@ -126,24 +215,24 @@ function initCategoryFilter() {
             const categoria = normalizeCategory(link.textContent);
             filterGamesByCategory(categoria);
             // Fechar o dropdown após a seleção
-            const dropdown = document.getElementById("category-btn")?.parentElement;
-            if (dropdown) {
-                dropdown.classList.remove("show");
+            const dropdownContent = document.querySelector(".dropdown-content");
+            if (dropdownContent) {
+                dropdownContent.style.display = "none";
             }
         });
     });
 
-    function normalizeCategory(text) {
+    // Esta função é vital para mapear o texto do menu para o atributo data-category
+    window.normalizeCategory = function(text) { // Expondo globalmente para acesso fácil
         // Transforma o texto do link para bater com o data-category do card
-        return text.toLowerCase().replace("ç", "c").replace(" ", "_");
+        // 'ação' -> 'acao', 'Menu Principal' -> 'menu_principal', 'quebra cabeça' -> 'quebra_cabeca'
+        return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
     }
 
-    function filterGamesByCategory(categoria) {
+    window.filterGamesByCategory = function(categoria) { // Expondo globalmente
         gameCards.forEach(card => {
             const categoriaCard = card.getAttribute("data-category");
-            if (categoria === "menu_principal") { // Se for "Menu Principal", mostra todos
-                card.style.display = "block";
-            } else if (categoriaCard === categoria) {
+            if (categoria === "menu_principal" || categoriaCard === categoria) {
                 card.style.display = "block";
             } else {
                 card.style.display = "none";
@@ -151,181 +240,159 @@ function initCategoryFilter() {
         });
     }
 }
+// ------------------------ CONTROLE DE MODAIS GERAL ------------------------
 
-// ------------------------ LOGIN ------------------------
-
-function initLoginModal() {
+function initModals() {
+    // Login Modal
     const loginBtn = document.getElementById("login-btn");
-    const loginModal = document.getElementById("login-form");
     const closeLoginBtn = document.getElementById("close-login-modal");
-    const loginContent = document.getElementById("login-content");
-    const registerFormInsideLogin = document.getElementById("register-form-inside-login");
-    const showRegisterFormLink = document.getElementById("show-register-form");
-    const showLoginFromRegisterLink = document.getElementById("show-login-form"); // Link "Fazer Login" dentro do form de registro
-    const forgotPasswordLink = loginContent?.querySelector('.options a[href="#"]'); // Link "Esqueci minha senha"
+    const showRegisterFormLink = document.getElementById("show-register-form"); // Link "Criar Conta" dentro do login
+    const showLoginFromRegisterInsideLink = document.getElementById("show-login-form-from-register-inside"); // Link "Fazer Login" dentro do FORM de registro (interno ao login)
+    const forgotPasswordLink = document.getElementById('forgot-password-link'); // Link "Esqueci minha senha"
+    const showLoginFromForgotLink = document.getElementById("show-login-from-forgot"); // Link "Fazer Login" dentro do form de esqueci senha
 
-    if (!loginBtn || !loginModal || !closeLoginBtn || !loginContent || !registerFormInsideLogin) {
-        console.warn("Elementos essenciais para o modal de login não encontrados.");
-        return;
+    if (loginBtn) loginBtn.addEventListener("click", () => modalController.open('login-form', 'main'));
+    if (closeLoginBtn) closeLoginBtn.addEventListener("click", () => modalController.close('login-form'));
+    if (showRegisterFormLink) showRegisterFormLink.addEventListener("click", (e) => { e.preventDefault(); modalController.open('login-form', 'register'); });
+    if (showLoginFromRegisterInsideLink) showLoginFromRegisterInsideLink.addEventListener("click", (e) => { e.preventDefault(); modalController.open('login-form', 'main'); });
+    if (forgotPasswordLink) forgotPasswordLink.addEventListener("click", (e) => { e.preventDefault(); modalController.open('login-form', 'forgot'); });
+    if (showLoginFromForgotLink) showLoginFromForgotLink.addEventListener("click", (e) => { e.preventDefault(); modalController.open('login-form', 'main'); });
+
+    // Register Modal (Separado)
+    const registerNavBtn = document.getElementById("register-nav-btn"); // Se houver um botão na nav para registro direto
+    const registerModalElement = document.getElementById("register-modal"); // O modal de registro separado
+    const closeRegisterModalBtn = document.getElementById("close-register-modal");
+
+    // === LINHA CORRIGIDA AQUI ===
+    // Agora selecionamos o link "Fazer Login" dentro do modal de registro SEPARADO
+    // É CRUCIAL que este seletor CSS (.signup-link a) esteja correto para o SEU HTML
+    // Se você adicionou um ID como "link-fazer-login-do-registro", use:
+    // const showLoginFromRegisterSeparateLink = document.getElementById("link-fazer-login-do-registro");
+    // Ou, se a estrutura é '.signup-link a', e você tem certeza de que só ele deve ser afetado:
+    const showLoginFromRegisterSeparateLink = registerModalElement ? registerModalElement.querySelector('.signup-link a') : null;
+    // Notei que seu seletor original era '.signup-link a[href="#"]'.
+    // Se o seu link não tem mais `href="#"`, isso pode ter quebrado.
+    // O seletor '.signup-link a' é mais geral.
+    // Se houver múltiplos links '.signup-link a' dentro do registerModalElement,
+    // você precisará de um ID específico no HTML ou um seletor mais preciso.
+    // ===========================
+
+    if (registerNavBtn) registerNavBtn.addEventListener("click", () => modalController.open('register-modal'));
+    if (closeRegisterModalBtn) closeRegisterModalBtn.addEventListener("click", () => modalController.close('register-modal'));
+
+    if (showLoginFromRegisterSeparateLink) {
+        showLoginFromRegisterSeparateLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalController.close('register-modal');
+            modalController.open('login-form', 'main'); // Abre o modal de login na seção principal
+        });
     }
 
-    // Abre o modal de login
-    loginBtn.addEventListener("click", () => {
-        loginModal.style.display = "block";
-        loginContent.style.display = "block"; // Garante que o login esteja visível
-        registerFormInsideLogin.style.display = "none"; // Garante que o registro esteja oculto
-        document.getElementById('forgot-password-content').style.display = "none"; // Oculta esqueci senha também
-    });
+    // ------------------------ CONTROLE DE MODAL LGPD ------------------------
+    // Botões do Modal LGPD
+    const closeLgpdModalBtn = document.getElementById('close-lgpd-modal');
+    const lgpdAgreeButton = document.getElementById('lgpd-agree-continue'); // CORRIGIDO O ID AQUI!
+    const lgpdMoreOptionsButton = document.getElementById('lgpd-more-options');
 
-    // Fecha o modal de login
-    closeLoginBtn.addEventListener("click", () => {
-        loginModal.style.display = "none";
-        hideAllLoginSubsections(); // Oculta todas as subseções internas ao fechar o modal
-    });
-
-    // Fecha o modal ao clicar fora
-    window.addEventListener("click", event => {
-        if (event.target === loginModal) {
-            loginModal.style.display = "none";
-            hideAllLoginSubsections();
-        }
-    });
-
-    // Mostrar formulário de registro dentro do modal de login
-    showRegisterFormLink?.addEventListener("click", (event) => {
-        event.preventDefault();
-        loginContent.style.display = "none";
-        registerFormInsideLogin.style.display = "block";
-    });
-
-    // Voltar para o formulário de login (do registro interno)
-    showLoginFromRegisterLink?.addEventListener("click", (event) => {
-        event.preventDefault();
-        loginContent.style.display = "block";
-        registerFormInsideLogin.style.display = "none";
-    });
-
-    // Mostrar formulário de "Esqueci minha senha"
-    forgotPasswordLink?.addEventListener("click", (event) => {
-        event.preventDefault();
-        loginContent.style.display = "none";
-        document.getElementById('forgot-password-content').style.display = "block";
-    });
-
-    // Função auxiliar para ocultar todas as sub-seções ao fechar o modal de login
-    function hideAllLoginSubsections() {
-        loginContent.style.display = "block"; // Volta para a seção de login por padrão
-        registerFormInsideLogin.style.display = "none";
-        document.getElementById('forgot-password-content').style.display = "none";
+    if (closeLgpdModalBtn) closeLgpdModalBtn.addEventListener('click', () => modalController.close('lgpd-modal'));
+    if (lgpdAgreeButton) {
+        lgpdAgreeButton.addEventListener('click', () => {
+            // REMOVIDA A LINHA: localStorage.setItem('lgpd_accepted', 'true');
+            modalController.close('lgpd-modal');
+        });
+    }
+    if (lgpdMoreOptionsButton) {
+        lgpdMoreOptionsButton.addEventListener('click', () => {
+            alert('Funcionalidade de "Mais Opções" ainda não implementada. Por favor, concorde para continuar.');
+            modalController.close('lgpd-modal'); // Pode fechar ou abrir outro modal de detalhes
+        });
     }
 }
 
-
-// ------------------------ REGISTRO MODAL (SEPARADO) ------------------------
-
-function initRegisterModal() {
-    const registerModal = document.getElementById("register-modal");
-    const closeRegisterBtn = document.getElementById("close-register-modal");
-    const showLoginFromRegisterModalLink = registerModal?.querySelector('.signup-link a[href="#"]#show-login-form');
-
-
-    if (!registerModal || !closeRegisterBtn) {
-        console.warn("Elementos essenciais para o modal de registro (separado) não encontrados.");
-        return;
-    }
-
-    closeRegisterBtn.addEventListener("click", () => {
-        registerModal.style.display = "none";
-    });
-
-    window.addEventListener("click", event => {
-        if (event.target === registerModal) {
-            registerModal.style.display = "none";
-        }
-    });
-
-    // Se o modal de registro separado for aberto, e o usuário clicar em "Fazer Login"
-    showLoginFromRegisterModalLink?.addEventListener('click', (event) => {
-        event.preventDefault();
-        registerModal.style.display = 'none'; // Fecha o modal de registro
-        document.getElementById('login-form').style.display = 'block'; // Abre o modal de login
-        document.getElementById('login-content').style.display = 'block'; // Mostra a parte de login
-        document.getElementById('register-form-inside-login').style.display = 'none'; // Esconde a parte de registro interna
-    });
-}
-
-// ------------------------ ESQUECI SENHA ------------------------
-function initForgotPassword() {
-    const forgotPasswordContent = document.getElementById("forgot-password-content");
-    const closeForgotPasswordBtn = document.getElementById("close-forgot-password-modal");
-    const showLoginFromForgotLink = document.getElementById("show-login-from-forgot");
-    const recoverPasswordButton = document.getElementById("recover-password-button");
-
-    if (!forgotPasswordContent) {
-        console.warn("Elemento 'forgot-password-content' não encontrado.");
-        return;
-    }
-
-    closeForgotPasswordBtn?.addEventListener("click", () => {
-        forgotPasswordContent.style.display = "none";
-        // Opcional: mostrar o modal de login novamente se ele estava aberto
-        document.getElementById('login-form').style.display = 'block';
-        document.getElementById('login-content').style.display = 'block';
-    });
-
-    showLoginFromForgotLink?.addEventListener("click", (event) => {
-        event.preventDefault();
-        forgotPasswordContent.style.display = "none";
-        document.getElementById('login-form').style.display = 'block';
-        document.getElementById('login-content').style.display = 'block';
-    });
-
-    recoverPasswordButton?.addEventListener("click", () => {
-        alert("Funcionalidade de recuperação de senha ainda não implementada.");
-        // Aqui você adicionaria a lógica para enviar o email de recuperação
-    });
-}
 
 // ------------------------ BARRA DE PESQUISA ------------------------
+
 function initSearchBar() {
-    const searchTrigger = document.getElementById("search-trigger");
+    const searchTriggerBtn = document.getElementById("search-trigger");
     const searchInput = document.getElementById("search-input");
     const closeSearchBtn = document.getElementById("close-search");
-    const gameCards = document.querySelectorAll(".game-card");
+    const gameCards = document.querySelectorAll(".game-card"); // Pega todos os cards de jogos
 
-    if (!searchTrigger || !searchInput || !closeSearchBtn || gameCards.length === 0) {
-        console.warn("Elementos para barra de pesquisa não encontrados.");
+    if (!searchTriggerBtn || !searchInput || !closeSearchBtn || gameCards.length === 0) {
+        console.warn("Elementos da barra de pesquisa ou cards de jogos não encontrados.");
         return;
     }
 
-    searchTrigger.addEventListener("click", () => {
+    searchTriggerBtn.addEventListener("click", () => {
         searchInput.style.display = "block";
         closeSearchBtn.style.display = "inline-block";
-        searchTrigger.style.display = "none"; // Esconde o botão "Procurar"
-        searchInput.focus();
+        searchTriggerBtn.style.display = "none";
+        searchInput.focus(); // Coloca o foco no input
     });
 
     closeSearchBtn.addEventListener("click", () => {
+        searchInput.value = ""; // Limpa o campo
         searchInput.style.display = "none";
         closeSearchBtn.style.display = "none";
-        searchTrigger.style.display = "inline-block"; // Mostra o botão "Procurar"
-        searchInput.value = ''; // Limpa o campo de busca
-        filterGamesByName(''); // Reseta o filtro
-    });
-
-    searchInput.addEventListener("keyup", () => {
-        filterGamesByName(searchInput.value);
-    });
-
-    function filterGamesByName(searchText) {
-        const lowerCaseSearchText = searchText.toLowerCase();
+        searchTriggerBtn.style.display = "inline-block";
+        // Mostra todos os jogos novamente quando a pesquisa é fechada
         gameCards.forEach(card => {
-            const gameName = card.querySelector("h3")?.textContent.toLowerCase() || "";
-            if (gameName.includes(lowerCaseSearchText) || lowerCaseSearchText === '') {
+            card.style.display = "block";
+        });
+    });
+
+    searchInput.addEventListener("input", () => {
+        const searchTerm = searchInput.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normaliza para remover acentos
+
+        gameCards.forEach(card => {
+            const gameName = card.querySelector("h3")?.textContent?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const gameCategory = card.getAttribute("data-category")?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (gameName && (gameName.includes(searchTerm) || gameCategory.includes(searchTerm))) {
                 card.style.display = "block";
             } else {
                 card.style.display = "none";
             }
         });
-    }
+    });
 }
+
+// ------------------------ DESCRIÇÃO LATERAL DOS CARDS NO HOVER ------------------------
+function initGameCardHoverDescriptions() {
+    const gameCards = document.querySelectorAll(".game-card");
+
+    gameCards.forEach(card => {
+        // Verifica se o card tem um elemento para descrição lateral
+        const descriptionBox = card.querySelector(".description-box");
+        if (descriptionBox) {
+            // Adiciona um listener para mouseenter (hover)
+            card.addEventListener("mouseenter", () => {
+                // A classe "description-box" já tem display: none por padrão no CSS.
+                // Ao adicionar o hover no .game-card no CSS, ele automaticamente
+                // muda o display para block e aplica a transição.
+                // Não precisamos de JS para `display = 'block'` aqui,
+                // pois o CSS já faz isso via `:hover`.
+
+                // Para navegadores que não suportam bem `:has()` ou para fallback:
+                // if (window.innerWidth > 1400) { // Verifica se a tela é grande o suficiente
+                //    descriptionBox.style.display = 'block';
+                //    descriptionBox.style.opacity = '1';
+                //    descriptionBox.style.transform = 'translateX(0)';
+                // }
+            });
+
+            // Adiciona um listener para mouseleave (sair do hover)
+            card.addEventListener("mouseleave", () => {
+                // O CSS já lida com o `display: none` e a transição
+                // quando o hover é removido do .game-card.
+                // if (window.innerWidth > 1400) {
+                //    descriptionBox.style.opacity = '0';
+                //    descriptionBox.style.transform = 'translateX(20px)';
+                //    // Pode adicionar um timeout aqui se precisar ocultar completamente após a transição
+                //    // setTimeout(() => descriptionBox.style.display = 'none', 400);
+                // }
+            });
+        }
+    });
+}
+
