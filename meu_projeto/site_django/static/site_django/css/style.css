@@ -10,22 +10,48 @@ body {
     font-family: 'Arial', sans-serif; /* Define a fonte principal para o corpo */
     background-color: #0d0d0d; /* Cor de fundo escura para o corpo */
     color: #fff; /* Cor do texto padrão branca */
-    background-image: url("/static/site_django/imagens/fundo_inteiro.png"); /* Imagem de fundo */
-    background-size: cover; /* Faz a imagem de fundo cobrir toda a área */
-    background-repeat: no-repeat; /* Evita que a imagem de fundo se repita */
-    background-attachment: fixed; /* Fixa a imagem de fundo durante a rolagem */
+    /* **JÁ COMENTADO NO SEU CÓDIGO - PERFEITO!** */
+    /* background-image: url("/static/site_django/imagens/fundo_inteiro.png"); */
+    /* background-size: cover; */
+    /* background-repeat: no-repeat; */
+    /* background-attachment: fixed; */
 }
 
 /* ===================================== HEADER =================================== */
 header {
-    background: transparent; /* Fundo transparente para o cabeçalho */
+    position: relative; /* ESSENCIAL para o vídeo absoluto dentro dele */
+    overflow: hidden; /* Esconde qualquer parte do vídeo que "vaze" */
+    height: 100vh; /* Faz o header ocupar a altura total da viewport */
+    display: flex; /* Para organizar o conteúdo logo e nav */
+    flex-direction: column; /* Organiza os filhos em coluna */
+    justify-content: space-between; /* Distribui espaço verticalmente */
+    align-items: center; /* Centraliza horizontalmente o conteúdo (logo, nav) */
+    background: transparent; /* Fundo transparente */
     padding: 10px 20px; /* Preenchimento interno do cabeçalho */
-    display: flex; /* Usa flexbox para organizar itens */
-    align-items: center; /* Alinha itens verticalmente ao centro */
-    justify-content: space-between; /* Distribui itens com espaço entre eles */
-    position: relative; /* Define posição relativa para posicionar elementos filhos */
-    height: 350px; /* Aumenta a altura do header para acomodar melhor o carrossel */
-    overflow: hidden; /* Garante que o conteúdo que extrapolar o header não seja visível */
+    /* Remove a altura fixa de 350px que estava aqui, pois 100vh já define isso */
+}
+
+/* ===================================== VÍDEO DE FUNDO =============================== */
+#bg-video {
+    position: absolute; /* Posiciona o vídeo de forma absoluta dentro do header */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Ocupa 100% da altura do header (que é 100vh) */
+    object-fit: cover; /* Garante que o vídeo cubra toda a área, cortando se necessário */
+    z-index: -1; /* Coloca o vídeo atrás de todo o outro conteúdo do header */
+}
+
+/* Opcional: Adicionar um overlay escuro sobre o vídeo para garantir legibilidade do texto */
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay preto com 50% de opacidade */
+    z-index: 0; /* Acima do vídeo, mas abaixo do conteúdo do header */
 }
 
 /* ===================================== LOGO ======================================= */
@@ -34,6 +60,7 @@ header {
     top: 20px; /* Distância do topo */
     left: 30px; /* Distância da esquerda */
     z-index: 30; /* Garante que a logo fique na frente do carrossel e navegação */
+    /* Garante que a logo seja uma "camada" separada, acima de tudo */
 }
 
 .logo img {
@@ -41,42 +68,45 @@ header {
 }
 
 /* ================ CARROSSEL COMO BANNER HERO (agora dentro do header) ============== */
-
 .carousel-container {
-    height: 100px; /* Altura do carrossel igual à altura da imagem */  
-    width: 100%;
-    height: 100px; /* Altura do carrossel igual à altura da imagem */
-    display: flex; /* Para dispor os itens do carrossel lado a lado */    
-    overflow: hidden;
-    position: relative;
-    height: 150%; /* Ocupa a altura do container do carrossel */    
-    z-index: 10;
-}
-
-.carousel-item img {
-    display: block;
-    width: 100%; /* Ocupa toda a largura */
-    height: 200%; /* Ocupa toda a altura do contêiner */
-    object-fit: cover; /* Preenche o contêiner, pode cortar um pouco */
-    margin: 0;
+    width: 100%; /* Ocupa toda a largura do header */
+    height: 100%; /* Ocupa 100% da altura do header */
+    position: absolute; /* Posiciona o carrossel de forma absoluta */
+    top: 0;
+    left: 0;
+    overflow: hidden; /* Esconde partes das imagens que "vazem" */
+    z-index: 1; /* Garante que o carrossel esteja acima do vídeo e overlay, mas abaixo da logo/nav */
+    display: flex; /* Para dispor os itens do carrossel lado a lado */
+    align-items: center; /* Centraliza verticalmente o slide dentro do container */
+    justify-content: center; /* Centraliza horizontalmente o slide dentro do container */
 }
 
 .carousel-slide {
     display: flex; /* Para dispor os itens do carrossel lado a lado */
     width: 300%; /* Largura total para 3 imagens */
-    height: 50%; /* Ocupa a altura do container do carrossel */
+    height: 100%; /* Ocupa 100% da altura do carousel-container */
     transition: transform 0.8s ease; /* Transição suave para o movimento dos slides */
-    transition: transform 0.5s ease; /* Transição suave para o movimento dos slides */
 }
 
 .carousel-item {
     width: 100%; /* Cada item ocupa a largura total do container do carrossel */
     flex-shrink: 0; /* Impede que os itens encolham */
-    z-index: 30; /* Um valor maior que o z-index do carrossel */    
-    height: auto; /* A altura se ajustará à imagem */
+    height: 100%; /* Ocupa 100% da altura do carousel-slide */
+    display: flex; /* Para centralizar a imagem dentro do item */
+    justify-content: center;
+    align-items: center;
 }
 
-/* Oculta controles */
+.carousel-item img {
+    display: block;
+    width: 100%; /* Ocupa toda a largura do carousel-item */
+    height: 100%; /* Ocupa toda a altura do carousel-item */
+    object-fit: cover; /* Preenche o contêiner, pode cortar um pouco */
+    margin: 0;
+    border-radius: 0; /* Remover bordas arredondadas se não quiser na imagem de fundo do carrossel */
+}
+
+/* Oculta controles - MANTIDO */
 .carousel-controls {
     display: none;
 }
@@ -86,7 +116,7 @@ nav {
     position: absolute; /* Posiciona a navegação de forma absoluta */
     top: 25px; /* Distância do topo */
     right: 30px; /* Distância da direita */
-    z-index: 30; /* Garante que a navegação fique na frente do carrossel */
+    z-index: 30; /* Garante que a navegação fique na frente do carrossel, logo e vídeo */
     display: flex; /* Usa flexbox para organizar os botões */
     align-items: center; /* Alinha os botões verticalmente */
     gap: 15px; /* Espaço entre os botões do menu */
@@ -113,7 +143,7 @@ nav .play-now:hover {
     transform: translateY(-2px); /* Pequeno efeito de elevação */
 }
 
-/* ===== MODAIS ===== */
+/* ========================== MODAIS (MANTIDO DO SEU CÓDIGO) ========================= */
 .modal {
     display: none; /* Inicialmente oculto */
     position: fixed; /* Fixa o modal na tela */
@@ -128,7 +158,6 @@ nav .play-now:hover {
     -webkit-backdrop-filter: blur(5px); /* Compatibilidade Safari */
 }
 
-/* NOVO: Esta regra faz o modal aparecer e centralizar QUANDO a classe 'show' é adicionada via JavaScript */
 .modal.show {
     display: flex; /* Torna o modal visível como flex container */
     justify-content: center; /* Centraliza horizontalmente o conteúdo do modal */
@@ -158,53 +187,12 @@ nav .play-now:hover {
     }
 }
 
-
 .login-content h2 {
     color: #fff; /* Cor do título */
     text-align: center; /* Alinha texto ao centro */
     margin-bottom: 30px; /* Margem inferior */
     font-size: 2.5em; /* Tamanho da fonte do título */
     letter-spacing: 1px; /* Espaçamento entre letras */
-}
-
-/* O modal deve estar oculto por padrão */
-.modal {
-    display: none; /* Importante para que ele não apareça sem a classe 'show' */
-    position: fixed;
-    z-index: 1000; /* Garante que fique acima de outros elementos */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Para rolagem se o conteúdo for muito grande */
-    background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente */
-    /* Outros estilos de overlay, se houver */
-}
-
-/* Quando a classe 'show' é adicionada pelo JS, o modal aparece e é centralizado */
-.modal.show {
-    display: flex; /* Ou 'block' se preferir, mas 'flex' é melhor para centralização */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-}
-
-/* Estilo do conteúdo do modal (o box branco/escuro central) */
-.modal-content {
-    background-color: #fefefe; /* Ou a cor do seu modal */
-    margin: auto; /* Ajuda a centralizar em navegadores mais antigos ou se não usar flex */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Ou outra largura desejada */
-    max-width: 500px; /* Um max-width é bom para responsividade */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    animation-name: animatetop; /* Exemplo de animação */
-    animation-duration: 0.4s;
-}
-
-/* Opcional: Animação para o modal aparecer */
-@keyframes animatetop {
-    from { top: -300px; opacity: 0; }
-    to { top: 0; opacity: 1; }
 }
 
 /* INPUTS DO FORMULÁRIO */
@@ -241,7 +229,6 @@ nav .play-now:hover {
     box-shadow: 0 0 0 3px rgba(208, 169, 51, 0.4); /* Sombra suave no foco */
     outline: none; /* Remove o outline padrão do navegador */
 }
-
 
 /* OPÇÕES DE LINKS DENTRO DO LOGIN */
 .options {
@@ -350,7 +337,6 @@ main {
     /* Dimensões e Layout */
     width: 300px; /* Largura preferencial maior para cada card */
     min-width: 250px; /* Garante que o card não encolha demais */
-    /* max-width: calc(33.33% - 25px); Removido para usar a largura fixa e deixar flexbox se encarregar */
     padding: 20px; /* Preenchimento interno do card */
     border-radius: 12px; /* Bordas arredondadas do card */
     text-align: center; /* Alinha o texto ao centro */
@@ -390,495 +376,46 @@ main {
     margin-bottom: 15px; /* Espaçamento abaixo da imagem */
 }
 
-/* TÍTULO DO JOGO DENTRO DO CARD */
-.game-card h3 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #ffda6a; /* Cor dourada para o título */
-}
-
-/* BOTÃO PLAY DENTRO DOS CARDS */
-.game-card .play-btn {
-    display: inline-block; /* Exibe como bloco inline */
-    padding: 10px 20px; /* Preenchimento interno do botão */
-    background-color: #ffbb33; /* Cor de fundo amarela vibrante */
-    color: #222; /* Cor do texto escura para contraste */
-    text-decoration: none; /* Remove sublinhado do link */
-    border: 1px solid #cc9900; /* Borda sutil para o botão */
-    border-radius: 25px; /* Bordas arredondadas para o botão, estilo pílula */
-    font-weight: bold; /* Texto em negrito */
-    font-size: 1.1em; /* Tamanho da fonte do botão */
-    margin-top: auto; /* Empurra o botão para a parte inferior do card */
-    transition: background-color 0.3s ease, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Suaviza transições no hover */
-}
-
-/* EFEITO DE HOVER NO BOTÃO PLAY */
-.game-card .play-btn:hover {
-    background-color: #e6a82e; /* Cor ligeiramente mais escura no hover */
-    transform: scale(1.08); /* Pequeno efeito de "zoom" ao passar o mouse */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Adiciona uma sombra sutil ao botão no hover */
-}
-
-/* POPUP DE FUNCIONALIDADES (Se for o antigo popup de funcionalidades) */
-.game-features-popup {
-    display: none; /* Esconde o popup */
-    position: absolute; /* Posicionamento absoluto */
-    background-color: #333; /* Cor de fundo */
-    color: #fff; /* Cor do texto */
-    border: 1px solid #555; /* Borda */
-    padding: 10px; /* Preenchimento */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 0.9em; /* Tamanho da fonte */
-    z-index: 10; /* Z-index */
-    max-width: 200px; /* Largura máxima */
-}
-
-/* =========================== ESTILOS PARA A CAIXA DE DESCRIÇÃO LATERAL ====================== */
-.description-box {
-    display: none; /* Inicialmente oculto */
-    position: absolute; /* Posiciona a caixa de forma absoluta em relação ao .game-card */
-    top: 0; /* Alinha o topo da descrição com o topo do card */
-    left: calc(100% + 20px); /* Posiciona à direita do card, com um espaçamento maior de 20px */
-    width: 350px; /* Largura da caixa de descrição, ajuste conforme necessário */
-    min-height: 100%; /* Garante que a caixa de descrição tenha pelo menos a altura do card */
-    background-color: #1f1f1f; /* Cor de fundo escura para a caixa de descrição */
-    border: 1px solid #997a00; /* Borda com a cor dourada/laranja do tema, mais visível */
-    border-radius: 10px; /* Bordas arredondadas */
-    padding: 20px; /* Preenchimento interno */
-    color: #f0f0f0; /* Cor do texto */
-    font-size: 1em; /* Tamanho da fonte ligeiramente maior */
-    text-align: left; /* Alinha o texto à esquerda */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8); /* Sombra mais pronunciada para a caixa de descrição */
-    z-index: 25; /* Garante que apareça acima de outros elementos, mas abaixo de modais principais */
-    overflow-y: auto; /* Adiciona scroll vertical se o texto for muito longo */
-    max-height: 450px; /* Limita a altura da caixa de descrição para evitar que ela fique muito longa */
-    transition: opacity 0.4s ease, transform 0.4s ease; /* Transição suave para o aparecimento */
-    opacity: 0; /* Começa transparente para a animação */
-    transform: translateX(20px); /* Começa ligeiramente à direita para o efeito de deslize */
-}
-
-.description-box h4 {
-    font-size: 1.3em;
-    color: #ffbb33;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #444;
-    padding-bottom: 5px;
-}
-
-.description-box p {
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-
-/* ESTILO PARA QUANDO A CAIXA DE DESCRIÇÃO ESTÁ VISÍVEL (ativado via hover no .game-card) */
-.game-card:hover .description-box {
-    display: block; /* Torna a caixa visível */
-    opacity: 1; /* Torna a caixa totalmente opaca */
-    transform: translateX(0); /* Move para a posição final */
-}
-
-/* =========================== RESPONSIVIDADE ===================== */
-@media (max-width: 1400px) { /* Esconde a descrição lateral em telas um pouco maiores também */
-    .description-box {
-        display: none !important; /* Força a ocultação da descrição lateral em telas menores */
+/* Adicione as media queries para fallback da imagem estática, se não as tiver */
+@media (max-width: 768px) {
+    #bg-video {
+        display: none; /* Oculta o vídeo em telas menores */
     }
-}
-
-@media (max-width: 1000px) { /* Media query para telas de notebooks menores/tablets maiores */
-    .game-card {
-        width: calc(50% - 30px); /* Cards ocupam 50% da largura (2 colunas) */
-    }
-
     header {
-        height: 250px; /* Reduz a altura do header em telas menores */
+        background-image: url("{% static 'site_django/imagens/fallback_image.jpg' %}"); /* Usa a imagem como fundo */
+        background-size: cover;
+        background-position: center;
+        /* É importante que `height: 100vh;` seja mantido aqui ou ajustado para uma altura adequada */
     }
-
+    .carousel-container {
+        /* Se o carrossel for apenas para o desktop, você pode ocultá-lo aqui */
+        display: none; 
+    }
     .logo {
-        top: 15px;
-        left: 20px;
+        position: relative; /* Pode voltar a ser relativo em mobile para melhor fluxo */
+        top: auto;
+        left: auto;
+        margin: 10px auto; /* Centraliza a logo */
     }
-
-    .logo img {
-        height: 60px;
-    }
-
     nav {
-        top: 20px;
-        right: 20px;
-        gap: 10px;
-    }
-
-    nav .nav-btn,
-    nav .play-now {
-        padding: 6px 14px;
-        font-size: 0.9em;
-    }
-}
-
-@media (max-width: 500px) { /* Media query para tablets */
-    .game-list {
-        padding: 15px;
-        gap: 15px;
-    }
-
-    .game-card {
-        width: calc(50% - 15px); /* Cards ocupam 50% da largura (2 colunas) */
-        min-height: 220px; /* Ajusta altura mínima */
-        padding: 15px;
-    }
-
-    .game-card h3 {
-        font-size: 1.3em;
-    }
-
-    .game-card .play-btn {
-        padding: 8px 16px;
-        font-size: 1em;
-    }
-
-    header {
-        height: 200px; /* Reduz ainda mais a altura do header */
-        flex-direction: column; /* Coloca logo e nav em colunas */
-        justify-content: flex-start; /* Alinha ao topo */
-        padding-top: 15px;
-    }
-
-    .logo {
-        position: static; /* Volta para posicionamento estático */
-        margin-bottom: 10px; /* Espaço abaixo da logo */
-        text-align: center;
-    }
-
-    nav {
-        position: static; /* Volta para posicionamento estático */
-        width: 100%;
+        position: relative; /* Pode voltar a ser relativo em mobile para melhor fluxo */
+        top: auto;
+        right: auto;
         justify-content: center; /* Centraliza os botões */
-        gap: 8px;
-    }
-
-    .modal-content.login-content {
-        margin: 5% auto; /* Ajusta a margem para telas menores */
-        padding: 25px;
-    }
-
-    .login-content h2 {
-        font-size: 2em;
     }
 }
 
-@media (max-width: 480px) { /* Media query para celulares */
-    .game-list {
-        padding: 10px;
-        gap: 10px;
+/* Também útil para usuários que preferem não ter animações (reduzir movimento) */
+@media (prefers-reduced-motion: reduce) {
+    #bg-video {
+        display: none;
     }
-
-    .game-card {
-        width: 95%; /* Cards ocupam quase toda a largura (1 coluna) */
-        min-width: unset; /* Remove o min-width para maior flexibilidade */
-    }
-
     header {
-        height: 180px; /* Altura menor para o header */
+        background-image: url("{% static 'site_django/imagens/fallback_image.jpg' %}");
+        background-size: cover;
+        background-position: center;
     }
-
-    .logo img {
-        height: 45px;
+    .carousel-slide {
+        transition: none !important; /* Desativa transições para carrossel */
     }
-
-    nav {
-        flex-direction: column; /* Botões em coluna */
-        align-items: stretch; /* Estica os botões */
-    }
-
-    nav .nav-btn,
-    nav .play-now {
-        width: 100%; /* Botões ocupam 100% da largura */
-        margin: 5px 0; /* Margem vertical entre eles */
-        padding: 10px;
-        font-size: 1.1em;
-    }
-
-    .modal-content.login-content {
-        padding: 20px;
-    }
-
-    .login-content h2 {
-        font-size: 1.8em;
-    }
-
-    .input-group input {
-        font-size: 1em;
-        padding: 10px;
-    }
-
-    .login-content button[type="submit"] {
-        padding: 10px 15px;
-        font-size: 1.1em;
-    }
-
-    .django-message-popup {
-        max-width: 95%;
-        padding: 10px 15px;
-        font-size: 0.9em;
-    }
-}
-
-
-/* ===================== ESTILOS DO DROPDOWN DE CATEGORIA ================== */
-.dropdown {
-    position: relative; /* Define posição relativa para elementos filhos */
-    display: inline-block; /* Exibe como bloco inline */
-}
-
-.dropdown-content {
-    position: absolute; /* Posiciona o conteúdo do dropdown de forma absoluta */
-    top: 100%; /* Posiciona abaixo do elemento pai */
-    left: 0; /* Alinha à esquerda */
-    background-color: #333300; /* Cor de fundo similar aos cards */
-    min-width: 180px; /* Largura mínima do dropdown */
-    box-shadow: 0 8px 16px rgba(0,0,0,0.4); /* Sombra para o dropdown */
-    z-index: 50; /* Z-index para controle de camadas, acima de outros elementos */
-    display: none; /* Inicialmente escondido */
-    flex-direction: column; /* Organiza itens em coluna */
-    border-radius: 8px; /* Adicionando bordas arredondadas */
-    animation: fadeInDown 0.3s ease-out forwards; /* Animação de entrada */
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.dropdown:hover .dropdown-content {
-    display: flex; /* Mostrar ao passar o mouse no dropdown */
-}
-
-.dropdown-content a {
-    padding: 10px 15px; /* Preenchimento interno dos links */
-    text-decoration: none; /* Remove sublinhado dos links */
-    color: #fff; /* Cor do texto branca, como nos cards */
-    display: block; /* Exibe o link como um bloco */
-    transition: background-color 0.2s ease, color 0.2s ease;
-    font-size: 1em;
-}
-
-.dropdown-content a:hover {
-    background-color: #664d00; /* Cor de fundo no hover, similar ao destaque dos cards */
-    color: #ffbb33; /* Cor do texto dourada no hover */
-}
-
-.dropdown-content a:first-child {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-}
-
-.dropdown-content a:last-child {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
-
-
-/* ======================== MENSAGENS DO DJANGO (Popup de Notificação) ============== */
-.django-message-popup {
-    position: fixed; /* Fixa o popup na tela */
-    top: 20px; /* Distância do topo */
-    left: 50%; /* Centraliza horizontalmente */
-    transform: translateX(-50%); /* Ajusta para centralização exata */
-    z-index: 1001; /* Z-index alto para ficar acima de tudo */
-    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%); /* Gradiente de fundo */
-    padding: 15px 20px; /* Preenchimento interno */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Sombra */
-    border: 1px solid #555; /* Borda */
-    color: #fff; /* Cor do texto */
-    text-align: center; /* Alinha texto ao centro */
-    max-width: 450px; /* Largura máxima */
-    width: 90%; /* Largura em porcentagem */
-    opacity: 0; /* Começa transparente */
-    visibility: hidden; /* Escondido */
-    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Transições suaves */
-}
-
-.django-message-popup.show {
-    opacity: 1; /* Torna visível */
-    visibility: visible; /* Torna visível */
-    top: 50px; /* Desliza para baixo ao aparecer */
-}
-
-.django-message-popup .message-content {
-    display: flex; /* Usa flexbox para organizar conteúdo */
-    align-items: center; /* Alinha itens verticalmente */
-    justify-content: center; /* Centraliza itens horizontalmente */
-    gap: 10px; /* Espaço entre os itens */
-}
-
-.django-message-popup .message-icon {
-    font-size: 2.2em; /* Aumenta o tamanho do ícone */
-}
-
-.django-message-popup .message-title {
-    font-weight: bold; /* Texto em negrito */
-    font-size: 1.4em; /* Aumenta o tamanho da fonte */
-    margin-bottom: 5px; /* Margem inferior */
-}
-
-.django-message-popup .message-body {
-    font-size: 1.1em; /* Aumenta o tamanho da fonte */
-}
-
-/* Estilos específicos para tipos de mensagem (opcional, para cores diferentes) */
-.django-message-popup.error {
-    background: linear-gradient(135deg, #8B0000 0%, #CC0000 50%, #8B0000 100%); /* Gradiente para erro */
-    border-color: #FF0000; /* Cor da borda para erro */
-}
-
-.django-message-popup.success {
-    background: linear-gradient(135deg, #006400 0%, #008000 50%, #006400 100%); /* Gradiente para sucesso */
-    border-color: #00FF00; /* Cor da borda para sucesso */
-}
-
-.django-message-popup.info {
-    background: linear-gradient(135deg, #00008B 0%, #0000CD 50%, #00008B 100%); /* Gradiente para informação */
-    border-color: #0000FF; /* Cor da borda para informação */
-}
-
-.django-message-popup.warning {
-    background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #8B4513 100%); /* Gradiente para aviso */
-    border-color: #FFA500; /* Cor da borda para aviso */
-}
-
-/* ============================================ MODAL LGPD ===================================== */
-/* Estilos para o modal LGPD (Visual Melhorado) */
-
-/* Garante que o fundo semitransparente do modal principal esteja visível */
-.modal.show {
-    background-color: rgba(0,0,0,0.65); /* Fundo semitransparente mais suave */
-    backdrop-filter: blur(8px); /* Efeito de blur um pouco mais intenso no fundo */
-    -webkit-backdrop-filter: blur(8px); /* Para compatibilidade com navegadores Webkit */
-}
-
-
-.lgpd-content {
-    max-width: 900px;
-    width: 90%;
-    padding: 35px; /* Aumentei um pouco o padding para mais espaço interno */
-    text-align: center;
-    background-color: #222; /* Tom de preto ligeiramente mais claro */
-    border-radius: 10px; /* Raio da borda ligeiramente menor */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Sombra mais suave e espalhada */
-    position: relative;
-    /* REMOVIDAS as propriedades max-height e overflow-y: auto */
-    /* Isso significa que se o conteúdo for muito grande, ele pode ser cortado na parte inferior em telas menores */
-}
-
-.lgpd-top-image {
-    width: 250px;
-    height: auto;
-    margin: 0 auto 30px auto; /* Aumentei a margem inferior para mais espaço abaixo da imagem */
-    display: block;
-    opacity: 0.9; /* Ligeira redução na opacidade para um visual um pouco menos "pesado" */
-}
-
-.lgpd-content h2 {
-    color: #eee; /* Tom de branco ligeiramente mais suave */
-    margin-bottom: 25px; /* Aumentei a margem inferior do título */
-    font-size: 1.9em; /* Aumentei ligeiramente o tamanho da fonte do título */
-    font-weight: bold; /* Garante que o título se destaque */
-    letter-spacing: 0.5px; /* Pequeno ajuste no espaçamento entre letras */
-}
-
-.lgpd-content p {
-    color: #ccc; /* Tom de cinza mais claro para o texto */
-    font-size: 1.0em; /* Aumentei ligeiramente o tamanho da fonte do parágrafo */
-    line-height: 1.5; /* Aumentei a altura da linha para melhor legibilidade */
-    margin-bottom: 20px; /* Aumentei a margem inferior dos parágrafos */
-}
-
-.lgpd-actions {
-    margin-top: 35px; /* Aumentei a margem superior dos botões */
-    display: flex;
-    flex-direction: row; /* Voltei para a disposição horizontal dos botões */
-    justify-content: center;
-    gap: 20px;
-}
-
-.lgpd-actions .secondary-button {
-    background-color: #444; /* Tom de cinza mais escuro para o botão "Mais Opções" */
-    color: #eee;
-    padding: 12px 28px; /* Ajustei o preenchimento dos botões */
-    border: 1px solid #555; /* Adicionei uma borda sutil */
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-.lgpd-actions .secondary-button:hover {
-    background-color: #555;
-    color: #fff;
-    border-color: #777;
-}
-
-.lgpd-actions .primary-button {
-    background-color: #ffc107; /* Cor amarela principal */
-    color: #222; /* Texto escuro para contraste */
-    padding: 12px 28px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.lgpd-actions .primary-button:hover {
-    background-color: #e0a800;
-    color: #333;
-}
-
-.lgpd-contact-info {
-    margin-top: 30px; /* Aumentei a margem superior */
-    font-size: 0.9em;
-    color: #bbb; /* Tom de cinza mais claro */
-}
-
-.lgpd-contact-info a {
-    color: #ffc107;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.lgpd-contact-info a:hover {
-    color: #e0a800;
-    text-decoration: underline;
-}
-
-/* Estilo para o botão de fechar (consistente com o modal de login) */
-.lgpd-content .close-button {
-    color: #757575;
-    font-size: 28px; /* Ligeiramente menor que o do modal de login */
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    transition: color 0.2s ease;
-}
-
-.lgpd-content .close-button:hover,
-.lgpd-content .close-button:focus {
-    color: #fff;
-    text-decoration: none;
-}
-
-#register-form-inside-login { /* Ou o ID correto do seu container de cadastro */
-    display: none; /* Isso é CRUCIAL! Garante que não apareça ao carregar a página */
-    /* ... outros estilos do seu modal de cadastro, como posição, z-index, etc. ... */
 }
