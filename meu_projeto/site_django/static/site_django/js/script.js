@@ -201,7 +201,7 @@ function initCategoryDropdown() {
 
 // Filtra os jogos ao clicar nas categorias
 function initCategoryFilter() {
-    const categoryLinks = document.querySelectorAll("#category-menu a");
+    const categoryLinks = document.querySelectorAll("#dropdown-category .dropdown-content a");
     const gameCards = document.querySelectorAll(".game-card");
 
     if (categoryLinks.length === 0 || gameCards.length === 0) {
@@ -223,11 +223,12 @@ function initCategoryFilter() {
     });
 
     // Esta função é vital para mapear o texto do menu para o atributo data-category
-    window.normalizeCategory = function(text) { // Expondo globalmente para acesso fácil
-        // Transforma o texto do link para bater com o data-category do card
-        // 'ação' -> 'acao', 'Menu Principal' -> 'menu_principal', 'quebra cabeça' -> 'quebra_cabeca'
-        return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
-    }
+    window.normalizeCategory = function(text) {
+    // Transforma o texto do link para bater com o data-category do card
+    // 'ação' -> 'acao', 'Menu Principal' -> 'menu_principal', 'quebra cabeça' -> 'quebra_cabeca'
+    // ADICIONE esta parte: .replace(/-/g, "_") para transformar hífens em underscores
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_").replace(/-/g, "_");
+}
 
     window.filterGamesByCategory = function(categoria) { // Expondo globalmente
         gameCards.forEach(card => {

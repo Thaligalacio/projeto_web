@@ -30,18 +30,18 @@
         </div>
 
         <nav>
-            <button class="nav-btn">Jogos Favoritos</button>
+            <button class="nav-btn">Empresa Parceira</button>
 
             <div class="dropdown" id="dropdown-category">
                 <button class="nav-btn" id="category-btn">Categoria</button>
-                <div class="dropdown-content" id="category-menu">
-                    <a href="#">Menu Principal</a>
-                    <a href="#">acao</a>
-                    <a href="#">corrida</a>
-                    <a href="#">aventura</a>
-                    <a href="#">quebra_cabeca</a>
+                <div class="dropdown-content">
+                    <a href="#" data-category="menu_principal">Menu Principal</a>
+                    <a href="#" data-category="acao">Ação</a> 
+                    <a href="#" data-category="corrida">Corrida</a>
+                    <a href="#" data-category="aventura">Aventura</a>
+                    <a href="#" data-category="quebra_cabeca">Quebra cabeça</a>
                 </div>
-            </div>
+            </div> {# FECHA A DIV DROPDOWN AQUI #}
 
             <button class="nav-btn" id="search-trigger">Procurar</button>
             <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;" />
@@ -202,7 +202,7 @@
     <div id="lgpd-modal" class="modal">
     <div class="modal-content lgpd-content">
         <span class="close-button" id="close-lgpd-modal">&times;</span>
-        <img src="/static/site_django/imagens/lgpd_logo.png" alt="LGPD" class="lgpd-top-image"> <h2>A sua privacidade é importante para nós.</h2>
+        <img src="{% static 'site_django/imagens/lgpd_logo.png' %}" alt="LGPD" class="lgpd-top-image"> <h2>A sua privacidade é importante para nós.</h2>
         <p>A sua privacidade é importante para nós. Ao continuar navegando neste site, você concorda com a nossa política de uso de dados, que descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais.</p>
         <p>Utilizamos cookies e tecnologias similares para personalizar conteúdo, oferecer funcionalidades de redes sociais e analisar nosso tráfego. Também compartilhamos informações sobre o uso do nosso site com nossos parceiros de mídia social, publicidade e análise.</p>
         <p>Seus dados serão tratados de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018). Você tem o direito de acessar, corrigir, excluir ou se opor ao tratamento dos seus dados. Para exercer esses direitos ou para mais informações, por favor, entre em contato conosco através do nosso e-mail de suporte.</p>
@@ -216,42 +216,42 @@
     </div>
 </div>
 
-    <main>
+<main>
         <div class="game-list">
             <div class="game-card" data-category="acao">
                 <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
                 <h3>CALL OF DUTY</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <a href="https://store.steampowered.com/agecheck/app/1938090/" class="play-btn">Play</a>
                 <div class="game-features" style="display: none;"></div> {# Descrição ou features do jogo, ocultas por padrão #}
             </div>
             <div class="game-card" data-category="aventura">
                 <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
                 <h3>UNCHARTED</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <a href="https://store.steampowered.com/app/1659420/UNCHARTED_Coleo_Legado_dos_Ladres/" class="play-btn">Play</a>
                 <div class="game-features" style="display: none;"></div>
             </div>
             <div class="game-card" data-category="corrida">
                 <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
                 <h3>GRAN TURISMO 7</h3> {# Corrigido para <h3> #}
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <a href="https://www.gran-turismo.com/br/" class="play-btn">Play</a>
                 <div class="game-features" style="display: none;"></div>
             </div>
             <div class="game-card" data-category="aventura">
                 <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
                 <h3>MINECRAFT</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <a href="https://www.minecraft.net/pt-br/about-dungeons" class="play-btn">Play</a>
                 <div class="game-features" style="display: none;"></div>
             </div>
             <div class="game-card" data-category="aventura">
                 <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
-                <h3>SUPER MARIO BROS</h3> {# Corrigido para <h3> #}
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <h3>SUPER MARIO BROS</h3>
+                <a href="https://www.minijogos.com.br/jogos-de-mario-bros" class="play-btn">Play</a>
                 <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="quebra_cabeca">
+            </div> 
+            <div class="game-card" data-category="quebra_cabeca"> 
                 <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
-                <h3>QUEBRA_CABECA</h3>
-                <a href="https://www.tronelo.com.br/" class="play-btn">Play</a>
+                <h3>QUEBRA CABEÇA</h3>
+                <a href="https://www.minijogos.com.br/jogo/block-puzzle" class="play-btn">Play</a>
                 <div class="game-features" style="display: none;"></div>
             </div>
         </div>
