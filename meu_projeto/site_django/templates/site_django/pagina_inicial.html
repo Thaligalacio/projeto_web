@@ -10,13 +10,23 @@
     <link rel="icon" href="{% static 'site_django/imagens/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
-    <header>
-        <video autoplay muted loop playsinline id="bg-video">
-            <source src="{% static 'site_django/videos/fundo_inteiro.mp4' %}" type="video/mp4">
-            <source src="{% static 'site_django/videos/fundo_inteiro.webm' %}" type="video/webm">
-            Seu navegador não suporta a tag de vídeo.
-        </video>
+    {# NOVO: VÍDEO DE FUNDO #}
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="{% static 'site_django/videos/fundo_inteiro.mp4' %}" type="video/mp4"> {# CORRIGIDO: type="video/mp4" #}
+        {# É ALTAMENTE RECOMENDADO ADICIONAR UM SEGUNDO FORMATO DE VÍDEO PARA MELHOR COMPATIBILIDADE #}
+        {# Por exemplo, se você tiver um arquivo .webm: #}
+        {# <source src="{% static 'site_django/videos/fundo_inteiro.webm' %}" type="video/webm"> #}
+        Seu navegador não suporta a tag de vídeo.
+    </video>
+    {# FIM DO NOVO: VÍDEO DE FUNDO #}
 
+    {# NOVO: OVERLAY PARA O VÍDEO DE FUNDO (MELHORAR LEGIBILIDADE) #}
+    <div id="video-overlay"></div>
+    {# FIM DO NOVO: OVERLAY #}
+
+    </body>
+
+    <header>
         <div class="carousel-container">
             <div class="carousel-slide">
                 <div class="carousel-item">
@@ -26,7 +36,7 @@
                     <img src="{% static 'site_django/imagens/fundo_carrossel2.png' %}" alt="Imagem2">
                 </div>
                 <div class="carousel-item">
-                    <img src="{% static 'site_django/imagens/fundo_carrossel3.png' %}" alt="Imagem3">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel3.png'}" alt="Imagem3">
                 </div>
             </div>
         </div>
@@ -47,6 +57,10 @@
                     <a href="#" data-category="quebra_cabeca">Quebra cabeça</a>
                 </div>
             </div>
+            <button class="nav-btn" id="search-trigger">Procurar</button>
+            <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;" />
+            <button class="nav-btn" id="close-search" style="display: none;">X</button>
+            </div>
             <div class="dropdown" id="dropdown-partners">
                 <button class="nav-btn" id="partners-btn">Parceiros</button>
                 <div class="dropdown-content">
@@ -54,70 +68,143 @@
                     <a href="https://www.mg.senac.br/Paginas/default.aspx" target="_blank">Senac Minas</a>
                 </div>
             </div>
-            <button class="nav-btn" id="search-trigger">Procurar</button>
-            <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;" />
-            <button class="nav-btn" id="close-search" style="display: none;">X</button>
-        </nav>
-    </header> {% if messages %}
-    {% load i18n %}
-    {% load static %}
-    {% load tz %}
-    {% load l10n %}
-    {% load humanize %}
+        </header>
 
 
-    {% for message in messages %}
-    <div id="django-message-{{ forloop.counter }}" class="django-message-popup {{ message.tags }}">
-        <div class="message-content">
-            <span class="message-icon">
-                {% if "error" in message.tags %}⚠️{% endif %}
-                {% if "success" in message.tags %}✅{% endif %}
-                {% if "info" in message.tags %}ℹ️{% endif %}
-                {% if "warning" in message.tags %}⚠️{% endif %}
-            </span>
-            <div class="message-body">
-                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                <div class="message-title">Erro!</div>
-                {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                <div class="message-title">Sucesso!</div>
-                {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                            <div class="message-title">Informação</div>
-                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                            <div class="message-title">Aviso!</div>
-                        {% else %}
-                            <div class="message-title">Mensagem</div> {# Título genérico para outros tipos #}
-                        {% endif %}
-                        {{ message }}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
+        {% if messages %}
+            {% load i18n %}
+            {% load static %}
+            {% load tz %}
+            {% load l10n %}
+            {% load humanize %}
 
-    <div id="login-form" class="modal">
-        <div class="modal-content login-content">
-            <span class="close-button" id="close-login-modal">&times;</span>
-            <div id="login-content">
-                <h2 id="login-title">Faça o seu login</h2>
-                <div class="input-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" name="email" placeholder="Seu email" />
+            {% for message in messages %}
+                <div id="django-message-{{ forloop.counter }}" class="django-message-popup {{ message.tags }}">
+                    <div class="message-content">
+                        <span class="message-icon">
+                            {% if "error" in message.tags %}⚠️{% endif %}
+                            {% if "success" in message.tags %}✅{% endif %}
+                            {% if "info" in message.tags %}ℹ️{% endif %}
+                            {% if "warning" in message.tags %}⚠️{% endif %}
+                        </span>
+                        <div class="message-body">
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                <div class="message-title">Erro!</div>
+                            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                <div class="message-title">Sucesso!</div>
+                            {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                                <div class="message-title">Informação</div>
+                            {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                                <div class="message-title">Aviso!</div>
+                            {% else %}
+                                <div class="message-title">Mensagem</div> {# Título genérico para outros tipos #}
+                            {% endif %}
+                            {{ message }}
+                        </div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="login-password">Senha</label>
-                    <input type="password" id="login-password" name="password" placeholder="Sua senha" />
+            {% endfor %}
+        {% endif %}
+
+        <div id="login-form" class="modal">
+            <div class="modal-content login-content">
+                <span class="close-button" id="close-login-modal">&times;</span>
+                {# REMOVIDA A LINHA '<h2>Faça o seu login</h2>' DAQUI #}
+                <div id="login-content">
+                    <h2 id="login-title">Faça o seu login</h2>
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" placeholder="Seu email" />
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" name="password" placeholder="Sua senha" />
+                    </div>
+                    <div class="options">
+                        <label><input type="checkbox" name="remember" /> Lembrar-me</label>
+                        <a href="#" id="forgot-password-link">Esqueci minha senha</a> {# Adicionado ID para JS #}
+                    </div>
+                    <button type="submit">Login</button>
+                    <div class="signup-link">
+                        Ainda não possui conta? <a href="#" id="show-register-form">Cadastre-se</a>
+                    </div>
                 </div>
-                <div class="options">
-                    <label><input type="checkbox" name="remember" /> Lembrar-me</label>
-                    <a href="#" id="forgot-password-link">Esqueci minha senha</a>
-                </div>
-                <button type="submit">Login</button>
-                <div class="signup-link">
-                    Ainda não possui conta? <a href="#" id="show-register-form">Cadastre-se</a>
+                <div id="register-form-inside-login" style="display: none;">
+                    <h2>Cadastrar Cliente</h2>
+                    <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
+                        {% csrf_token %}
+                        {# Mensagens específicas para o formulário de registro aninhado (opcional, Django messages já lidam com isso) #}
+                        {% if messages %}
+                        <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                        </ul>
+                        {% endif %}
+                        <div class="input-group">
+                            <label for="register-nome-inside">Nome</label>
+                            <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="register-email-inside">Email</label>
+                            <input type="email" name="email" id="register-email-inside" placeholder="Email" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="register-password-inside">Senha</label>
+                            <input type="password" name="password" id="register-password-inside" placeholder="Senha" required />
+                        </div>
+                        <div class="input-group">
+                            <label for="register-telefone-inside">Telefone</label>
+                            <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone" />
+                        </div>
+                        <button type="submit">Cadastrar</button>
+                        <div class="signup-link">
+                            Já possui conta? <a href="#" id="show-login-form-from-register-inside">Fazer Login</a> {# Corrigido ID #}
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <div id="forgot-password-content" style="display: none;"> {# ESTE ID É IMPORTANTE #}
+        <div id="register-modal" class="modal">
+            <div class="modal-content login-content">
+                <span class="close-button" id="close-register-modal">&times;</span>
+                <h2>Cadastrar Cliente</h2>
+                <form method="POST" id="registerForm" action="{% url 'registrar_cliente' %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label for="register-nome">Nome</label>
+                        <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style" />
+                    </div>
+                    <div class="input-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style" />
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password">Senha</label>
+                        <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style" />
+                    </div>
+                    <div class="input-group">
+                        <label for="register-telefone">Telefone</label>
+                        <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style" />
+                    </div>
+                    <button type="submit" class="login-button">Cadastrar</button>
+                    <div class="signup-link">
+                        Já possui conta? <a href="#" id="show-login-form-from-register">Fazer Login</a> {# Corrigido ID #}
+                    </div>
+                    <div id="register-success-message" style="display: none; color: green; margin-top: 10px;">
+                        Cadastro realizado com sucesso!
+                    </div>
+                    {% if sucesso %}
+                    <p style="color: green; display: none;">{{ sucesso }}</p>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <div id="forgot-password-modal" class="modal" style="display: none;"> {# Adicionado classe 'modal' e ID próprio #}
+            <div class="modal-content"> {# Novo modal-content para este modal #}
+                <span class="close-button" id="close-forgot-password-modal">&times;</span>
                 <h2>Recuperar Senha</h2>
                 <p>Por favor, insira seu email para recuperar sua senha.</p>
                 <div class="input-group">
@@ -129,135 +216,65 @@
                     Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
                 </div>
             </div>
-            <div id="register-form-inside-login" style="display: none;">
-                <h2>Cadastrar Cliente</h2>
-                <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
-                    {% csrf_token %}
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    <div class="input-group">
-                        <label for="register-nome-inside">Nome</label>
-                        <input type="text" name="nome" id="register-nome-inside" placeholder="Nome" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="register-email-inside">Email</label>
-                        <input type="email" name="email" id="register-email-inside" placeholder="Email" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="register-password-inside">Senha</label>
-                        <input type="password" name="password" id="register-password-inside" placeholder="Senha" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="register-telefone-inside">Telefone</label>
-                        <input type="text" name="telefone" id="register-telefone-inside" placeholder="Telefone" />
-                    </div>
-                    <button type="submit">Cadastrar</button>
-                    <div class="signup-link">
-                        Já possui conta? <a href="#" id="show-login-form-from-register-inside">Fazer Login</a>
-                    </div>
-                </form>
+        </div>
+
+        {# NOVO MODAL LGPD ADICIONADO AQUI #}
+        <div id="lgpd-modal" class="modal">
+            <div class="modal-content lgpd-content">
+                <span class="close-button" id="close-lgpd-modal">&times;</span>
+                <img src="{% static 'site_django/imagens/lgpd_logo.png' %}" alt="LGPD" class="lgpd-top-image"> <h2>A sua privacidade é importante para nós.</h2>
+                <p>A sua privacidade é importante para nós. Ao continuar navegando neste site, você concorda com a nossa política de uso de dados, que descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais.</p>
+                <p>Utilizamos cookies e tecnologias similares para personalizar conteúdo, oferecer funcionalidades de redes sociais e analisar nosso tráfego. Também compartilhamos informações sobre o uso do nosso site com nossos parceiros de mídia social, publicidade e análise.</p>
+                <p>Seus dados serão tratados de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018). Você tem o direito de acessar, corrigir, excluir ou se opor ao tratamento dos seus dados. Para exercer esses direitos ou para mais informações, por favor, entre em contato conosco através do nosso e-mail de suporte.</p>
+                <div class="lgpd-actions">
+                    <button class="secondary-button" id="lgpd-more-options">Mais Opções</button>
+                    <button class="primary-button" id="lgpd-agree-continue">Concordar e Continuar</button>
+                </div>
+                <div class="lgpd-contact-info">
+                    <p>Ao continuar, você concorda com nossos <a href="#">Termos e Condições</a> e com a nossa <a href="#">Política de Privacidade</a>. Em caso de dúvidas, por favor, <a href="#">entre em contato</a>.</p>
+                </div>
             </div>
         </div>
-    </div>
 
-        <div id="register-modal" class="modal">
-        <div class="modal-content login-content">
-            <span class="close-button" id="close-register-modal">&times;</span>
-            <h2>Cadastrar Cliente</h2>
-            <form method="POST" id="registerForm" action="{% url 'registrar_cliente' %}">
-                {% csrf_token %}
-                <div class="input-group">
-                    <label for="register-nome">Nome</label>
-                    <input type="text" name="nome" id="register-nome" placeholder="Nome" required class="input-style" />
-                </div>
-                <div class="input-group">
-                    <label for="register-email">Email</label>
-                    <input type="email" name="email" id="register-email" placeholder="Email" required class="input-style" />
-                </div>
-                <div class="input-group">
-                    <label for="register-password">Senha</label>
-                    <input type="password" name="password" id="register-password" placeholder="Senha" required class="input-style" />
-                </div>
-                <div class="input-group">
-                    <label for="register-telefone">Telefone</label>
-                    <input type="text" name="telefone" id="register-telefone" placeholder="Telefone" class="input-style" />
-                </div>
-                <button type="submit" class="login-button">Cadastrar</button>
-                <div class="signup-link">
-                    Já possui conta? <a href="#" id="show-login-form-from-register">Fazer Login</a> {# Corrigido ID #}
-                </div>
-                <div id="register-success-message" style="display: none; color: green; margin-top: 10px;">
-                    Cadastro realizado com sucesso!
-                </div>
-                {% if sucesso %}
-                <p style="color: green; display: none;">{{ sucesso }}</p>
-                {% endif %}
-            </form>
-        </div>
-    </div>
-
-    {# NOVO MODAL LGPD ADICIONADO AQUI #}
-    <div id="lgpd-modal" class="modal">
-    <div class="modal-content lgpd-content">
-        <span class="close-button" id="close-lgpd-modal">&times;</span>
-        <img src="{% static 'site_django/imagens/lgpd_logo.png' %}" alt="LGPD" class="lgpd-top-image"> <h2>A sua privacidade é importante para nós.</h2>
-        <p>A sua privacidade é importante para nós. Ao continuar navegando neste site, você concorda com a nossa política de uso de dados, que descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais.</p>
-        <p>Utilizamos cookies e tecnologias similares para personalizar conteúdo, oferecer funcionalidades de redes sociais e analisar nosso tráfego. Também compartilhamos informações sobre o uso do nosso site com nossos parceiros de mídia social, publicidade e análise.</p>
-        <p>Seus dados serão tratados de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018). Você tem o direito de acessar, corrigir, excluir ou se opor ao tratamento dos seus dados. Para exercer esses direitos ou para mais informações, por favor, entre em contato conosco através do nosso e-mail de suporte.</p>
-        <div class="lgpd-actions">
-            <button class="secondary-button" id="lgpd-more-options">Mais Opções</button>
-            <button class="primary-button" id="lgpd-agree-continue">Concordar e Continuar</button>
-        </div>
-        <div class="lgpd-contact-info">
-            <p>Ao continuar, você concorda com nossos <a href="#">Termos e Condições</a> e com a nossa <a href="#">Política de Privacidade</a>. Em caso de dúvidas, por favor, <a href="#">entre em contato</a>.</p>
-        </div>
-    </div>
-</div>
-
-<main>
-        <div class="game-list">
-            <div class="game-card" data-category="acao">
-                <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
-                <h3>CALL OF DUTY</h3>
-                <a href="https://store.steampowered.com/agecheck/app/1938090/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div> {# Descrição ou features do jogo, ocultas por padrão #}
-            </div>
-            <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
-                <h3>UNCHARTED</h3>
-                <a href="https://store.steampowered.com/app/1659420/UNCHARTED_Coleo_Legado_dos_Ladres/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="corrida">
-                <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
-                <h3>GRAN TURISMO 7</h3> {# Corrigido para <h3> #}
-                <a href="https://www.gran-turismo.com/br/" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
-                <h3>MINECRAFT</h3>
-                <a href="https://www.minecraft.net/pt-br/about-dungeons" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-            <div class="game-card" data-category="aventura">
-                <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
-                <h3>SUPER MARIO BROS</h3>
-                <a href="https://www.minijogos.com.br/jogos-de-mario-bros" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div> 
-            <div class="game-card" data-category="quebra_cabeca"> 
-                <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
-                <h3>QUEBRA CABEÇA</h3>
-                <a href="https://www.minijogos.com.br/jogo/block-puzzle" class="play-btn">Play</a>
-                <div class="game-features" style="display: none;"></div>
-            </div>
-        </div>
-    </main>
+    <main>
+        <div class="game-list">
+            <div class="game-card" data-category="acao">
+                <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
+                <h3>CALL OF DUTY</h3>
+                <a href="https://store.steampowered.com/agecheck/app/1938090/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div> {# Descrição ou features do jogo, ocultas por padrão #}
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
+                <h3>UNCHARTED</h3>
+                <a href="https://store.steampowered.com/app/1659420/UNCHARTED_Coleo_Legado_dos_Ladres/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="corrida">
+                <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
+                <h3>GRAN TURISMO 7</h3> {# Corrigido para <h3> #}
+                <a href="https://www.gran-turismo.com/br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
+                <h3>MINECRAFT</h3>
+                <a href="https://www.minecraft.net/pt-br/about-dungeons" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
+                <h3>SUPER MARIO BROS</h3>
+                <a href="https://www.minijogos.com.br/jogos-de-mario-bros" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="quebra_cabeca">
+                <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
+                <h3>QUEBRA CABEÇA</h3>
+                <a href="https://www.minijogos.com.br/jogo/block-puzzle" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
