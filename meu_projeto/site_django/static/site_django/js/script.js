@@ -103,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCarousel();
     initDjangoMessages();
     initGameCardHoverDescriptions(); // Nova função para a descrição lateral no hover
+    initLoginFormHandler(); // NOVO: Inicializa o manipulador do formulário de login
 
     // Garante que todos os jogos sejam exibidos na carga inicial da página
     filterGamesByCategory("menu_principal");
@@ -138,7 +139,6 @@ function initDjangoMessages() {
         }, 5000); // Exibe por 5 segundos
     });
 }
-
 
 // ------------------------ CARROSSEL ------------------------
 function initCarousel() {
@@ -310,7 +310,6 @@ function initModals() {
     }
 }
 
-
 // ------------------------ BARRA DE PESQUISA ------------------------
 
 function initSearchBar() {
@@ -397,3 +396,70 @@ function initGameCardHoverDescriptions() {
     });
 }
 
+// ====================================================================================
+// NOVO: TRATAMENTO DO FORMULÁRIO DE LOGIN COM AJAX E REDIRECIONAMENTO
+// ====================================================================================
+function initLoginFormHandler() {
+    const loginForm = document.getElementById('loginActualForm');
+    const loginErrorMessageDiv = document.getElementById('login-error-message'); // A div que adicionamos no HTML
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Impede o envio padrão do formulário (que recarregaria a página)
+
+            const emailInput = loginForm.querySelector('input[name="email"]');
+            const passwordInput = loginForm.querySelector('input[name="password"]');
+
+            const email = emailInput ? emailInput.value : '';
+            const password = passwordInput ? passwordInput.value : '';
+
+            // Oculta qualquer mensagem de erro anterior
+            if (loginErrorMessageDiv) {
+                loginErrorMessageDiv.style.display = 'none';
+                loginErrorMessageDiv.textContent = '';
+            }
+
+            try {
+                // Pega o token CSRF do campo hidden no formulário
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                const response = await fetch(loginForm.action, { // Usa o 'action' do formulário
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken, // Importante para o Django
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    modalController.close('login-form'); // Fecha o modal de login
+                    // Redireciona para a URL fornecida pelo backend (deve ser '/')
+                    if (data.redirect_url) {
+                        window.location.href = data.redirect_url;
+                    }
+                } else {
+                    // Exibe a mensagem de erro que veio do backend dentro do modal
+                    if (loginErrorMessageDiv) {
+                        loginErrorMessageDiv.textContent = data.message;
+                        loginErrorMessageDiv.style.display = 'block'; // Mostra a mensagem de erro
+                    } else {
+                        // Fallback caso a div de erro não seja encontrada
+                        console.error('Div para mensagem de erro de login não encontrada.');
+                        alert(data.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao enviar o formulário de login:', error);
+                if (loginErrorMessageDiv) {
+                    loginErrorMessageDiv.textContent = 'Ocorreu um erro na conexão. Tente novamente.';
+                    loginErrorMessageDiv.style.display = 'block';
+                } else {
+                    alert('Ocorreu um erro na conexão. Tente novamente.');
+                }
+            }
+        });
+    }
+}

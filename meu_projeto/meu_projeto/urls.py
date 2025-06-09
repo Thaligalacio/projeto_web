@@ -5,11 +5,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('site_django.urls')),
-    path('', include('core.urls')),
-    path('', include('site_institucional.urls')),
-    path('', include('app_cadastro.urls')),
-    path('', include('site_jogosFera.urls')),
+    path('', include('site_django.urls')), # Esta será sua homepage principal
+    path('core/', include('core.urls')), # Adicionado prefixo 'core/'
+    path('institucional/', include('site_institucional.urls')), # Adicionado prefixo 'institucional/'
+    path('cadastro/', include('app_cadastro.urls')), # Adicionado prefixo 'cadastro/'
+    path('jogos/', include('site_jogosFera.urls')), # Adicionado prefixo 'jogos/'
 ]
 
 if settings.DEBUG:
