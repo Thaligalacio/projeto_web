@@ -1,63 +1,1451 @@
-        body {
-            color: hsl(0, 23%, 95%);
-        }
+/* ======================================= RESET GERAL ================================= */
+* {
+    box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura/altura */
+    margin: 0; /* Remove margens padrão do navegador */
+    padding: 0; /* Remove preenchimentos padrão do navegador */
+}
 
-.hero {
-    background-image: url("{% static 'imagens/fundo.png' %}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: rgb(223, 24, 24);
-            text-align: center;
-            padding: 50px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 300px;
-            width: 100%;
-        }
+/* ======================================== BODY E FUNDO =============================== */
+body {
+    font-family: 'Arial', sans-serif; /* Define a fonte principal para o corpo */
+    background-color: #0d0d0d; /* Cor de fundo escura para o corpo (fallback se o vídeo não carregar) */
+    color: #fff; /* Cor do texto padrão branca */
+    /* As linhas de background-image aqui DEVEM ser removidas ou comentadas, pois o vídeo fará o papel de fundo */
+    /* background-image: url("/static/site_django/imagens/fundo_inteiro.png"); */
+    /* background-size: cover; */
+    /* background-repeat: no-repeat; */
+    /* background-attachment: fixed; */
+}
 
-        /* Estilização do menu de categorias */
-        .category-menu {
-            display: none;
-            position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            list-style: none;
-            z-index: 100;
-        }
+/* ======================================= VÍDEO DE FUNDO E OVERLAY ================================= */
+#bg-video {
+    position: fixed; /* Mudei para 'fixed' para que o vídeo ocupe toda a viewport e não role com o conteúdo */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Usa a largura total da viewport */
+    height: 100vh; /* Usa a altura total da viewport */
+    object-fit: cover; /* Garante que o vídeo cubra toda a área sem distorcer */
+    z-index: -2; /* Coloca o vídeo MUITO atrás do conteúdo e do overlay */
+}
 
-        .category-menu li {
-            padding: 5px;
-            cursor: pointer;
-            color: white;
-        }
+/* Importante: Mudei o overlay do vídeo para um pseudo-elemento do body ou um novo div
+    para evitar conflito com o overlay do HEADER se você quiser ele para outros fins.
+    Se o seu HTML JÁ TEM #video-overlay, este é o CSS para ele.
+    Se não, o `body::before` é uma alternativa.
+*/
+#video-overlay { /* Este CSS é para o <div id="video-overlay"></div> que você adicionou no HTML */
+    position: fixed; /* Também 'fixed' para cobrir a viewport */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay preto com 50% de opacidade */
+    z-index: -1; /* Acima do vídeo (-2), mas abaixo de todo o conteúdo (0 ou mais) */
+}
 
-        .category-menu li:hover {
-            background: gray;
-        }
+/* ===================================== HEADER (Ajustado para o novo fundo) =================================== */
+header {
+    background: transparent; /* Fundo transparente para o cabeçalho, permitindo ver o vídeo/overlay */
+    padding: 10px 20px; /* Preenchimento interno do cabeçalho */
+    display: flex; /* Usa flexbox para organizar itens */
+    align-items: center; /* Alinha itens verticalmente ao centro */
+    justify-content: space-between; /* Distribui itens com espaço entre eles */
+    position: relative; /* Mantém relative para posicionar logo/nav absolutamente dentro dele */
+    height: 350px; /* Altura do header. Ajuste se precisar */
+    overflow: hidden; /* Esconde qualquer conteúdo que extrapolar o header */
+    z-index: 1; /* Garante que o header esteja acima do overlay do vídeo */
+}
 
-        /* Melhor responsividade para lista de jogos */
-        .game-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
+/* Garanta que o conteúdo do header (carousel, logo, nav) apareça sobre o overlay */
+.carousel-container, .logo, nav {
+    position: relative; /* Essencial para que o z-index funcione corretamente */
+    z-index: 10; /* Z-index alto o suficiente para aparecer acima do overlay e do vídeo */
+}
 
-        .game-card {
-            width: 250px;
-            text-align: center;
-            border: 1px solid gray;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-        }
+/* Adicione as media queries para fallback da imagem estática, se não as tiver */
+@media (max-width: 768px) {
+    #bg-video {
+        display: none; /* Esconde o vídeo em telas menores */
+    }
+    #video-overlay {
+        display: none; /* Esconde o overlay do vídeo em telas menores */
+    }
+    body { /* Aplica a imagem de fallback ao corpo em telas menores */
+        background-image: url("{% static 'site_django/imagens/fundo_fallback.jpg' %}"); /* Imagem de fallback */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    header {
+        background: transparent; /* Certifica que o header continue transparente para mostrar a imagem de fundo do body */
+    }
+}
 
-        .game-card img {
-            max-width: 100%;
-            height: auto;
-        }
-        
+/* ===================================== LOGO ======================================= */
+.logo {
+    position: absolute; /* Posiciona a logo de forma absoluta */
+    top: 20px; /* Distância do topo */
+    left: 30px; /* Distância da esquerda */
+    z-index: 30; /* Garante que a logo fique na frente do carrossel e navegação */
+}
+
+.logo img {
+    height: 70px; /* Ajusta o tamanho da logo */
+}
+
+/* ================ CARROSSEL COMO BANNER HERO (agora dentro do header) ============== */
+
+.carousel-container {
+    width: 100%;
+    height: 100px; /* Altura do carrossel igual à altura da imagem */
+    display: flex; /* Para dispor os itens do carrossel lado a lado */
+    overflow: hidden;
+    position: relative;
+    height: 150%; /* Ocupa a altura do container do carrossel */
+    z-index: 10;
+}
+
+.carousel-item img {
+    display: block;
+    width: 100%; /* Ocupa toda a largura */
+    height: 200%; /* Ocupa toda a altura do contêiner */
+    object-fit: cover; /* Preenche o contêiner, pode cortar um pouco */
+    margin: 0;
+}
+
+.carousel-slide {
+    display: flex; /* Para dispor os itens do carrossel lado a lado */
+    width: 300%; /* Largura total para 3 imagens */
+    height: 50%; /* Ocupa a altura do container do carrossel */
+    transition: transform 0.8s ease; /* Transição suave para o movimento dos slides */
+}
+
+.carousel-item {
+    width: 100%; /* Cada item ocupa a largura total do container do carrossel */
+    flex-shrink: 0; /* Impede que os itens encolham */
+    z-index: 30; /* Um valor maior que o z-index do carrossel */
+    height: auto; /* A altura se ajustará à imagem */
+}
+
+/* Oculta controles */
+.carousel-controls {
+    display: none;
+}
+
+/* ===== NAVEGAÇÃO ===== */
+nav {
+    position: absolute; /* Posiciona a navegação de forma absoluta */
+    top: 25px; /* Distância do topo */
+    right: 30px; /* Distância da direita */
+    z-index: 30; /* Garante que a navegação fique na frente do carrossel */
+    display: flex; /* Usa flexbox para organizar os botões */
+    align-items: center; /* Alinha os botões verticalmente */
+    gap: 15px; /* Espaço entre os botões do menu */
+    flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha em telas menores */
+}
+
+/* ================================ BOTÕES GERAIS ================================= */
+nav .nav-btn,
+nav .play-now {
+    background-color: #d0a933; /* Cor de fundo dos botões */
+    color: #fff; /* Cor do texto dos botões */
+    padding: 8px 18px; /* Preenchimento interno dos botões */
+    border: none; /* Remove bordas dos botões */
+    border-radius: 25px; /* Bordas arredondadas para os botões, estilo pílula */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    font-weight: bold; /* Texto em negrito */
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transição suave */
+}
+
+nav .nav-btn:hover,
+nav .play-now:hover {
+    background-color: #e0b84c; /* Cor ligeiramente mais clara no hover */
+    transform: translateY(-2px); /* Pequeno efeito de elevação */
+}
+
+/* ===== MODAIS ===== */
+
+/* Remove a regra .modal duplicada e mantém apenas uma */
+.modal {
+    display: none; /* Inicialmente oculto */
+    position: fixed; /* Fixa o modal na tela */
+    z-index: 1000; /* Z-index para sobrepor outros elementos, maior que o header */
+    left: 0; /* Alinha à esquerda */
+    top: 0; /* Alinha ao topo */
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Adiciona scroll ao BACKGROUND se o conteúdo do MODAL for muito grande e ocupe a tela toda */
+    background-color: rgba(0,0,0,0.85); /* Fundo semi-transparente mais escuro */
+    backdrop-filter: blur(5px); /* Efeito de blur no fundo */
+    -webkit-backdrop-filter: blur(5px); /* Compatibilidade Safari */
+}
+
+/* Esta regra faz o modal aparecer e centralizar QUANDO a classe 'show' é adicionada via JavaScript */
+.modal.show {
+    display: flex; /* Torna o modal visível como flex container */
+    justify-content: center; /* Centraliza horizontalmente o conteúdo do modal */
+    align-items: center; /* Centraliza verticalmente o conteúdo do modal */
+}
+
+/* Ajuste para o conteúdo de TODOS os modais (INCLUINDO LOGIN, ESQUECI SENHA, LGPD) */
+.modal-content {
+    background-color: #1a1a1a;
+    padding: 35px; /* Padding padrão para modais menores (como o login) */
+    border-radius: 12px;
+    width: 90%; /* <--- CORRIGIDO: Era 200%, o que causava problemas. 90% é responsivo e seguro. */
+    max-width: 400px; /* <--- padrão para o login. */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
+    color: #e0e0e0;
+    position: relative;
+    animation: fadeInScale 0.3s ease-out forwards;
+    overflow-y: auto; /* Permite rolagem apenas para modais que podem ser mais altos que a tela (ex: LGPD, ou login em telas muito pequenas) */
+    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+}
+
+/* Regras ESPECÍFICAS para o MODAL DE CADASTRO */
+.cadastro-modal-content {
+    max-width: 1000px; /* Largura desejada para o modal de cadastro */
+    padding: 40px 50px; /* Padding interno, como na imagem de referência */
+    height: auto; /* Altura se ajusta ao conteúdo */
+    overflow-y: hidden; /* Remove barra de rolagem vertical */
+    overflow-x: hidden; /* Remove barra de rolagem horizontal */
+    /* Remova quaisquer 'display: flex' ou 'flex-direction' que você tenha aqui, pois o FORM vai usar Grid */
+}
+
+/* Opcional: Estilo para o ícone de usuário no cabeçalho do cadastro */
+.cadastro-modal-content .user-icon {
+    display: block;
+    margin: 0 auto 15px auto; /* Centraliza e adiciona margem abaixo */
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* Se for uma imagem, adicione background-image: url("{% static 'site_django/imagens/icone_usuario.png' %}"); */
+    background-size: cover;
+    background-position: center;
+    background-color: #dcb32f; /* Cor de fundo caso não tenha imagem */
+}
+
+/* Título do formulário de cadastro */
+.cadastro-modal-content h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em; /* Tamanho maior para o título */
+}
+
+/* Ajustes para o FORMULÁRIO dentro do modal de cadastro (usa CSS Grid) */
+.cadastro-modal-content form {
+    display: grid;
+    /* Define 3 colunas: duas flexíveis para os campos (1fr cada) e uma fixa para os botões (200px) */
+    grid-template-columns: 1fr 1fr 200px;
+    /* Espaçamento entre as linhas (15px) e entre as colunas (30px) */
+    gap: 15px 30px;
+    align-items: start; /* Alinha o conteúdo ao topo de cada célula do grid */
+}
+
+/* Estilos para cada grupo de label e input (campos em linha única) */
+.cadastro-modal-content .form-group {
+    grid-column: span 2; /* Faz com que este grupo ocupe as 2 primeiras colunas do grid */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0; /* A margem é controlada pelo 'gap' do grid */
+}
+
+/* Estilos para as LINHAS de campos (para agrupar 2 campos na mesma linha, ex: Usuário/Email) */
+.cadastro-modal-content .form-row {
+    grid-column: span 2; /* Faz com que a linha de campos ocupe as 2 primeiras colunas do grid */
+    display: flex;
+    gap: 20px; /* Espaçamento entre os campos dentro desta linha */
+    flex-wrap: wrap; /* Permite que os campos quebrem para a próxima linha em telas menores */
+}
+
+/* Estilos para os grupos de input dentro de um form-row (ex: o campo "Usuário" dentro da linha) */
+.cadastro-modal-content .form-row .form-group {
+    flex: 1; /* Faz com que cada campo ocupe o espaço disponível igualmente na linha */
+    min-width: 200px; /* Largura mínima para evitar que os campos fiquem muito pequenos */
+    grid-column: unset; /* Sobrescreve o 'grid-column: span 2' do .form-group geral */
+    margin-bottom: 0; /* Garante que não haja margem extra aqui */
+}
+
+/* Estilos para as LABELS dos campos de cadastro */
+.cadastro-modal-content label {
+    display: block; /* Essencial para que a label apareça acima do input */
+    color: #e0e0e0;
+    margin-bottom: 5px; /* Espaço entre a label e o input */
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Estilos para os INPUTS e TEXTAREAS dentro do modal de cadastro */
+/* Estas regras são mais específicas do que as genéricas 'modal input' para evitar conflitos */
+.cadastro-modal-content input[type="text"],
+.cadastro-modal-content input[type="password"],
+.cadastro-modal-content input[type="email"],
+.cadastro-modal-content input[type="date"],
+.cadastro-modal-content input[type="tel"] { /* Adicionado 'tel' para telefone */
+    width: 100%;
+    padding: 12px;
+    margin: 0; /* Margem controlada pelos gaps do grid e form-row */
+    display: block;
+    border: 1px solid #444;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+    font-size: 16px;
+    line-height: 1.5;
+    height: auto;
+    min-height: 40px;
+}
+
+/* Estilos para a linha de botões (Salvar, Cancelar) */
+.cadastro-modal-content .button-row {
+    grid-column: 3; /* Posiciona os botões na terceira coluna do grid */
+    grid-row: 1 / span 7; /* Faz com que esta área ocupe da linha 1 até a linha 7 (ajuste conforme necessário) */
+    display: flex;
+    flex-direction: column; /* Botões um abaixo do outro */
+    gap: 15px; /* Espaço entre os botões */
+    align-items: stretch; /* Estica os botões para preencher a largura da coluna */
+    justify-content: center; /* Centraliza os botões verticalmente na sua área do grid */
+}
+
+/* Estilo para os botões individuais dentro do button-row */
+.cadastro-modal-content .button-row button {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1em;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espaço entre ícone e texto do botão */
+    margin-top: 0;
+}
+
+.cadastro-modal-content .button-row button:hover {
+    opacity: 0.9;
+}
+
+.cadastro-modal-content .button-row .save-button {
+    background-color: #4CAF50; /* Verde */
+    color: white;
+}
+
+.cadastro-modal-content .button-row .cancel-button {
+    background-color: #f44336; /* Vermelho */
+    color: white;
+}
+
+.cadastro-modal-content .button-row .button-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Estilo para o link "Já possui conta?" no modal de cadastro */
+.cadastro-modal-content .login-link-cadastro {
+    grid-column: 1 / span 2; /* Ocupa as duas primeiras colunas do grid */
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.cadastro-modal-content .login-link-cadastro a {
+    color: #dcb32f;
+    text-decoration: none;
+}
+
+/* Garante que o modal de login siga o max-width de 500px, já que você o considera "perfeito" */
+/* Este seletor .login-content é usado no seu HTML (ex: <div class="modal-content login-content">) */
+.login-content {
+    max-width: 500px; /* Mantém a largura do login perfeita */
+    /* Se o seu login tiver um padding diferente do .modal-content padrão, ajuste aqui */
+}
+
+/* Título do formulário de login */
+.login-content h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.0em;
+    letter-spacing: 1px;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Estilos para os campos de input e botões (afeta ambos os modais para manter consistência visual) */
+.modal input[type="text"],
+.modal input[type="password"],
+.modal input[type="email"],
+.modal input[type="date"],
+.modal input[type="number"],
+.modal textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0; /* Margem vertical ligeiramente reduzida para otimizar espaço */
+    display: block; /* Ocupa a largura total e organiza verticalmente */
+    border: 1px solid #444;
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+    background-color: #2a2a2a;
+    color: #f0f0f0; /* Cor do texto digitado */
+    font-size: 16px;
+    line-height: 1.5; /* Ajuda a alinhar o texto dentro do campo e evita que seja cortado */
+}
+
+.modal input::placeholder,
+.modal textarea::placeholder {
+    color: #999;
+    opacity: 1; /* Garante que o placeholder não seja transparente */
+}
+
+/* Estilos para os labels dos campos (se você usar <label> para "Nome", "Sobrenome", etc.) */
+/* Isso ajudará a exibir "Nome" e "Sobrenome" corretamente */
+/* ATENÇÃO: As labels do cadastro são sobrescritas pela regra mais específica .cadastro-modal-content label */
+.modal label {
+    display: block; /* Faz a label aparecer acima do campo */
+    color: #e0e0e0; /* Cor do texto da label */
+    margin-bottom: 5px; /* Espaço entre a label e o input */
+    font-size: 1em;
+    font-weight: bold; /* Deixa o texto da label em negrito para destaque */
+}
+
+.modal button {
+    background-color: #dcb32f; /* Cor dos seus botões */
+    color: black;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 25px;
+    font-size: 1.1em;
+    transition: opacity 0.3s ease;
+}
+
+.modal button:hover {
+    opacity: 0.9;
+}
+
+/* Estilo para o botão de fechar (x) */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: -10px;
+    margin-right: -10px;
+}
+
+.close:hover,
+.close:focus {
+    color: #f00;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* --- INÍCIO DA RESPONSIVIDADE ESPECÍFICA PARA O MODAL DE CADASTRO --- */
+/* ========================================================== */
+/* ESTILOS PARA O MODAL DE CADASTRO COMPLETO (Separado)     */
+/* (Novo Estilo Moderno e Limpo)                          */
+/* ========================================================== */
+
+/* Estilo para a caixa do modal de cadastro */
+.cadastro-modal-content {
+    /* Dimensões e posicionamento */
+    width: 90%;
+    max-width: 950px; /* Levemente maior para acomodar mais espaço interno */
+    height: auto;
+    overflow-y: auto;
+    
+    /* Espaçamento e Aparência */
+    padding: 40px; /* Mais padding para um visual mais arejado */
+    background-color: #f0f2f5; /* Fundo claro para o modal */
+    border-radius: 12px; /* Cantos arredondados */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra mais suave */
+    color: #333; /* Cor do texto principal mais escura */
+    
+    /* Layout com Flexbox */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px; /* Maior espaçamento vertical entre blocos */
+    box-sizing: border-box;
+}
+
+/* Título principal do modal */
+.cadastro-modal-content h2 {
+    color: #2c3e50; /* Cor do título mais escura */
+    font-size: 2.2em; /* Tamanho do título */
+    margin-bottom: 15px; /* Espaçamento abaixo do título */
+    text-align: center;
+    font-weight: 700; /* Mais negrito */
+}
+
+/* Estilo para os ícones e texto "Gast" e "Creavatar" no cabeçalho do modal */
+.cadastro-modal-content .header-icons {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Maior espaço entre os ícones */
+    margin-bottom: 20px;
+}
+
+.cadastro-modal-content .header-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #555; /* Cor para o texto dos ícones */
+    font-size: 1.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.cadastro-modal-content .header-icon-item img {
+    width: 65px; /* Ícones um pouco maiores */
+    height: 65px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); /* Sombra sutil nos ícones */
+}
+
+/* Estilo para o formulário dentro do modal */
+.cadastro-modal-content form {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Organiza as linhas de campos em coluna */
+    gap: 20px; /* Espaço vertical entre as linhas de campos (form-row) */
+}
+
+/* Estilo para as linhas de campos (ex: Nome e Email lado a lado) */
+.cadastro-modal-content .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Distribui o espaço entre os itens */
+    gap: 20px; /* Espaço entre os grupos de campos (horizontal e vertical) */
+    width: 100%;
+}
+
+/* Estilo para cada grupo de campo (rótulo + input) */
+.cadastro-modal-content .form-group {
+    /* Define a largura de cada campo. Para dois campos por linha */
+    flex-basis: calc(50% - 10px); /* flex-basis de 50% menos metade do gap de 20px */
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Estilo para os rótulos dos campos (Nome, Email, Senha, etc.) */
+.cadastro-modal-content label {
+    margin-bottom: 8px; /* Espaço abaixo do rótulo */
+    color: #555; /* Rótulos em tom de cinza escuro */
+    font-size: 1.05em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Estilo para todos os campos de input de texto, email, senha, data, telefone */
+.cadastro-modal-content input[type="text"],
+.cadastro-modal-content input[type="email"],
+.cadastro-modal-content input[type="password"],
+.cadastro-modal-content input[type="date"],
+.cadastro-modal-content input[type="tel"] {
+    width: 100%;
+    padding: 14px 18px; /* Padding ajustado para um visual mais preenchido */
+    border: 1px solid #ddd; /* Borda suave */
+    border-radius: 8px;
+    background-color: #fff; /* Fundo branco para os inputs */
+    color: #333;
+    font-size: 17px;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra interna sutil */
+    transition: all 0.3s ease; /* Transição suave para foco */
+}
+
+/* Estilo para o select (dropdown) */
+.cadastro-modal-content select {
+    width: 100%;
+    padding: 14px 18px; /* Padding igual aos inputs */
+    border: 1px solid #ddd; /* Borda suave */
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.5;
+    height: auto; /* Deixa a altura se ajustar ao padding */
+    min-height: 48px; /* Altura mínima para o select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23777%22%3E%3Cpath%20d%3D%22M7%2010l5%205%205-5z%22%2F%3E%3C%2Fsvg%3E'); /* Seta um pouco mais escura */
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    transition: all 0.3s ease; /* Transição suave para foco */
+}
+
+/* Estilo para campos em foco (quando clicados ou digitando) */
+.cadastro-modal-content select:focus,
+.cadastro-modal-content input:focus {
+    border-color: #007bff; /* Borda azul vibrante no foco */
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); /* Sombra de foco mais proeminente */
+    outline: none;
+}
+
+/* Botões de Ação (Salvar/Cancelar) */
+.cadastro-modal-content .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 25px; /* Espaço entre os botões */
+    margin-top: 30px; /* Margem acima dos botões */
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.cadastro-modal-content .button-row button {
+    flex: 1;
+    min-width: 160px;
+    max-width: 220px; /* Largura máxima para cada botão */
+    padding: 14px 25px; /* Espaçamento interno dos botões */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.15em;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Espaço entre ícone e texto no botão */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.cadastro-modal-content .button-row .save-button {
+    background-color: #007bff; /* Azul primário */
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+.cadastro-modal-content .button-row .save-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(0, 123, 255, 0.4);
+}
+
+.cadastro-modal-content .button-row .cancel-button-register {
+    background-color: #6c757d; /* Cinza secundário */
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+}
+
+.cadastro-modal-content .button-row .cancel-button-register:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(108, 117, 125, 0.4);
+}
+
+/* Estilo para o ícone dentro dos botões (se estiver visível) */
+.cadastro-modal-content .button-icon {
+    /* Deixei visível por padrão neste estilo, remova o comentário para esconder */
+    width: 22px; 
+    height: 22px;
+    margin-right: 5px; /* Espaço à direita do ícone */
+    filter: invert(100%); /* Inverte a cor do ícone para branco se ele for preto */
+}
+
+
+/* Estilo para o link "Já possui conta?" */
+.cadastro-modal-content .login-link-cadastro {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1em;
+    color: #777;
+}
+
+.cadastro-modal-content .login-link-cadastro a {
+    color: #007bff; /* Cor do link azul */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.cadastro-modal-content .login-link-cadastro a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+/* Regras de Responsividade para telas menores */
+@media (max-width: 768px) {
+    .cadastro-modal-content {
+        padding: 25px;
+        width: 98%; /* Ocupa mais largura em telas pequenas */
+        gap: 20px;
+    }
+
+    .cadastro-modal-content h2 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+    }
+
+    .cadastro-modal-content .header-icons {
+        gap: 20px;
+        margin-bottom: 10px;
+    }
+
+    .cadastro-modal-content .header-icon-item img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .cadastro-modal-content form {
+        gap: 15px;
+    }
+
+    .cadastro-modal-content .form-row {
+        flex-direction: column; /* Empilha os campos verticalmente */
+        gap: 10px;
+    }*/
+
+    .cadastro-modal-content .form-group {
+        flex-basis: auto; /* Remove a base flex para que o campo ocupe 100% da largura */
+        width: 100%;
+    }
+
+    .cadastro-modal-content label {
+        font-size: 0.9em;
+    }
+
+    .cadastro-modal-content input[type="text"],
+    .cadastro-modal-content input[type="email"],
+    .cadastro-modal-content input[type="password"],
+    .cadastro-modal-content input[type="date"],
+    .cadastro-modal-content input[type="tel"],
+    .cadastro-modal-content select {
+        padding: 10px 12px;
+        font-size: 15px;
+        min-height: 45px; /* Garante altura mínima para inputs em mobile */
+    }
+
+    .cadastro-modal-content .button-row {
+        flex-direction: column; /* Empilha os botões também em telas pequenas */
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .cadastro-modal-content .button-row button {
+        max-width: 100%; /* Ocupa a largura total em telas pequenas */
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .cadastro-modal-content .button-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .cadastro-modal-content .login-link-cadastro {
+        margin-top: 15px;
+    }
+}
+
+/* --- FIM DA RESPONSIVIDADE ESPECÍFICA PARA O MODAL DE CADASTRO --- */
+
+
+/* Responsividade básica para telas menores (REGRAS GERAIS, AFETAM O LOGIN) */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        max-width: 95%; /* Em telas menores, o modal de login/cadastro pode ocupar quase toda a largura */
+    }
+    /* O .cadastro-modal-content já tem sua própria media query que é mais específica para o layout de grid */
+}
+
+/* INPUTS DO FORMULÁRIO */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block; /* Exibe o label como um bloco */
+    color: #bbb; /* Cor do texto do label */
+    margin-bottom: 8px; /* Margem inferior do label */
+    font-size: 1em; /* Tamanho da fonte do label */
+    font-weight: bold;
+}
+
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group input[type="date"] { /* MODIFICAÇÃO: Adicionado input[type="date"] */
+    width: 100%; /* Largura total do input */
+    padding: 12px; /* Preenchimento interno do input */
+    border: 1px solid #444; /* Borda do input */
+    border-radius: 6px; /* Bordas arredondadas do input */
+    background-color: #2a2a2a; /* Cor de fundo do input */
+    color: #fff; /* Cor do texto do input */
+    font-size: 1.1em; /* Tamanho da fonte do input */
+    box-sizing: border-box; /* Inclui padding e border na largura */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transição para foco */
+}
+
+/* MODIFICAÇÃO: Estilo específico para input[type="date"] para garantir consistência */
+.input-group input[type="date"] {
+    /* Alguns navegadores podem ter estilos padrão diferentes para date inputs */
+    -webkit-appearance: none; /* Remove estilos padrão do WebKit */
+    -moz-appearance: none; /* Remove estilos padrão do Mozilla */
+    appearance: none; /* Remove estilos padrão */
+    /* Adicione mais estilos se precisar customizar o ícone do calendário */
+}
+
+.input-group input[type="text"]:focus,
+.input-group input[type="email"]:focus,
+.input-group input[type="password"]:focus,
+.input-group input[type="date"]:focus { /* MODIFICAÇÃO: Adicionado input[type="date"]:focus */
+    border-color: #d0a933; /* Borda dourada no foco */
+    box-shadow: 0 0 0 3px rgba(208, 169, 51, 0.4); /* Sombra suave no foco */
+    outline: none; /* Remove o outline padrão do navegador */
+}
+
+/* OPÇÕES DE LINKS DENTRO DO LOGIN */
+.options {
+    display: flex; /* Usa flexbox para organizar links */
+    justify-content: space-between; /* Distribui links com espaço entre eles */
+    align-items: center; /* Alinha links verticalmente */
+    margin-bottom: 25px; /* Margem inferior */
+    color: #9e9e9e; /* Cor do texto */
+    font-size: 0.9em; /* Tamanho da fonte */
+}
+
+.options a {
+    color: #64b5f6; /* Cor dos links */
+    text-decoration: none; /* Remove sublinhado dos links */
+    transition: color 0.2s ease;
+}
+
+.options a:hover {
+    color: #81D4FA; /* Cor mais clara no hover */
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
+
+/* BOTÃO DE SUBMIT */
+.login-content button[type="submit"] {
+    background-image: linear-gradient(to right, #d0a933, #e0b84c); /* Gradiente de cor dos botões principais */
+    color: #1a1a1a; /* Cor do texto do botão, escuro para contraste */
+    padding: 14px 25px; /* Preenchimento interno */
+    border: none; /* Remove borda */
+    border-radius: 8px; /* Bordas arredondadas */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    width: 100%; /* Largura total */
+    font-size: 1.2em; /* Tamanho da fonte */
+    font-weight: bold;
+    transition: background-size 0.3s ease, transform 0.2s ease; /* Transição suave */
+    margin-top: 15px; /* Margem superior */
+    background-size: 200% auto; /* Para o efeito de hover do gradiente */
+}
+
+.login-content button[type="submit"]:hover {
+    background-position: right center; /* Move o gradiente no hover */
+    transform: translateY(-2px); /* Pequeno efeito de elevação */
+}
+
+/* LINK PARA CADASTRO */
+.signup-link {
+    text-align: center; /* Alinha texto ao centro */
+    margin-top: 25px; /* Margem superior */
+    color: #9e9e9e; /* Cor do texto */
+    font-size: 1em; /* Tamanho da fonte */
+}
+
+.signup-link a {
+    color: #81D4FA; /* Cor do link */
+    text-decoration: none; /* Remove sublinhado */
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.signup-link a:hover {
+    color: #A7EDFF; /* Cor mais clara no hover */
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
+
+/* BOTÃO DE FECHAR MODAL */
+.close-button {
+    color: #757575; /* Cor do botão de fechar */
+    font-size: 32px; /* Tamanho da fonte maior */
+    font-weight: bold; /* Texto em negrito */
+    cursor: pointer; /* Muda o cursor para indicar clicável */
+    position: absolute; /* Posicionamento absoluto */
+    top: 15px; /* Distância do topo */
+    right: 20px; /* Distância da direita */
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #fff; /* Muda a cor ao passar o mouse ou focar */
+    transform: rotate(90deg); /* Pequena rotação no hover */
+    text-decoration: none; /* Remove sublinhado */
+}
+
+/* ========================== LAYOUT PRINCIPAL ========================= */
+main {
+    display: flex; /* Usa flexbox para organizar o conteúdo principal */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    gap: 20px; /* Espaço entre os itens */
+    padding: 20px; /* Preenchimento interno */
+    justify-content: center; /* Centraliza os cards dentro do main */
+}
+
+/* =========================== LISTA DE JOGOS ====================== */
+.game-list {
+    display: flex; /* Usa flexbox para organizar os cards de jogos */
+    flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os cards horizontalmente */
+    gap: 25px; /* Espaço maior entre os cards */
+    padding: 30px; /* Preenchimento interno da lista */
+    background: transparent; /* Fundo transparente */
+    max-width: 1400px; /* Largura máxima do contêiner da lista */
+    margin: 0 auto; /* Centraliza o contêiner na página */
+}
+
+/* ================================== CARD DO JOGO ============================= */
+.game-card {
+    /* Dimensões e Layout */
+    width: 300px; /* Largura preferencial maior para cada card */
+    min-width: 250px; /* Garante que o card não encolha demais */
+    /* max-width: calc(33.33% - 25px); Removido para usar a largura fixa e deixar flexbox se encarregar */
+    padding: 20px; /* Preenchimento interno do card */
+    border-radius: 12px; /* Bordas arredondadas do card */
+    text-align: center; /* Alinha o texto ao centro */
+    color: #fff; /* Cor do texto do card */
+    display: flex; /* Usa flexbox para organizar conteúdo interno do card */
+    flex-direction: column; /* Organiza itens em coluna (imagem, título, botão) */
+    justify-content: space-between; /* Distribui espaço entre imagem, título e botão */
+    min-height: 250px; /* Aumenta a altura mínima do card para acomodar imagem e conteúdo */
+    align-items: center; /* Alinha itens horizontalmente no centro do card */
+
+    /* Estilos Visuais */
+    background: linear-gradient(145deg, #222200 0%, #444400 50%, #222200 100%); /* Gradiente de cor mais sutil */
+    border: 1px solid #776000; /* Borda sutil e clara para o card */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); /* Sombra suave para o card */
+
+    /* Transições para Efeitos de Hover */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.4s ease; /* Suaviza transições no hover */
+
+    /* Posicionamento para a caixa de descrição lateral */
+    position: relative; /* Essencial para posicionar o .description-box dentro dele */
+    overflow: visible; /* Permite que o .description-box "saia" dos limites do card */
+}
+
+/* EFEITO DE HOVER NO CARD */
+.game-card:hover {
+    transform: translateY(-8px); /* Move o card ligeiramente para cima ao passar o mouse */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.7); /* Aumenta a sombra do card no hover */
+    background: linear-gradient(145deg, #443300 0%, #775d00 50%, #443300 100%); /* Gradiente mais intenso no hover */
+}
+
+/* IMAGEM DENTRO DO CARD */
+.game-card img {
+    width: 100%; /* Imagem ocupa 100% da largura do card */
+    max-height: 180px; /* Altura máxima da imagem */
+    object-fit: cover; /* Corta a imagem para preencher a área sem distorcer */
+    border-radius: 8px; /* Bordas arredondadas para a imagem */
+    margin-bottom: 15px; /* Espaçamento abaixo da imagem */
+}
+
+/* TÍTULO DO JOGO DENTRO DO CARD */
+.game-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #ffda6a; /* Cor dourada para o título */
+}
+
+/* BOTÃO PLAY DENTRO DOS CARDS */
+.game-card .play-btn {
+    display: inline-block; /* Exibe como bloco inline */
+    padding: 10px 20px; /* Preenchimento interno do botão */
+    background-color: #ffbb33; /* Cor de fundo amarela vibrante */
+    color: #222; /* Cor do texto escura para contraste */
+    text-decoration: none; /* Remove sublinhado do link */
+    border: 1px solid #cc9900; /* Borda sutil para o botão */
+    border-radius: 25px; /* Bordas arredondadas para o botão, estilo pílula */
+    font-weight: bold; /* Texto em negrito */
+    font-size: 1.1em; /* Tamanho da fonte do botão */
+    margin-top: auto; /* Empurra o botão para a parte inferior do card */
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Suaviza transições no hover */
+}
+
+/* EFEITO DE HOVER NO BOTÃO PLAY */
+.game-card .play-btn:hover {
+    background-color: #e6a82e; /* Cor ligeiramente mais escura no hover */
+    transform: scale(1.08); /* Pequeno efeito de "zoom" ao passar o mouse */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Adiciona uma sombra sutil ao botão no hover */
+}
+
+/* POPUP DE FUNCIONALIDADES (Se for o antigo popup de funcionalidades) */
+.game-features-popup {
+    display: none; /* Esconde o popup */
+    position: absolute; /* Posicionamento absoluto */
+    background-color: #333; /* Cor de fundo */
+    color: #fff; /* Cor do texto */
+    border: 1px solid #555; /* Borda */
+    padding: 10px; /* Preenchimento */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 0.9em; /* Tamanho da fonte */
+    z-index: 10; /* Z-index */
+    max-width: 200px; /* Largura máxima */
+}
+
+/* =========================== ESTILOS PARA A CAIXA DE DESCRIÇÃO LATERAL ====================== */
+.description-box {
+    display: none; /* Inicialmente oculto */
+    position: absolute; /* Posiciona a caixa de forma absoluta em relação ao .game-card */
+    top: 0; /* Alinha o topo da descrição com o topo do card */
+    left: calc(100% + 20px); /* Posiciona à direita do card, com um espaçamento maior de 20px */
+    width: 350px; /* Largura da caixa de descrição, ajuste conforme necessário */
+    min-height: 100%; /* Garante que a caixa de descrição tenha pelo menos a altura do card */
+    background-color: #1f1f1f; /* Cor de fundo escura para a caixa de descrição */
+    border: 1px solid #997a00; /* Borda com a cor dourada/laranja do tema, mais visível */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 20px; /* Preenchimento interno */
+    color: #f0f0f0; /* Cor do texto */
+    font-size: 1em; /* Tamanho da fonte ligeiramente maior */
+    text-align: left; /* Alinha o texto à esquerda */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8); /* Sombra mais pronunciada para a caixa de descrição */
+    z-index: 25; /* Garante que apareça acima de outros elementos, mas abaixo de modais principais */
+    overflow-y: auto; /* Adiciona scroll vertical se o texto for muito longo */
+    max-height: 450px; /* Limita a altura da caixa de descrição para evitar que ela fique muito longa */
+    transition: opacity 0.4s ease, transform 0.4s ease; /* Transição suave para o aparecimento */
+    opacity: 0; /* Começa transparente para a animação */
+    transform: translateX(20px); /* Começa ligeiramente à direita para o efeito de deslize */
+}
+
+.description-box h4 {
+    font-size: 1.3em;
+    color: #ffbb33;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 5px;
+}
+
+.description-box p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* ESTILO PARA QUANDO A CAIXA DE DESCRIÇÃO ESTÁ VISÍVEL (ativado via hover no .game-card) */
+.game-card:hover .description-box {
+    display: block; /* Torna a caixa visível */
+    opacity: 1; /* Torna a caixa totalmente opaca */
+    transform: translateX(0); /* Move para a posição final */
+}
+
+/* =========================== RESPONSIVIDADE ===================== */
+@media (max-width: 1400px) { /* Esconde a descrição lateral em telas um pouco maiores também */
+    .description-box {
+        display: none !important; /* Força a ocultação da descrição lateral em telas menores */
+    }
+}
+
+@media (max-width: 1000px) { /* Media query para telas de notebooks menores/tablets maiores */
+    .game-card {
+        width: calc(50% - 30px); /* Cards ocupam 50% da largura (2 colunas) */
+    }
+
+    header {
+        height: 250px; /* Reduz a altura do header em telas menores */
+    }
+
+    .logo {
+        top: 15px;
+        left: 20px;
+    }
+
+    .logo img {
+        height: 60px;
+    }
+
+    nav {
+        top: 20px;
+        right: 20px;
+        gap: 10px;
+    }
+
+    nav .nav-btn,
+    nav .play-now {
+        padding: 6px 14px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 500px) { /* Media query para tablets */
+    .game-list {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .game-card {
+        width: calc(50% - 15px); /* Cards ocupam 50% da largura (2 colunas) */
+        min-height: 220px; /* Ajusta altura mínima */
+        padding: 15px;
+    }
+
+    .game-card h3 {
+        font-size: 1.3em;
+    }
+
+    .game-card .play-btn {
+        padding: 8px 16px;
+        font-size: 1em;
+    }
+
+    header {
+        height: 200px; /* Reduz ainda mais a altura do header */
+        flex-direction: column; /* Coloca logo e nav em colunas */
+        justify-content: flex-start; /* Alinha ao topo */
+        padding-top: 15px;
+    }
+
+    .logo {
+        position: static; /* Volta para posicionamento estático */
+        margin-bottom: 10px; /* Espaço abaixo da logo */
+        text-align: center;
+    }
+
+    nav {
+        position: static; /* Volta para posicionamento estático */
+        width: 100%;
+        justify-content: center; /* Centraliza os botões */
+        gap: 8px;
+    }
+
+    .modal-content.login-content {
+        margin: 5% auto; /* Ajusta a margem para telas menores */
+        padding: 25px;
+    }
+
+    .login-content h2 {
+        font-size: 2em;
+    }
+
+    .input-group input {
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .login-content button[type="submit"] {
+        padding: 10px 15px;
+        font-size: 1.1em;
+    }
+
+    .django-message-popup {
+        max-width: 95%;
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) { /* Media query para celulares */
+    .game-list {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .game-card {
+        width: 95%; /* Cards ocupam quase toda a largura (1 coluna) */
+        min-width: unset; /* Remove o min-width para maior flexibilidade */
+    }
+
+    header {
+        height: 180px; /* Altura menor para o header */
+    }
+
+    .logo img {
+        height: 45px;
+    }
+
+    nav {
+        flex-direction: column; /* Botões em coluna */
+        align-items: stretch; /* Estica os botões */
+    }
+
+    nav .nav-btn,
+    nav .play-now {
+        width: 100%; /* Botões ocupam 100% da largura */
+        margin: 5px 0; /* Margem vertical entre eles */
+        padding: 10px;
+        font-size: 1.1em;
+    }
+
+    .modal-content.login-content {
+        padding: 20px;
+    }
+
+    .login-content h2 {
+        font-size: 1.8em;
+    }
+
+    .input-group input {
+        font-size: 1em;
+        padding: 10px;
+    }
+
+    .login-content button[type="submit"] {
+        padding: 10px 15px;
+        font-size: 1.1em;
+    }
+
+    .django-message-popup {
+        max-width: 95%;
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+}
+
+
+/* ===================== ESTILOS DO DROPDOWN DE CATEGORIA ================== */
+.dropdown {
+    position: relative; /* Define posição relativa para elementos filhos */
+    display: inline-block; /* Exibe como bloco inline */
+}
+
+.dropdown-content {
+    position: absolute; /* Posiciona o conteúdo do dropdown de forma absoluta */
+    top: 100%; /* Posiciona abaixo do elemento pai */
+    left: 0; /* Alinha à esquerda */
+    background-color: #333300; /* Cor de fundo similar aos cards */
+    min-width: 180px; /* Largura mínima do dropdown */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4); /* Sombra para o dropdown */
+    z-index: 50; /* Z-index para controle de camadas, acima de outros elementos */
+    display: none; /* Inicialmente escondido */
+    flex-direction: column; /* Organiza itens em coluna */
+    border-radius: 8px; /* Adicionando bordas arredondadas */
+    animation: fadeInDown 0.3s ease-out forwards; /* Animação de entrada */
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown:hover .dropdown-content {
+    display: flex; /* Mostrar ao passar o mouse no dropdown */
+}
+
+.dropdown-content a {
+    padding: 10px 15px; /* Preenchimento interno dos links */
+    text-decoration: none; /* Remove sublinhado dos links */
+    color: #fff; /* Cor do texto branca, como nos cards */
+    display: block; /* Exibe o link como um bloco */
+    transition: background-color 0.2s ease, color 0.2s ease;
+    font-size: 1em;
+}
+
+.dropdown-content a:hover {
+    background-color: #664d00; /* Cor de fundo no hover, similar ao destaque dos cards */
+    color: #ffbb33; /* Cor do texto dourada no hover */
+}
+
+.dropdown-content a:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.dropdown-content a:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+/* ======================== MENSAGENS DO DJANGO (Popup de Notificação) ============== */
+.django-message-popup {
+    position: fixed; /* Fixa o popup na tela */
+    top: 20px; /* Distância do topo */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta para centralização exata */
+    z-index: 1001; /* Z-index alto para ficar acima de tudo */
+    background: linear-gradient(135deg, #333300 0%, #664d00 50%, #333300 100%); /* Gradiente de fundo */
+    padding: 15px 20px; /* Preenchimento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Sombra */
+    border: 1px solid #555; /* Borda */
+    color: #fff; /* Cor do texto */
+    text-align: center; /* Alinha texto ao centro */
+    max-width: 450px; /* Largura máxima */
+    width: 90%; /* Largura em porcentagem */
+    opacity: 0; /* Começa transparente */
+    visibility: hidden; /* Escondido */
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Transições suaves */
+}
+
+.django-message-popup.show {
+    opacity: 1; /* Torna visível */
+    visibility: visible; /* Torna visível */
+    top: 50px; /* Desliza para baixo ao aparecer */
+}
+
+.django-message-popup .message-content {
+    display: flex; /* Usa flexbox para organizar conteúdo */
+    align-items: center; /* Alinha itens verticalmente */
+    justify-content: center; /* Centraliza itens horizontalmente */
+    gap: 10px; /* Espaço entre os itens */
+}
+
+.django-message-popup .message-icon {
+    font-size: 2.2em; /* Aumenta o tamanho do ícone */
+}
+
+.django-message-popup .message-title {
+    font-weight: bold; /* Texto em negrito */
+    font-size: 1.4em; /* Aumenta o tamanho da fonte */
+    margin-bottom: 5px; /* Margem inferior */
+}
+
+.django-message-popup .message-body {
+    font-size: 1.1em; /* Aumenta o tamanho da fonte */
+}
+
+/* Estilos específicos para tipos de mensagem (opcional, para cores diferentes) */
+.django-message-popup.error {
+    background: linear-gradient(135deg, #8B0000 0%, #CC0000 50%, #8B0000 100%); /* Gradiente para erro */
+    border-color: #FF0000; /* Cor da borda para erro */
+}
+
+.django-message-popup.success {
+    background: linear-gradient(135deg, #006400 0%, #008000 50%, #006400 100%); /* Gradiente para sucesso */
+    border-color: #00FF00; /* Cor da borda para sucesso */
+}
+
+.django-message-popup.info {
+    background: linear-gradient(135deg, #00008B 0%, #0000CD 50%, #00008B 100%); /* Gradiente para informação */
+    border-color: #0000FF; /* Cor da borda para informação */
+}
+
+.django-message-popup.warning {
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #8B4513 100%); /* Gradiente para aviso */
+    border-color: #FFA500; /* Cor da borda para aviso */
+}
+
+/* ============================================ MODAL LGPD ===================================== */
+/* Estilos para o modal LGPD (Visual Melhorado) */
+
+.lgpd-content { /* Usado no HTML, então vamos estilizar */
+    background-color: #1a1a1a;
+    padding: 35px;
+    border-radius: 12px;
+    max-width: 800px; /* Aumenta um pouco a largura máxima para o LGPD */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.9);
+    color: #e0e0e0;
+    position: relative;
+    animation: fadeInScale 0.3s ease-out forwards;
+    text-align: center;
+}
+
+.lgpd-top-image { /* Estilo para a imagem de logo LGPD */
+    max-width: 150px;
+    margin-bottom: 20px;
+}
+
+.lgpd-content h2 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.lgpd-content p {
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-align: justify; /* Justifica o texto para melhor leitura */
+}
+
+.lgpd-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.lgpd-actions .primary-button {
+    background-image: linear-gradient(to right, #d0a933, #e0b84c);
+    color: #1a1a1a;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-size 0.3s ease, transform 0.2s ease;
+    background-size: 200% auto;
+}
+
+.lgpd-actions .primary-button:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+}
+
+.lgpd-actions .secondary-button {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 25px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+}
+
+.lgpd-actions .secondary-button:hover {
+    background-color: #555;
+    border-color: #777;
+    transform: translateY(-2px);
+}
+
+.lgpd-contact-info {
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #9e9e9e;
+}
+
+.lgpd-contact-info a {
+    color: #81D4FA;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.lgpd-contact-info a:hover {
+    color: #A7EDFF;
+    text-decoration: underline;
+}
+
+/* Garante que o fundo semitransparente do modal principal esteja visível */
+.modal.show {
+    background-color: rgba(0,0,0,0.65); /* Fundo semitransparente mais suave */
+    backdrop-filter: blur(8px);
+}
