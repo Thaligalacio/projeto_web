@@ -129,19 +129,9 @@
                 </div>
             </div>
 
-            {# Conteúdo do Formulário de Registro (dentro do modal de login) - AGORA COM AS ALTERAÇÕES #}
+            {# Conteúdo do Formulário de Registro (dentro do modal de login) - AGORA SEM "CREAVATAR" E "GAST" #}
             <div id="register-form-inside-login" class="cadastro-modal-content" style="display: none;">
-                <div class="header-icons">
-                    <div class="header-icon-item">
-                        <img src="{% static 'site_django/imagens/icone_gast.png' %}" alt="Gast Icon">
-                        <span>Gast</span>
-                    </div>
-                    <div class="header-icon-item">
-                        <img src="{% static 'site_django/imagens/icone_creavatar.png' %}" alt="Creavatar Icon">
-                        <span>Creavatar</span>
-                    </div>
-                </div>
-                <h2>Cadastrar Cliente</h2> {# Removi o user-icon aqui, pois está na imagem Gast/Creavatar #}
+                <h2>Cadastrar Cliente</h2>
                 <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
                     {% csrf_token %}
                     <div class="form-row">
@@ -167,34 +157,6 @@
                             <label for="register-password-confirm-inside">Confirmar Senha</label>
                             <input type="password" name="password_confirm" id="register-password-confirm-inside" placeholder="Confirmar Senha" required />
                         </div>
-                        <div class="form-group">
-                            <label for="register-telefone-inside">Telefone</label>
-                            <input type="tel" name="telefone" id="register-telefone-inside" placeholder="Telefone" />
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="register-birth-date-inside">Data de Nascimento</label>
-                            <input type="date" name="birth_date" id="register-birth-date-inside" required />
-                        </div>
-                        <div class="form-group"> {# Mantido Gênero e Estado para preencher o lado a lado #}
-                            <label for="register-gender-inside">Gênero:</label>
-                            <select id="register-gender-inside" name="gender" required>
-                                <option value="">Selecione</option>
-                                <option value="male">Masculino</option>
-                                <option value="female">Feminino</option>
-                                <option value="other">Outro</option>
-                                <option value="prefer_not_say">Prefiro não dizer</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="register-state-inside">Estado:</label>
-                            <input type="text" id="register-state-inside" name="state" placeholder="Seu Estado" required>
-                        </div>
                     </div>
 
                     <div class="button-row">
@@ -202,7 +164,7 @@
                             <img src="{% static 'site_django/imagens/icone_salvar.png' %}" alt="Salvar" class="button-icon">
                             Cadastrar
                         </button>
-                        <button type="button" class="cancel-button-register" onclick="closeModal('login-form')"> {# Ajustado para usar a classe cancel-button-register e fechar o modal de login #}
+                        <button type="button" class="cancel-button-register" onclick="closeModal('login-form')">
                             <img src="{% static 'site_django/imagens/icone_cancelar.png' %}" alt="Cancelar" class="button-icon">
                             Cancelar
                         </button>
@@ -233,56 +195,54 @@
     {# FIM DO MODAL DE LOGIN/REGISTRO #}
 
 
-    {# INÍCIO DO MODAL DE REGISTRO SEPARADO - AGORA COM AS ALTERAÇÕES E CORRIGINDO O FORM #}
-{# Começo do Modal de Cadastro #}
-<div id="cadastroModal" class="modal">
-    <div class="modal-content cadastro-modal-content">
-        {# Botão de Fechar #}
-        <span class="close-button-register">&times;</span>
-        
-        {# Título do Modal - AGORA DENTRO DO modal-content #}
-        <h2>Cadastrar Cliente</h2>
+    {# INÍCIO DO MODAL DE REGISTRO SEPARADO - AGORA SEM "CREAVATAR" E "GAST" E CORRIGINDO O FORM #}
+    {# Começo do Modal de Cadastro #}
+    <div id="cadastroModal" class="modal">
+        <div class="modal-content cadastro-modal-content">
+            {# Botão de Fechar #}
+            <span class="close-button-register">&times;</span>
 
+            {# Título do Modal #}
+            <h2>Cadastrar Cliente</h2>
+            {# Formulário de Cadastro #}
+            <form method="post" action="{% url 'registrar_cliente' %}">
+                {% csrf_token %}
 
-        {# Formulário de Cadastro - AGORA DENTRO DO modal-content #}
-        <form method="post" action="{% url 'registrar_cliente' %}">
-            {% csrf_token %}
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="id_nome_completo">Nome Completo:</label>
-                    <input type="text" id="id_nome_completo" name="nome_completo" placeholder="Seu nome completo" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_nome_completo">Nome Completo:</label>
+                        <input type="text" id="id_nome_completo" name="nome_completo" placeholder="Seu nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email_cadastro">Email:</label>
+                        <input type="email" id="id_email_cadastro" name="email" placeholder="Email" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="id_email_cadastro">Email:</label>
-                    <input type="email" id="id_email_cadastro" name="email" placeholder="Email" required>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="id_senha_cadastro">Senha:</label>
-                    <input type="password" id="id_senha_cadastro" name="senha" placeholder="Senha" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_senha_cadastro">Senha:</label>
+                        <input type="password" id="id_senha_cadastro" name="senha" placeholder="Senha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_confirmar_senha">Confirmar Senha:</label>
+                        <input type="password" id="id_confirmar_senha" name="confirmar_senha" placeholder="Confirmar Senha" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="id_confirmar_senha">Confirmar Senha:</label>
-                    <input type="password" id="id_confirmar_senha" name="confirmar_senha" placeholder="Confirmar Senha" required>
-                </div>
-            </div>
 
-            <div class="button-row">
-                <button type="submit" class="save-button">
-                    <img src="{% static 'img/cadatrar.png' %}" alt="Salvar" class="button-icon"> {# <-- Caminho ajustado para 'img/' #}
-                    Cadastrar
-                </button>
-                <button type="button" class="cancel-button-register">
-                    <img src="{% static 'img/icone_cancelar.png' %}" alt="Cancelar" class="button-icon"> {# <-- Caminho ajustado para 'img/' #}
-                    Cancelar
-                </button>
-            </div>
-        </form>
-    </div> {# <-- Fim de modal-content #}
-</div> {# <-- Fim de cadastroModal #}
+                <div class="button-row">
+                    <button type="submit" class="save-button">
+                        <img src="{% static 'img/icone_salvar.png' %}" alt="Salvar" class="button-icon">
+                        Cadastrar
+                    </button>
+                    <button type="button" class="cancel-button-register">
+                        <img src="{% static 'img/icone_cancelar.png' %}" alt="Cancelar" class="button-icon">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div> {# <-- Fim de modal-content #}
+    </div> {# <-- Fim de cadastroModal #}
     {# FIM DO MODAL DE REGISTRO SEPARADO #}
 
     {# MODAL LGPD #}
