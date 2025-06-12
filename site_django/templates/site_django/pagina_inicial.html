@@ -1,0 +1,331 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FB Games</title>
+    <link rel="stylesheet" href="{% static 'site_django/css/style.css' %}" />
+    <link rel="icon" href="{% static 'site_django/imagens/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/cadastro_modal_revisado.css' %}">
+</head>
+
+<body data-open-login-modal="{{ open_login_modal|default:'False' }}"
+    data-open-register-modal="{{ open_register_modal|default:'False' }}"
+    data-open-login-modal-register-section="{{ open_login_modal_register_section|default:'False' }}">
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="{% static 'site_django/videos/fundo_inteiro.mp4' %}" type="video/mp4">
+        {# <source src="{% static 'site_django/videos/fundo_inteiro.webm' %}" type="video/webm"> #}
+        Seu navegador não suporta a tag de vídeo.
+    </video>
+    <div id="video-overlay"></div>
+
+    <header>
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel1.png' %}" alt="Imagem1">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel2.png' %}" alt="Imagem2">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'site_django/imagens/fundo_carrossel3.png' %}" alt="Imagem3">
+                </div>
+            </div>
+        </div>
+
+        <div class="logo">
+            <img src="{% static 'site_django/imagens/Logo-marca.png' %}" alt="FBGAMES" />
+        </div>
+
+        <nav>
+            <button class="nav-btn" id="login-btn">Login/Cadastro</button>
+            <div class="dropdown" id="dropdown-category">
+                <button class="nav-btn" id="category-btn">Categoria</button>
+                <div class="dropdown-content">
+                    <a href="#" data-category="menu_principal">Menu Principal</a>
+                    <a href="#" data-category="acao">Ação</a>
+                    <a href="#" data-category="corrida">Corrida</a>
+                    <a href="#" data-category="aventura">Aventura</a>
+                    <a href="#" data-category="quebra_cabeca">Quebra cabeça</a>
+                </div>
+            </div>
+            <button class="nav-btn" id="search-trigger">Procurar</button>
+            <input type="text" id="search-input" placeholder="Pesquisar jogos..." style="display: none;" />
+            <button class="nav-btn" id="close-search" style="display: none;">X</button>
+            <div class="dropdown" id="dropdown-partners">
+                <button class="nav-btn" id="partners-btn">Parceiros</button>
+                <div class="dropdown-content">
+                    <a href="https://www.tronelo.com.br/" target="_blank">Tronelo</a>
+                    <a href="https://www.mg.senac.br/Paginas/default.aspx" target="_blank">Senac Minas</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    {# INÍCIO DA MENSAGEM DO DJANGO #}
+    {% if messages %}
+        <div id="django-messages-container">
+            {% for message in messages %}
+            <div class="django-message-popup {{ message.tags }}">
+                <div class="message-content">
+                    <span class="message-icon">
+                        {% if "error" in message.tags %}⚠️{% endif %}
+                        {% if "success" in message.tags %}✅{% endif %}
+                        {% if "info" in message.tags %}ℹ️{% endif %}
+                        {% if "warning" in message.tags %}⚠️{% endif %}
+                    </span>
+                    <div class="message-body">
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="message-title">Erro!</div>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <div class="message-title">Sucesso!</div>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                            <div class="message-title">Informação</div>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                            <div class="message-title">Aviso!</div>
+                        {% else %}
+                            <div class="message-title">Mensagem</div>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {# FIM DA MENSAGEM DO DJANGO #}
+
+    {# INÍCIO DO MODAL DE LOGIN/REGISTRO #}
+    <div id="login-form" class="modal">
+        <div class="modal-content login-content">
+            <span class="close-button" id="close-login-modal">&times;</span>
+
+            {# Conteúdo principal do Login #}
+            <div id="login-content">
+                <h2 id="login-title">Faça o seu login</h2>
+                <form id="loginActualForm" method="POST" action="{% url 'login_user' %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" name="email" placeholder="Seu email" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" name="password" placeholder="Sua senha" required />
+                    </div>
+                    <div class="options">
+                        <label><input type="checkbox" name="remember" /> Lembrar-me</label>
+                        <a href="#" id="forgot-password-link">Esqueci minha senha</a>
+                    </div>
+                    <button type="submit">Login</button>
+                    <div id="login-error-message" style="color: red; margin-top: 10px; text-align: center; display: none;"></div>
+                </form>
+                <div class="signup-link">
+                    Ainda não possui conta? <a href="#" id="show-register-form">Cadastre-se</a>
+                </div>
+            </div>
+
+            {# Conteúdo do Formulário de Registro (dentro do modal de login) - AGORA COM AS ALTERAÇÕES #}
+            <div id="register-form-inside-login" class="cadastro-modal-content" style="display: none;">
+                <div class="header-icons">
+                    <div class="header-icon-item">
+                        <img src="{% static 'site_django/imagens/icone_gast.png' %}" alt="Gast Icon">
+                        <span>Gast</span>
+                    </div>
+                    <div class="header-icon-item">
+                        <img src="{% static 'site_django/imagens/icone_creavatar.png' %}" alt="Creavatar Icon">
+                        <span>Creavatar</span>
+                    </div>
+                </div>
+                <h2>Cadastrar Cliente</h2> {# Removi o user-icon aqui, pois está na imagem Gast/Creavatar #}
+                <form method="POST" id="registerFormInside" action="{% url 'registrar_cliente' %}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-full-name-inside">Nome Completo</label>
+                            <input type="text" name="full_name" id="register-full-name-inside" placeholder="Seu nome completo" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-email-inside">Email</label>
+                            <input type="email" name="email" id="register-email-inside" placeholder="Email" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password-inside">Senha</label>
+                            <input type="password" name="password" id="register-password-inside" placeholder="Senha" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-password-confirm-inside">Confirmar Senha</label>
+                            <input type="password" name="password_confirm" id="register-password-confirm-inside" placeholder="Confirmar Senha" required />
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <button type="submit" class="save-button">
+                            <img src="{% static 'site_django/imagens/icone_salvar.png' %}" alt="Salvar" class="button-icon">
+                            Cadastrar
+                        </button>
+                        <button type="button" class="cancel-button-register" onclick="closeModal('login-form')"> {# Ajustado para usar a classe cancel-button-register e fechar o modal de login #}
+                            <img src="{% static 'site_django/imagens/icone_cancelar.png' %}" alt="Cancelar" class="button-icon">
+                            Cancelar
+                        </button>
+                    </div>
+                    <p class="login-link-cadastro">Já possui conta? <a href="#" id="show-login-form-from-register-inside">Fazer Login</a></p>
+                </form>
+            </div>
+
+            {# Conteúdo do Formulário de Recuperação de Senha (dentro do modal de login) #}
+            <div id="forgot-password-content" style="display: none;">
+                <h2>Recuperar Senha</h2>
+                <p>Por favor, insira seu email para recuperar sua senha.</p>
+                <form method="POST" action="{% url 'recuperar_senha' %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label for="forgot-email">Email</label>
+                        <input type="email" id="forgot-email" name="email" placeholder="Seu email" required />
+                    </div>
+                    <button type="submit" id="recover-password-button">Enviar Link de Recuperação</button>
+                    <div class="signup-link">
+                        Lembrou a senha? <a href="#" id="show-login-from-forgot">Fazer Login</a>
+                    </div>
+                </form>
+            </div>
+
+        </div> {# Fim do modal-content login-content #}
+    </div> {# Fim do modal login-form #}
+    {# FIM DO MODAL DE LOGIN/REGISTRO #}
+
+
+    {# INÍCIO DO MODAL DE REGISTRO SEPARADO - AGORA COM AS ALTERAÇÕES E CORRIGINDO O FORM #}
+{# Começo do Modal de Cadastro #}
+<div id="cadastroModal" class="modal">
+    <div class="modal-content cadastro-modal-content">
+        {# Botão de Fechar #}
+        <span class="close-button-register">&times;</span>
+        
+        {# Título do Modal - AGORA DENTRO DO modal-content #}
+        <h2>Cadastrar Cliente</h2>
+
+        {# Seção dos Ícones no topo do modal (Gast/Creavatar) - Adicionei de volta, pois seu CSS os estiliza #}
+        <div class="header-icons">
+            <div class="header-icon-item">
+                <img src="{% static 'img/gast_icon.png' %}" alt="Gast Icon">
+                <span>GAST</span>
+            </div>
+            <div class="header-icon-item">
+                <img src="{% static 'img/creavatar.png' %}" alt="Creavatar Icon">
+                <span>CREAVATAR</span>
+            </div>
+        </div>
+
+        {# Formulário de Cadastro - AGORA DENTRO DO modal-content #}
+        <form method="post" action="{% url 'registrar_cliente' %}">
+            {% csrf_token %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_nome_completo">Nome Completo:</label>
+                    <input type="text" id="id_nome_completo" name="nome_completo" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_email_cadastro">Email:</label>
+                    <input type="email" id="id_email_cadastro" name="email" placeholder="Email" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="id_senha_cadastro">Senha:</label>
+                    <input type="password" id="id_senha_cadastro" name="senha" placeholder="Senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_confirmar_senha">Confirmar Senha:</label>
+                    <input type="password" id="id_confirmar_senha" name="confirmar_senha" placeholder="Confirmar Senha" required>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="save-button">
+                    <img src="{% static 'img/icone_salvar.png' %}" alt="Salvar" class="button-icon"> {# <-- Caminho ajustado para 'img/' #}
+                    Cadastrar
+                </button>
+                <button type="button" class="cancel-button-register">
+                    <img src="{% static 'img/icone_cancelar.png' %}" alt="Cancelar" class="button-icon"> {# <-- Caminho ajustado para 'img/' #}
+                    Cancelar
+                </button>
+            </div>
+        </form>
+    </div> {# <-- Fim de modal-content #}
+</div> {# <-- Fim de cadastroModal #}
+    {# FIM DO MODAL DE REGISTRO SEPARADO #}
+
+    {# MODAL LGPD #}
+    <div id="lgpd-modal" class="modal">
+        <div class="modal-content lgpd-content">
+            <span class="close-button" id="close-lgpd-modal">&times;</span>
+            <img src="{% static 'site_django/imagens/lgpd_logo.png' %}" alt="LGPD" class="lgpd-top-image"> <h2>A sua privacidade é importante para nós.</h2>
+            <p>A sua privacidade é importante para nós. Ao continuar navegando neste site, você concorda com a nossa política de uso de dados, que descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais.</p>
+            <p>Utilizamos cookies e tecnologias similares para personalizar conteúdo, oferecer funcionalidades de redes sociais e analisar nosso tráfego. Também compartilhamos informações sobre o uso do nosso site com nossos parceiros de mídia social, publicidade e análise.</p>
+            <p>Seus dados serão tratados de acordo com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018). Você tem o direito de acessar, corrigir, excluir ou se opor ao tratamento dos seus dados. Para exercer esses direitos ou para mais informações, por favor, entre em contato conosco através do nosso e-mail de suporte.</p>
+            <div class="lgpd-actions">
+                <button class="secondary-button" id="lgpd-more-options">Mais Opções</button>
+                <button class="primary-button" id="lgpd-agree-continue">Concordar e Continuar</button>
+            </div>
+            <div class="lgpd-contact-info">
+                <p>Ao continuar, você concorda com nossos <a href="#">Termos e Condições</a> e com a nossa <a href="#">Política de Privacidade</a>. Em caso de dúvidas, por favor, <a href="#">entre em contato</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="game-list">
+            <div class="game-card" data-category="acao">
+                <img src="{% static 'site_django/imagens/call_of_duty.png' %}" alt="call_of_duty" />
+                <h3>CALL OF DUTY</h3>
+                <a href="https://store.steampowered.com/agecheck/app/1938090/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/uncharted.png' %}" alt="uncharted" />
+                <h3>UNCHARTED</h3>
+                <a href="https://store.steampowered.com/app/1659420/UNCHARTED_Coleo_Legado_dos_Ladres/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="corrida">
+                <img src="{% static 'site_django/imagens/gran_turismo7.png' %}" alt="gran_turismo7" />
+                <h3>GRAN TURISMO 7</h3>
+                <a href="https://www.gran-turismo.com/br/" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/minecraft.png' %}" alt="minecraft" />
+                <h3>MINECRAFT</h3>
+                <a href="https://www.minecraft.net/pt-br/about-dungeons" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="aventura">
+                <img src="{% static 'site_django/imagens/super_mario_bros.png' %}" alt="super_mario_bros" />
+                <h3>SUPER MARIO BROS</h3>
+                <a href="https://www.minijogos.com.br/jogos-de-mario-bros" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+            <div class="game-card" data-category="quebra_cabeca">
+                <img src="{% static 'site_django/imagens/quebra_cabeca.png' %}" alt="quebra_cabeca" />
+                <h3>QUEBRA CABEÇA</h3>
+                <a href="https://www.minijogos.com.br/jogo/block-puzzle" class="play-btn">Play</a>
+                <div class="game-features" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+    <script src="{% static 'site_django/js/script.js' %}" defer></script>
+</body>
+</html>
