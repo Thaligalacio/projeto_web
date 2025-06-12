@@ -8,7 +8,7 @@ from .forms import ClienteForm
 from django.db import IntegrityError
 from django.http import JsonResponse
 # Importações para o sistema de autenticação do Django
-from django.contrib.auth import authenticate, login, logout # Adicionado logout para exemplo futuro
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User # Importa o modelo de usuário padrão do Django
 from django.views.decorators.http import require_POST # Melhor que csrf_exempt para segurança
 import json # Para manipular JSON (usado no login_user)
@@ -46,7 +46,7 @@ def registrar_cliente(request):
                 nome = form.cleaned_data.get('nome')
                 email = form.cleaned_data.get('email')
                 password = form.cleaned_data.get('password') # Senha deve vir do form, mas não ser salva diretamente
-                telefone = form.cleaned_data.get('telefone')
+                # telefone = form.cleaned_data.get('telefone')
 
                 # --- Importante: Crie um usuário Django para autenticação segura ---
                 # Verifica se já existe um usuário com este e-mail
@@ -67,7 +67,7 @@ def registrar_cliente(request):
                 # cliente.user = user
                 # cliente.save()
                 # Ou se Cliente for apenas um perfil adicional, crie-o assim:
-                cliente = Cliente.objects.create(nome=nome, email=email, telefone=telefone)
+                cliente = Cliente.objects.create(nome=nome, email=email)
                 # Se você tiver um campo user no Cliente, adicione:
                 # cliente.user = user
                 # cliente.save()

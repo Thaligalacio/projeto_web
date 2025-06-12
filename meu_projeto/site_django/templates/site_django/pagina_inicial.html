@@ -137,7 +137,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="register-full-name-inside">Nome Completo</label>
-                            <input type="text" name="full_name" id="register-full-name-inside" placeholder="Seu nome completo" required />
+                            {# MODIFICAÇÃO AQUI: name="full_name" mudado para name="nome" #}
+                            <input type="text" name="nome" id="register-full-name-inside" placeholder="Seu nome completo" required />
                         </div>
                     </div>
 
@@ -164,7 +165,7 @@
                             <img src="{% static 'site_django/imagens/icone_salvar.png' %}" alt="Salvar" class="button-icon">
                             Cadastrar
                         </button>
-                        <button type="button" class="cancel-button-register" onclick="closeModal('login-form')">
+                        <button type="button" class="cancel-button-register" onclick="modalController.close('login-form')">
                             <img src="{% static 'site_django/imagens/icone_cancelar.png' %}" alt="Cancelar" class="button-icon">
                             Cancelar
                         </button>
@@ -195,7 +196,7 @@
     {# FIM DO MODAL DE LOGIN/REGISTRO #}
 
 
-    {# INÍCIO DO MODAL DE REGISTRO SEPARADO - AGORA SEM "CREAVATAR" E "GAST" E CORRIGINDO O FORM #}
+    {# INÍCIO DO MODAL DE REGISTRO SEPARADO #}
     {# Começo do Modal de Cadastro #}
     <div id="cadastroModal" class="modal">
         <div class="modal-content cadastro-modal-content">
@@ -211,7 +212,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="id_nome_completo">Nome Completo:</label>
-                        <input type="text" id="id_nome_completo" name="nome_completo" placeholder="Seu nome completo" required>
+                        {# MODIFICAÇÃO AQUI: name="nome_completo" mudado para name="nome" #}
+                        <input type="text" id="id_nome_completo" name="nome" placeholder="Seu nome completo" required>
                     </div>
                     <div class="form-group">
                         <label for="id_email_cadastro">Email:</label>
@@ -232,11 +234,11 @@
 
                 <div class="button-row">
                     <button type="submit" class="save-button">
-                        <img src="{% static 'img/icone_salvar.png' %}" alt="Salvar" class="button-icon">
+                        <img src="{% static 'site_django/imagens/icone_salvar.png' %}" alt="Salvar" class="button-icon">
                         Cadastrar
                     </button>
                     <button type="button" class="cancel-button-register">
-                        <img src="{% static 'img/icone_cancelar.png' %}" alt="Cancelar" class="button-icon">
+                        <img src="{% static 'site_django/imagens/icone_cancelar.png' %}" alt="Cancelar" class="button-icon">
                         Cancelar
                     </button>
                 </div>
